@@ -9,6 +9,7 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           FRONT END!!!
+          If u wanna move this, remember to check the homepage link in package.json!
         </p>
       </header>
     </div>
