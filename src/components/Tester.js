@@ -6,16 +6,16 @@ export default class Tester extends React.Component {
   constructor() {
     super()
     this.state = {
-      message: "",
+      allEmployees: "",
       endpointURL: "http://sppexperiment.us-west-2.elasticbeanstalk.com/admin/employees"
     }
   }
 
-  getAllEmployees = () => {
-
+  componentDidMount() {
+    // Queries postgres for all employees
     axios.get(this.state.endpointURL)
     .then( response => {
-      console.log("YES!!!");
+      console.log(response.data);
       this.setState({ message: response.data});
       return response.data;
     })
@@ -24,13 +24,14 @@ export default class Tester extends React.Component {
     });
   }
 
+
+  
+
     render() {
-      this.getAllEmployees();
 
       return (
         <div>
           TESTER here!
-          {this.getAllEmployees}
         </div>
       );
     }
