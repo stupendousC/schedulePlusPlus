@@ -1,6 +1,15 @@
 import React from 'react';
 import axios from 'axios';
 import {convertEmployeeObjsToArray} from './Helpers';
+import Tester from './Tester';
+
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
+
 
 const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
 const ALL_EMPS = "admin/employees";
@@ -67,7 +76,19 @@ export default class Admin extends React.Component {
         <section>
           ALL EMPLOYEES
           {allEmployeesForNow}
+          <br/>
+          LINKS: 
+          <br/> admin CRUD
+          <br/> employees CRUD
+          <br/>clients CRUD
+          <br/>master calendar, from shifts table
+          <br/>staff it! from unavailbilities table, make new unmanned shift for shifts table, and send twilio texts
+          
+
+
         </section>
+
+        
       );
     }
   

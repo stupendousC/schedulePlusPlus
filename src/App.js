@@ -14,28 +14,44 @@ import Employee from './components/Employee';
 import Tester from './components/Tester';
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      adminLoggedIn: false,
+      employeeLoggedIn: false,
+      loggedInPerson: []
+    }
+  }
+
+  showLogins = () => {
+    if (this.state.adminLoggedIn | this.state.employeeLoggedIn) {
+      return (
+      <section>You're logged in as... {this.state.loggedInPerson}</section>
+      );
+    } else {
+      return (
+        <section>
+          <Link to="/admin">ADMIN LOGIN</Link>
+          <Link to="/employee">EMPLOYEE LOGIN</Link>
+        </section>
+      )
+    }
+  }
 
   render() {
     return (
     <div className="App">
       <header className="App-header">
-          FRONT END!!!
-          <p>1. If u wanna move this, remember to check the homepage link in package.json!</p>
+          SCHEDULE++
       </header>
 
       <Router className="App-intro">
           <nav className="navbar navbar-light">
             <Link to="/">Home</Link>
-            <Link to="/admin">ADMIN LOGIN</Link>
-            <Link to="/employee">EMPLOYEE LOGIN</Link>
-            
-            <Link to="/tester">TEMPORARY TESTER</Link>
+            {this.showLogins()}
           </nav>
 
           <Switch>
-            <Route path="/tester">
-              <Tester />
-            </Route>
 
             <Route path="/admin">
               <Admin />
