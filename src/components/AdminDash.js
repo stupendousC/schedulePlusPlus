@@ -1,27 +1,30 @@
 import React from 'react';
 import axios from 'axios';
 import {convertEmployeeObjsToArray} from './Helpers';
-import Tester from './Tester';
-
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
 
 
-const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
+// import {
+//   BrowserRouter as Router,
+//   Switch,
+//   Route,
+//   Link
+// } from "react-router-dom";
+
+const BASE_URL = 'http://localhost:5000/'
+// const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
+
 const ALL_EMPS = "admin/employees";
 
-export default class Admin extends React.Component {
+export default class AdminDash extends React.Component {
 
   constructor() {
     super()
     this.state = {
+      allClients: [],
+      allAdmin: [],
       allEmployees: [],
       allShifts: [],
-      allUnavailabilities: []
+      allUnavails: []
     }
   }
 
@@ -74,8 +77,6 @@ export default class Admin extends React.Component {
       
       return (
         <section>
-          ALL EMPLOYEES
-          {allEmployeesForNow}
           <br/>
           LINKS: 
           <br/> admin CRUD
@@ -83,9 +84,6 @@ export default class Admin extends React.Component {
           <br/>clients CRUD
           <br/>master calendar, from shifts table
           <br/>staff it! from unavailbilities table, make new unmanned shift for shifts table, and send twilio texts
-          
-
-
         </section>
 
         
