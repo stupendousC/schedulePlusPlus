@@ -34,15 +34,14 @@ class LoginBanner extends React.Component {
     // if successful, .setState to affect the login buttons 
     // TODO: switch out role with loggedInPerson.name
     if (oAuthSuccessful) {
+      sessionStorage.setItem('role', role);
+      sessionStorage.setItem('loggedInPerson', 'NAME HERE');
+
       if (role === "admin") {
         this.setState({ adminLoggedIn: true, loggedInPerson: role});
-        sessionStorage.setItem('loggedInPerson', 'ADMIN NAME PLACEHOLDER');
-        sessionStorage.setItem('role', role);
         console.log(this.getLoggedInPerson());
       } else {
         this.setState({ employeeLoggedIn: true, loggedInPerson: role});
-        sessionStorage.setItem('loggedInPerson', 'EMPLOYEE NAME PLACEHOLDER');
-        sessionStorage.setItem('role', role);
         console.log(this.getLoggedInPerson());
       } 
     }
@@ -88,10 +87,8 @@ class LoginBanner extends React.Component {
     }
   }
 
-
 ////////////////////// RENDER //////////////////////
   render() {
-    
     return(
       <section>
         <Link to="/">LOGO to go home</Link>
@@ -104,42 +101,3 @@ class LoginBanner extends React.Component {
 }
 
 export default LoginBanner;
-
-
-//   render() {
-//     return (
-//     <div className="App">
-
-// <AlertComp title="Alert" body="TODO: make it shortlived" variant="success"/>
-
-//       <Router className="navbar navbar-light">
-//         <Link to="/">
-//           <header className="App-header">
-//           SCHEDULE++    (TODO: clickable logo for homepage, activate showHomepage())
-//           </header>
-//         </Link>
-//         <Switch>
-//           <Route path="/">
-//           </Route>
-//         </Switch>
-//       </Router>
-
-
-//       <Router className="App-intro">
-//         <section>
-//           {this.showLogins()}
-//         </section>
-            
-//           <Switch>
-//             <Route path="/adminDash">
-//               <AdminDash />
-//             </Route>
-
-//             <Route path="/employeeDash">
-//               <EmployeeDash />
-//             </Route>
-//           </Switch>
-//       </Router>
-//     </div>
-//   );
-//   }

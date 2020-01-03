@@ -19,7 +19,6 @@ class App extends React.Component {
             <Route path="/" exact component={Homepage}/>    {/* use 'exact' so it won't accidentally outrank anything below*/}
             <Route path="/adminDash" component={AdminDash} />
             <Route path="/employeeDash" component={EmployeeDash} />
-            <Route path="/googlef09f7182011b6bdd.html" component={AdminDash} />
           </Switch>
       </Router>
   );
