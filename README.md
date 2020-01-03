@@ -1,3 +1,5 @@
-FRONT PAGE DEPLOYMENT *SHOULD* NOT BE SEEING THIS,
+google-site-verification: googlef09f7182011b6bdd.html
 
-it's supposed to go to App.js!!!
+
+
+FRONT PAGE DEPLOYMENT supposed to go to App.js!!!
