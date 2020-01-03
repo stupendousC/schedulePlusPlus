@@ -80,10 +80,9 @@ class App extends React.Component {
   ////////////////////// DISPLAY //////////////////////
   showLogins = () => {
     if (this.getLoggedInPerson()) {
-      // someone is already logged in, show logout buttons instead
       return (
         <section className = 'navbar'>
-    <section>You're logged in as... {this.getLoggedInRole()}: {this.getLoggedInPerson()}</section>
+          <section>You're logged in as... {this.getLoggedInRole()}: {this.getLoggedInPerson()}</section>
           <button onClick={this.logout}>LOGOUT</button>
         </section>
       );
@@ -107,12 +106,13 @@ class App extends React.Component {
     return (
     <div className="App">
 
-      
+<AlertComp title="Alert" body="TODO: make it shortlived" variant="success"/>
+
       
       <Router className="navbar navbar-light">
         <Link to="/">
           <header className="App-header">
-          SCHEDULE++    (this is clickable for homepage, activate showHomepage())
+          SCHEDULE++    (TODO: clickable logo for homepage, activate showHomepage())
           </header>
         </Link>
         <Switch>
@@ -121,7 +121,6 @@ class App extends React.Component {
         </Switch>
       </Router>
 
-<AlertComp title="title here" body="body here" variant="success"/>
 
       <Router className="App-intro">
         <section>
