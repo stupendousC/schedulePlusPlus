@@ -37,6 +37,10 @@
   }
 }
 
+.homepage-logo {
+  height: 10vh;
+}
+
 .navbar {
   background-color: pink;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import bannerLogo from './SPPbanner.png';
 
 import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
 
@@ -91,7 +92,7 @@ class LoginBanner extends React.Component {
   render() {
     return(
       <section>
-        <Link to="/">LOGO to go home</Link>
+        <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" /></Link>
         {this.showLogins()}
         
       </section>
