@@ -1,6 +1,11 @@
 import React from 'react';
 // import axios from 'axios';
 
+//https://www.hobo-web.co.uk/best-screen-size/  
+// 360x640
+// 1366 x 768
+// 1920x1080   
+
 export default class EmployeeDash extends React.Component {
 
 

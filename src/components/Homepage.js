@@ -5,6 +5,7 @@ export default function Homepage() {
 
   return (
     <section>
+      PUT SOMETHING PRETTIER HERE AS THE HOMEPAGE PICTURES!!
       <img src={logo} alt="logo" className="homepage-logo"/>
     </section>
   );
