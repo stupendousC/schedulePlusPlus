@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Calendar from 'react-calendar'
 
 const BASE_URL = 'http://localhost:5000/'
 // const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
@@ -150,6 +151,12 @@ export default class AdminDash extends React.Component {
     .catch(error => console.log("ERROR:", error.messages));
   }
 
+  ////////////////////// calendar fcns //////////////////////
+  getDayDetails = (e) => {
+    console.log("u clicked on", e);
+    // Have a dropdown card for the day, showing what shifts are there
+    // dropdown can also show who are avail to work, with a 'staff it!' button
+  }
   
   ////////////////////// render //////////////////////
     render() {
@@ -174,6 +181,7 @@ export default class AdminDash extends React.Component {
           <section data-spy="scroll" data-target="#calendar" id="calendar">
             <h4 id="calendar">CALENDAR, from shifts table</h4>
             staff it! from unavailbilities table, make new unmanned shift for shifts table, and send twilio texts
+            <Calendar onChange={this.getDayDetails}/>
             <table>
                 <thead></thead>
                 <tbody>{allShifts}</tbody>
