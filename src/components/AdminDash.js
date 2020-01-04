@@ -26,7 +26,7 @@ export default class AdminDash extends React.Component {
     }
   }
 
-  ////////////////////// loading of db data //////////////////////
+  ////////////////////// loading db data //////////////////////
   getAllEmpsDB = () => {
     axios.get(BASE_URL+ALL_EMPS)
     .then( response => this.setState({allEmployees: response.data}) )
