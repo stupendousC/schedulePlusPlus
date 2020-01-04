@@ -1,6 +1,6 @@
 ---
 https://stackoverflow.com/questions/43918286/github-pages-returns-readme-file-instead-of-index-html-cant-host-my-react-proj
-permalink: /index.html
+permalink: /public/index.html
 ---
 
 
