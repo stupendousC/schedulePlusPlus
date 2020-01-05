@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar';
 import CalendarDay from './CalendarDay';
+import NewShift from './NewShift';
 import {convertDateString} from './Helpers';
 
 const BASE_URL = 'http://localhost:5000/'
@@ -189,7 +190,7 @@ export default class AdminDash extends React.Component {
 
           <section data-spy="scroll" data-target="#calendar" id="calendar">
             <h4 id="calendar">CALENDAR, from shifts table</h4>
-            staff it! from unavailbilities table, make new unmanned shift for shifts table, and send twilio texts
+            <NewShift /> 
             <Calendar onChange={this.getDayDetails} value={new Date()}/>
             <CalendarDay shiftsOfDay={this.state.daySpotlight} />
 
