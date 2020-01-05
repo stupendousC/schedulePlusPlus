@@ -1,7 +1,8 @@
 import React from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar';
-
+import CalendarDay from './CalendarDay';
+import {convertDateString} from './Helpers';
 
 const BASE_URL = 'http://localhost:5000/'
 // const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
@@ -22,7 +23,8 @@ export default class AdminDash extends React.Component {
       allEmployees: [],
       allShifts: [],
       allUnavails: [],
-      spotlight: "",
+      personSpotlight: "",
+      daySpotlight: [],
       message: "",
       error: ""
     }
@@ -84,14 +86,14 @@ export default class AdminDash extends React.Component {
             <td><button onClick={() => this.delete(person, URL_endpoint)} className="btn btn-danger">TODO: Delete</button></td>
           </tr>
           <tr>
-            {this.state.spotlight === person ? this.showSpotlight(person):null}
+            {this.state.personSpotlight === person ? this.showPersonSpotlight(person):null}
           </tr>
         </section>
       )})
     );
   }
 
-  showSpotlight = (person) => {
+  showPersonSpotlight = (person) => {
     return (
       <ul>
         <li>ID: {person.id}</li>
@@ -104,6 +106,21 @@ export default class AdminDash extends React.Component {
     );
   }
 
+  ////////////////////// calendar fcns //////////////////////
+  getDayDetails = (e) => {
+    // convert chosen event value to yyyy-mm-dd format
+    const chosenStr = convertDateString(e);
+
+    // select db's allShifts and save the matching shifts into state.daySpotlight
+    const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === chosenStr)
+    this.setState({ daySpotlight:shiftsOfDay });
+
+    // setState will re-render component to show <CalendarDay > below <Calendar>, with state.daySpotlight as props
+    
+    // dropdown can also show who are avail to work, with a 'staff it!' button
+  }
+
+
   //TOTALLY TEMPORARY:  GONNA PLACE THIS IN A CALENDAR SOON!
   showAllShifts = () => {
     const URL_endpoint = BASE_URL + ALL_SHIFTS
@@ -112,13 +129,13 @@ export default class AdminDash extends React.Component {
       return (
         <section>
           <tr key={i}>
-            <td>SHOULD GO INTO CALENDAR{shift.shift_date}</td>
+            <td>{shift.shift_date}</td>
             <td><button onClick={() => this.read(i, listFromState)} className="btn btn-primary">Info</button></td>
             <td><button onClick={() => this.update(i, listFromState)} className="btn btn-primary">TODO: Update</button></td>
             <td><button onClick={() => this.delete(shift, URL_endpoint)} className="btn btn-danger">Delete</button></td>
           </tr>
           <tr>
-            {this.state.spotlight === shift ? this.showSpotlight(shift):null}
+            {this.state.personSpotlight === shift ? this.showPersonSpotlight(shift):null}
           </tr>
         </section>
       )})
@@ -128,14 +145,14 @@ export default class AdminDash extends React.Component {
   ////////////////////// manipulate data in rows //////////////////////
   read = (i, listFromState) => {
     const selectedPerson = listFromState[i];
-    this.setState({ spotlight: selectedPerson });
+    this.setState({ personSpotlight: selectedPerson });
     return selectedPerson;    
   }
 
   update = (i, listFromState) => {
     console.log("TODO: UPDATE");
     const selectedPerson = listFromState[i];
-    this.setState({spotlight: selectedPerson});
+    this.setState({personSpotlight: selectedPerson});
 
     // TODO: add fields for input
   }
@@ -143,21 +160,13 @@ export default class AdminDash extends React.Component {
   delete = (person, URL_endpoint) => {
     console.log("DELETE", person.name, "from", URL_endpoint);
 
-    this.setState({spotlight: ""});
+    this.setState({personSpotlight: ""});
     axios.delete(BASE_URL + URL_endpoint + "/" + person.id)
-    .then(response => 
-      this.setState({message: `Deleted ${person.name} from database`}),
-      console.log("ok")
-      )
+    .then(response => this.setState({message: `Deleted ${person.name} from database`}))
     .catch(error => console.log("ERROR:", error.messages));
   }
 
-  ////////////////////// calendar fcns //////////////////////
-  getDayDetails = (e) => {
-    console.log("u clicked on", e);
-    // Have a dropdown card for the day, showing what shifts are there
-    // dropdown can also show who are avail to work, with a 'staff it!' button
-  }
+
   
   ////////////////////// render //////////////////////
     render() {
@@ -170,7 +179,6 @@ export default class AdminDash extends React.Component {
         <section>
           <nav id="allLists" className="navbar navbar-light bg-light">
             
-
             <nav className="nav nav-pills flex-row">
               <a className="nav-link" href="#calendar">CALENDAR</a>
               <a className="nav-link" href="#employeeList">EMPLOYEES</a>
@@ -182,11 +190,14 @@ export default class AdminDash extends React.Component {
           <section data-spy="scroll" data-target="#calendar" id="calendar">
             <h4 id="calendar">CALENDAR, from shifts table</h4>
             staff it! from unavailbilities table, make new unmanned shift for shifts table, and send twilio texts
-            <Calendar onChange={this.getDayDetails}/>
-            <table>
-                <thead></thead>
-                <tbody>{allShifts}</tbody>
-              </table>
+            <Calendar onChange={this.getDayDetails} value={new Date()}/>
+            <CalendarDay shiftsOfDay={this.state.daySpotlight} />
+
+                      <table>
+                          <thead></thead>
+                          <tbody>{allShifts}</tbody>
+                        </table>
+
           </section>
 
           <section data-spy="scroll" data-target="#allLists" data-offset="0">

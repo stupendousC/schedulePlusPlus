@@ -1,8 +1,17 @@
 import axios from 'axios';
 
-export const convertEmployeeObjsToArray = (JSONofEmployees) => {
-  return ["TODO", "conv", "employees", "from JSON"];
+export const convertDateString = (timeObj) => {
+  const year = timeObj.getFullYear();
+  let month = timeObj.getMonth() + 1;
+  let day = timeObj.getDate();
+
+  if (month < 10) { month = "0" + month.toString() }
+  if (day < 10) { day = "0" + day.toString() }
+
+  return `${year}-${month}-${day}`;
+  
 }
+
 
 
 // FROM VIDEO STORE, MIGHT RECYCLE LATER
