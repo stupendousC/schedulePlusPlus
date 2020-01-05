@@ -58,6 +58,8 @@ class App extends React.Component {
   }
 
   render() {
+    console.log("ENV", process.env.REACT_APP_BASE_URL);
+    
     this.showCorrectDashboard();
 
     return (
