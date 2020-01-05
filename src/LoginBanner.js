@@ -5,6 +5,7 @@ import bannerLogo from './SPPbanner.png';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 
+import {getAllAdminDB} from './components/Helpers';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
 
 class LoginBanner extends React.Component {
@@ -31,7 +32,8 @@ class LoginBanner extends React.Component {
 
   checkAgainstDB = () => {
     // check agaisnt admins first
-
+    const allAdmins = getAllAdminDB();
+    console.log(allAdmins);
     // check agaisnt employees
 
     // return either admin or employee

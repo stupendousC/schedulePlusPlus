@@ -1,43 +1,45 @@
-// import axios from 'axios';
+import axios from 'axios';
 
-// const BASE_URL = 'http://localhost:5000/'
-// // const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
+const BASE_URL = 'http://localhost:5000/'
+// const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
 
-// const ALL_EMPS = "admin/employees";
-// const ALL_CLIENTS = "admin/clients";
-// const ALL_ADMIN = "admin/admins";
-// const ALL_SHIFTS = "admin/shifts";
-// const ALL_UNAVAILS = "admin/unavails";
+const ALL_EMPS = "admin/employees";
+const ALL_CLIENTS = "admin/clients";
+const ALL_ADMIN = "admin/admins";
+const ALL_SHIFTS = "admin/shifts";
+const ALL_UNAVAILS = "admin/unavails";
 
-// export const getAllEmpsDB = () => {
-//   axios.get(BASE_URL+ALL_EMPS)
-//   .then( response => {return response.data} )
-//   .catch(error => console.log("NO!!!", error));
-// }
+export const getAllEmpsDB = () => {
+  axios.get(BASE_URL+ALL_EMPS)
+  .then( response => {return response.data} )
+  .catch(error => console.log("NO!!!", error));
+}
 
-// export const getAllClientsDB = () => {
-//   axios.get(BASE_URL+ALL_CLIENTS)
-//   .then( response => this.setState({allClients: response.data}))
-//   .catch(error => console.log("NO!!!", error));
-// }
+export const getAllClientsDB = () => {
+  axios.get(BASE_URL+ALL_CLIENTS)
+  .then( response => this.setState({allClients: response.data}))
+  .catch(error => console.log("NO!!!", error));
+}
 
-// export const getAllAdminDB = () => {
-//   axios.get(BASE_URL+ALL_ADMIN)
-//   .then( response => this.setState({allAdmin: response.data}))
-//   .catch(error => console.log("NO!!!", error));
-// }
+export const getAllAdminDB = () => {
+  let result = "SHOULD SEE ADMINS instead of this";
+  axios.get(BASE_URL+ALL_ADMIN)
+  .then(response => { result = response.data})
+  .catch(error => { console.log(error.messages)});
+  return result;
+}
 
-// export const getAllShiftsDB = () => {
-//   axios.get(BASE_URL+ALL_SHIFTS)
-//   .then( response => this.setState({allShifts: response.data}))
-//   .catch(error => console.log("NO!!!, error"));
-// }
+export const getAllShiftsDB = () => {
+  axios.get(BASE_URL+ALL_SHIFTS)
+  .then( response => this.setState({allShifts: response.data}))
+  .catch(error => console.log("NO!!!, error"));
+}
 
-// export const getAllUnavailsDB = () => {
-//   axios.get(BASE_URL+ALL_UNAVAILS)
-//   .then( response => this.setState({allUnavails: response.data}))
-//   .catch(error => console.log("NO!!!, error"));
-// }
+export const getAllUnavailsDB = () => {
+  axios.get(BASE_URL+ALL_UNAVAILS)
+  .then( response => this.setState({allUnavails: response.data}))
+  .catch(error => console.log("NO!!!, error"));
+}
 
 export const convertDateString = (timeObj) => {
   const year = timeObj.getFullYear();
