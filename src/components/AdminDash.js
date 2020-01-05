@@ -87,7 +87,7 @@ export default class AdminDash extends React.Component {
           <tr key={i} className="table-4-col">
             <td>{person.name}</td>
             <td><button onClick={() => this.read(i, listFromState)} className="btn btn-primary">Info</button></td>
-            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-primary">TODO: Update</button></td>
+            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-secondary">TODO: Update</button></td>
             <td><button onClick={() => this.delete(person, URL_endpoint)} className="btn btn-danger">Delete</button></td>
           </tr>
           <tr>
