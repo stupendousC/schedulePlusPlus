@@ -30,6 +30,11 @@ class LoginBanner extends React.Component {
   login = (role) => {
     console.log('logging into table for', role);
     // TODO: oAuth login
+
+
+
+
+    
     const oAuthSuccessful = true;   
 
     // if successful, .setState to affect the login buttons 

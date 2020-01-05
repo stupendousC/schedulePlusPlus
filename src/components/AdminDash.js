@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import Calendar from 'react-calendar'
+import Calendar from 'react-calendar';
+
 
 const BASE_URL = 'http://localhost:5000/'
 // const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
