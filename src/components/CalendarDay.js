@@ -1,21 +1,37 @@
 import React from 'react';
 
-const CalendarDay = ({shiftsOfDay}) => {
+const CalendarDay = ({completeShiftsInfo, dateStr}) => {
+  console.log("CalendarDay received date=", dateStr);
 
-  const showShiftsOnThisDay = () => {
-    console.log(shiftsOfDay);
-    return ( shiftsOfDay.map (shift => {
-      return (
-      <tr key={shift.id}> 
-        <td>{shift.shift_date}</td>
-        <td><button className="btn btn-primary">Update</button></td>
-        <td><button className="btn btn-primary">Delete</button></td>
+  // completeShiftsInfo = [ [shift1], [shift2], [shift3], etc ]
+    // subarray = [[shiftInfo], [employeeInfo], [clientInfo]] 
 
-      </tr>
+  console.log(completeShiftsInfo);
+  for (const eachShift of completeShiftsInfo) {
+    console.log(eachShift[0].id);
+    console.log(eachShift[1].name);
+    console.log(eachShift[2]);
+  }
+
+  const showShifts = () => {
+    if (completeShiftsInfo.length === 0) {
+      return(
+        <h3>No shifts scheduled
+        <br />BUG!!! today doesn't show automatically, assumed none!</h3>
       );
-    })
+    } else {
 
-    );
+      return ( completeShiftsInfo.map (shift => {
+        return (
+        <tr key={shift.id}> 
+          <td>{shift[1].name}</td>
+          <td>{shift[2].name}</td>
+          <td><button className="btn btn-primary">Update</button></td>
+          <td><button className="btn btn-primary">Delete</button></td>
+        </tr>
+        );
+    }));
+    }    
   }
   
   // <td>shift.id = {shift.id}</td>
@@ -51,8 +67,8 @@ const CalendarDay = ({shiftsOfDay}) => {
 
   return(
     <section>
-      <h1>Shifts For This Day</h1>
-      {showShiftsOnThisDay()}
+      <h1>All Shifts For {dateStr}</h1>
+      {showShifts()}
     </section>
   );
   

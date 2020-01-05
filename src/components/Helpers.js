@@ -9,7 +9,6 @@ export const convertDateString = (timeObj) => {
   if (day < 10) { day = "0" + day.toString() }
 
   return `${year}-${month}-${day}`;
-  
 }
 
 

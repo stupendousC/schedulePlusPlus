@@ -25,7 +25,8 @@ export default class AdminDash extends React.Component {
       allShifts: [],
       allUnavails: [],
       personSpotlight: "",
-      daySpotlight: [],
+      daySpotlight: "",
+      shiftsSpotlight: [],
       message: "",
       error: ""
     }
@@ -68,6 +69,9 @@ export default class AdminDash extends React.Component {
     this.getAllAdminDB();
     this.getAllShiftsDB();
     this.getAllUnavailsDB();
+
+    // NO THIS WON'T WORK BC the db retrieval is too slow, this one will run first :-(
+    this.getDayDetails(new Date());
   }
 
 
@@ -107,40 +111,43 @@ export default class AdminDash extends React.Component {
     );
   }
 
-  ////////////////////// calendar fcns //////////////////////
+  ////////////////////// calendar //////////////////////
+
   getDayDetails = (e) => {
+    console.log("\ngetDayDetails on ", e);
+
     // convert chosen event value to yyyy-mm-dd format
     const chosenStr = convertDateString(e);
 
-    // select db's allShifts and save the matching shifts into state.daySpotlight
+    // select db's allShifts and save the matching shifts into state.shiftsSpotlight
     const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === chosenStr)
-    this.setState({ daySpotlight:shiftsOfDay });
 
-    // setState will re-render component to show <CalendarDay > below <Calendar>, with state.daySpotlight as props
-    
-    // dropdown can also show who are avail to work, with a 'staff it!' button
+    // this will trigger <CalendarDay> into rendering this info
+    this.setState({ daySpotlight:chosenStr, shiftsSpotlight: shiftsOfDay });
   }
 
+  getCompleteShiftsInfo = () => {
+    const allShifts = this.state.shiftsSpotlight;
 
-  //TOTALLY TEMPORARY:  GONNA PLACE THIS IN A CALENDAR SOON!
-  showAllShifts = () => {
-    const URL_endpoint = BASE_URL + ALL_SHIFTS
-    const listFromState = this.state.allShifts
-    return ( listFromState.map((shift, i) => {
-      return (
-        <section>
-          <tr key={i}>
-            <td>{shift.shift_date}</td>
-            <td><button onClick={() => this.read(i, listFromState)} className="btn btn-primary">Info</button></td>
-            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-primary">TODO: Update</button></td>
-            <td><button onClick={() => this.delete(shift, URL_endpoint)} className="btn btn-danger">Delete</button></td>
-          </tr>
-          <tr>
-            {this.state.personSpotlight === shift ? this.showPersonSpotlight(shift):null}
-          </tr>
-        </section>
-      )})
-    );
+    console.log("STARTING WITH #allShifts =", allShifts.length);
+
+
+    if (allShifts) {
+      let completeShiftsInfo = [];
+      for (let shift of allShifts) {
+        let thisShift = [];
+        // part 1: the shift itself goes into thisShift[]
+        thisShift.push(shift);
+        // part 2 & 3: relevant employee & client also go into thisShift[]
+        const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
+        thisShift.push(employee);
+        const client = this.state.allClients.find( client => client.id === shift.client_id );
+        thisShift.push(client);
+        // put the triple combo of thisShift into completeShiftsInfo
+        completeShiftsInfo.push(thisShift);
+      }
+      return completeShiftsInfo;
+    }
   }
   
   ////////////////////// manipulate data in rows //////////////////////
@@ -166,15 +173,12 @@ export default class AdminDash extends React.Component {
     .then(response => this.setState({message: `Deleted ${person.name} from database`}))
     .catch(error => console.log("ERROR:", error.messages));
   }
-
-
   
   ////////////////////// render //////////////////////
     render() {
       const allEmployees = this.showAllEmployees();
       const allAdmin = this.showAllAdmin();
       const allClients = this.showAllClients();
-      const allShifts = this.showAllShifts();
       
       return (
         <section>
@@ -188,20 +192,21 @@ export default class AdminDash extends React.Component {
             </nav>
           </nav>
 
+
+
+          {/* CALENDAR SECTION */}
           <section data-spy="scroll" data-target="#calendar" id="calendar">
-            <h4 id="calendar">CALENDAR, from shifts table</h4>
+            <h4 id="calendar">MASTER CALENDAR</h4>
             <NewShift /> 
             <Calendar onChange={this.getDayDetails} value={new Date()}/>
-            <CalendarDay shiftsOfDay={this.state.daySpotlight} />
-
-                      <table>
-                          <thead></thead>
-                          <tbody>{allShifts}</tbody>
-                        </table>
-
+            {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+            <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
           </section>
 
-          <section data-spy="scroll" data-target="#allLists" data-offset="0">
+
+
+          {/* PEOPLE SECTION ... think about moving this to separate routes...*/}
+          <section data-spy="scroll" data-target="#allLists">
             <h4 id="employeeList">EMPLOYEES collapsible plz!</h4>
               <table>
                 <thead></thead>
