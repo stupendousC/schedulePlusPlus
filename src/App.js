@@ -1,10 +1,12 @@
 import React from 'react';
+import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginBanner from './LoginBanner';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
 
+import {} from './components/Helpers';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
 import Homepage from './components/Homepage';
 
@@ -14,20 +16,34 @@ class App extends React.Component {
     this.state = {
       authenticatedRole: "",
       googleId: "",
-      googleEmail: ""
+      username: ""
     }
     sessionStorage.setItem('authenticatedRole', '');
-    sessionStorage.setItem('loggedInPerson', '');
+    sessionStorage.setItem('googleId', '');
+    sessionStorage.setItem('username', '');
   }
 
-  login = (googleId, googleEmail, authenticatedRole) => {
-    this.setState({
-      googleId: googleId,
-      googleEmail: googleEmail,
-      authenticatedRole: authenticatedRole
-    })
-    sessionStorage.setItem('authenticatedRole', authenticatedRole);     /// USING ADMIN FOR NOW!~!!
-    sessionStorage.setItem('loggedInPerson', '');
+  login = (googleId) => {
+    const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
+    
+    axios.get(endpoint, { googleId: googleId })
+      .then(response => {
+        // console.log("RECEIVING FROM BACKEND:", response.data);
+        const authenticatedRoleDB = Object.keys(response.data)[0];
+        const usernameDB = Object.values(response.data)[0].name;
+
+        sessionStorage.setItem('authenticatedRole', authenticatedRoleDB);
+        sessionStorage.setItem('userName', usernameDB);
+        sessionStorage.setItem('googleId', googleId);
+
+        this.setState({
+          authenticatedRole: authenticatedRoleDB,
+          googleId: googleId,
+          username: usernameDB      
+      })
+      })
+      .catch(error => console.log("LOGIN error!", error.message));
+    console.log("STATE = ", this.state.authenticatedRole, this.state.username);
   }
 
   logout = () => {
@@ -35,10 +51,11 @@ class App extends React.Component {
     this.setState({
       authenticatedRole: "",
       googleId: "",
-      googleEmail: ""
+      username: ""
     })
     sessionStorage.setItem('authenticatedRole', '');
-    sessionStorage.setItem('loggedInPerson', '');
+    sessionStorage.setItem('googleId', '');
+    sessionStorage.setItem('username', '');
   }
 
   showCorrectDashboard = () => {
@@ -52,13 +69,12 @@ class App extends React.Component {
     } else if (authenticatedRole === "EMPLOYEE") {
       return <Redirect to="/employeeDash" />
     } else {
-      console.log("home it is");
+      console.log("Nobody logged in -> HOME");
       return <Redirect to="/" />
     }
   }
 
   render() {
-    console.log("ENV", process.env.REACT_APP_BASE_URL);
     
     this.showCorrectDashboard();
 
@@ -66,10 +82,12 @@ class App extends React.Component {
       
       <Router>
           <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
+          {/* {this.state.authenticatedRole === "ADMIN" ? <AdminDash /> : null}  
+          {this.state.authenticatedRole === "EMPLOYEE" ? <EmployeeDash /> : null}   */}
 
           <Switch>  
             {/* Displays only 1 of these components based on on what the URL is */}
-            <Route path="/" exact component={Homepage}/>    {/* use 'exact' so it won't accidentally outrank anything below*/}
+            <Route path="/" exact component={Homepage}/>    use 'exact' so it won't accidentally outrank anything below
             <Route path="/adminDash" component={AdminDash} />
             <Route path="/employeeDash" component={EmployeeDash} />
           </Switch>
