@@ -5,7 +5,6 @@ import bannerLogo from './SPPbanner.png';
 import GoogleLogin from 'react-google-login';
 import axios from 'axios';
 
-import {getAllAdminDB} from './components/Helpers';
 import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
 
 class LoginBanner extends React.Component {
@@ -18,33 +17,23 @@ class LoginBanner extends React.Component {
   
   ////////////////////// LOGIN //////////////////////
   responseGoogle = (response) => {
-    // Are you even an admin or employee?
-    const roleDB = this.checkAgainstDB();
+    console.log(response.profileObj);
 
-    // If yes, send info up to App.js     
-    if (roleDB === "ADMIN" || roleDB === "EMPLOYEE") {
-      this.props.googleAuthCB(response.profileObj.googleId, response.profileObj.email, roleDB);
-    } else {
-      console.log("ARE YOU A CLIENT THEN?  SORRY THAT FEATURE IS NOT YET IMPLEMENTED");
-    }
+    // 
+    
+
+    // send info up to App.js     
+    this.props.googleAuthCB(response.profileObj.googleId);
+    
     
   }
 
-  checkAgainstDB = () => {
-    // check agaisnt admins first
-    const allAdmins = getAllAdminDB();
-    console.log(allAdmins);
-    // check agaisnt employees
-
-    // return either admin or employee
-    return "NOPE!";     // TODO!!!!!!!!
-  }
 
   showBothLogins = () => {
     return (
       <section className="giant-in-middle">
         <GoogleLogin
-          clientId="10529880190-r19j0h35rit1kcoki6dnk9itkhpkqs9e.apps.googleusercontent.com"
+          clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           buttonText="LOGIN"
           onSuccess={this.responseGoogle}
           onFailure={this.responseGoogle}
