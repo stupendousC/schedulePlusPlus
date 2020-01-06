@@ -28,7 +28,12 @@ class App extends React.Component {
     
     axios.get(endpoint, { googleId: googleId })
       .then(response => {
-        // console.log("RECEIVING FROM BACKEND:", response.data);
+        if (Object.entries(response.data).length === 0) {
+          console.log("NOT IN OUR DB!!!");
+          sessionStorage.setItem('authenticatedRole', "NEED UUID");
+          this.setState({ authenticatedRole: "NEED UUID" });
+        }
+
         const authenticatedRoleDB = Object.keys(response.data)[0];
         const usernameDB = Object.values(response.data)[0].name;
 
@@ -43,7 +48,6 @@ class App extends React.Component {
       })
       })
       .catch(error => console.log("LOGIN error!", error.message));
-    console.log("STATE = ", this.state.authenticatedRole, this.state.username);
   }
 
   logout = () => {
