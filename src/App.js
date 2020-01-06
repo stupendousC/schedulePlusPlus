@@ -26,7 +26,7 @@ class App extends React.Component {
   login = (googleId) => {
     const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
     
-    axios.get(endpoint, { googleId: googleId })
+    axios.get(endpoint)
       .then(response => {
         if (Object.entries(response.data).length === 0) {
           console.log("NOT IN OUR DB!!!");
@@ -48,6 +48,11 @@ class App extends React.Component {
       })
       })
       .catch(error => console.log("LOGIN error!", error.message));
+
+      // check to see what the authenticatedRole is... 
+      // console.log("session storage ready? ", sessionStorage.getItem('authenticatedRole'));
+      // console.log("state ready?", this.state.authenticatedRole);
+      // DO NOT ASK FOR UUID at this point, b/c both session & state updates are not ready yet! 
   }
 
   logout = () => {

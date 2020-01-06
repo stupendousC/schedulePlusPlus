@@ -5,14 +5,11 @@ import CalendarDay from './CalendarDay';
 import NewShift from './NewShift';
 import {convertDateString} from './Helpers';
 
-const BASE_URL = 'http://localhost:5000/'
-// const BASE_URL = 'http://sppexperiment.us-west-2.elasticbeanstalk.com/';
-
-const ALL_EMPS = "admin/employees";
-const ALL_CLIENTS = "admin/clients";
-const ALL_ADMIN = "admin/admins";
-const ALL_SHIFTS = "admin/shifts";
-const ALL_UNAVAILS = "admin/unavails";
+const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
+const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
+const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
+const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
+const ALL_UNAVAILS = process.env.REACT_APP_ALL_EMPS;
 
 export default class AdminDash extends React.Component {
 
@@ -20,7 +17,7 @@ export default class AdminDash extends React.Component {
     super()
     this.state = {
       allClients: [],
-      allAdmin: [],
+      allAdmins: [],
       allEmployees: [],
       allShifts: [],
       allUnavails: [],
@@ -33,32 +30,33 @@ export default class AdminDash extends React.Component {
   }
 
   ////////////////////// loading db data //////////////////////
+  
   getAllEmpsDB = () => {
-    axios.get(BASE_URL+ALL_EMPS)
+    axios.get(ALL_EMPS)
     .then( response => this.setState({allEmployees: response.data}) )
     .catch(error => console.log("NO!!!", error));
   }
 
   getAllClientsDB = () => {
-    axios.get(BASE_URL+ALL_CLIENTS)
+    axios.get(ALL_CLIENTS)
     .then( response => this.setState({allClients: response.data}))
     .catch(error => console.log("NO!!!", error));
   }
-
-  getAllAdminDB = () => {
-    axios.get(BASE_URL+ALL_ADMIN)
-    .then( response => this.setState({allAdmin: response.data}))
+  
+  getAllAdminsDB = () => {
+    axios.get(ALL_ADMINS)
+    .then( response => this.setState({allAdmins: response.data}))
     .catch(error => console.log("NO!!!", error));
   }
 
   getAllShiftsDB = () => {
-    axios.get(BASE_URL+ALL_SHIFTS)
+    axios.get(ALL_SHIFTS)
     .then( response => this.setState({allShifts: response.data}))
     .catch(error => console.log("NO!!!, error"));
   }
 
   getAllUnavailsDB = () => {
-    axios.get(BASE_URL+ALL_UNAVAILS)
+    axios.get(ALL_UNAVAILS)
     .then( response => this.setState({allUnavails: response.data}))
     .catch(error => console.log("NO!!!, error"));
   }
@@ -66,7 +64,7 @@ export default class AdminDash extends React.Component {
   componentDidMount() {
     this.getAllEmpsDB();
     this.getAllClientsDB();
-    this.getAllAdminDB();
+    this.getAllAdminsDB();
     this.getAllShiftsDB();
     this.getAllUnavailsDB();
 
@@ -77,7 +75,7 @@ export default class AdminDash extends React.Component {
 
   ////////////////////// generate data in rows //////////////////////
   showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);
-  showAllAdmin = () => this.showAll(this.state.allAdmin, ALL_ADMIN);
+  showAllAdmins = () => this.showAll(this.state.allAdmins, ALL_ADMINS);
   showAllClients = () => this.showAll(this.state.allClients, ALL_CLIENTS);
 
   showAll = (listFromState, URL_endpoint) => {
@@ -169,7 +167,7 @@ export default class AdminDash extends React.Component {
     console.log("DELETE", person.name, "from", URL_endpoint);
 
     this.setState({personSpotlight: ""});
-    axios.delete(BASE_URL + URL_endpoint + "/" + person.id)
+    axios.delete(URL_endpoint + "/" + person.id)
     .then(response => this.setState({message: `Deleted ${person.name} from database`}))
     .catch(error => console.log("ERROR:", error.messages));
   }
@@ -177,7 +175,7 @@ export default class AdminDash extends React.Component {
   ////////////////////// render //////////////////////
     render() {
       const allEmployees = this.showAllEmployees();
-      const allAdmin = this.showAllAdmin();
+      const allAdmins = this.showAllAdmins();
       const allClients = this.showAllClients();
       
       return (
@@ -188,7 +186,7 @@ export default class AdminDash extends React.Component {
               <a className="nav-link" href="#calendar">CALENDAR</a>
               <a className="nav-link" href="#employeeList">EMPLOYEES</a>
               <a className="nav-link" href="#clientsList">CLIENTS</a>
-              <a className="nav-link" href="#adminList">ADMINS</a>
+              <a className="nav-link" href="#adminsList">ADMINS</a>
             </nav>
           </nav>
 
@@ -218,10 +216,10 @@ export default class AdminDash extends React.Component {
                 <thead></thead>
                 <tbody>{allClients}</tbody>
               </table>
-            <h5 id="adminList">ADMIN</h5>
+            <h5 id="adminsList">ADMINS</h5>
             <table>
                 <thead></thead>
-                <tbody>{allAdmin}</tbody>
+                <tbody>{allAdmins}</tbody>
               </table>
           </section>
 
