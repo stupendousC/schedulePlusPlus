@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
-import { convertDateString } from './Helpers';
+import { convertDateString, convertTimeString } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -132,8 +132,8 @@ export default class EmployeeDash extends React.Component {
               <section key = {shift.id} className="section-4-col">
                 <section>{shift.shift_date}</section>
                 <section>{shift.client_id}</section>
-                <section>{shift.start_time}</section>
-                <section>{shift.end_time}</section>
+                <section>{convertTimeString(shift.start_time)}</section>
+                <section>{convertTimeString(shift.end_time)}</section>
               </section>
             )}
           )}

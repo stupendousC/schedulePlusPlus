@@ -1,5 +1,5 @@
 import React from 'react';
-import { convertDateString } from './Helpers';
+import { convertDateString, convertTimeString } from './Helpers';
 
 const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
 
@@ -9,8 +9,8 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
         <section key={shift.id} className="table-4-col"> 
           <section>{shift.shift_date}</section>
           <section>{shift.client_id}</section>
-          <section>{shift.start_time}</section>
-          <section>{shift.end_time}</section>
+          <section>{convertTimeString(shift.start_time)}</section>
+          <section>{convertTimeString(shift.end_time)}</section>
         </section>
         );
     }));
