@@ -10,6 +10,8 @@ import { convertDateString } from './Helpers';
 // 1366 x 768
 // 1920x1080   
 
+const EMP_DASH = process.env.REACT_APP_EMP_DASH;
+
 export default class EmployeeDash extends React.Component {
 
   constructor() {
@@ -27,14 +29,26 @@ export default class EmployeeDash extends React.Component {
     console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
     if (this.props.authenticatedRole === "EMPLOYEE") {
 
-      // THIS IS WHERE I LEFT OFF!!!!!!!
       // get employee's own info
-      axios.get()
-      .then()
-      .catch()
+      axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
+      .then(response => {
+        this.setState({empInfo: response.data});
+      })
+      .catch(error => console.log("ERROR downloading employee dash:", error.message));
+
     // get employee's own Unavails
+    // axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
+    //   .then(response => {
+    //     this.setState({empInfo: response.data});
+    //   })
+    //   .catch(error => console.log("ERROR downloading employee dash:", error.message));
 
     // get employee's own Shifts
+    // axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
+    //   .then(response => {
+    //     this.setState({empInfo: response.data});
+    //   })
+    //   .catch(error => console.log("ERROR downloading employee dash:", error.message));
 
     } else {
       console.log("YOU ARE *NOT* AN EMPLOYEE!");
@@ -91,7 +105,7 @@ export default class EmployeeDash extends React.Component {
       <section>
         <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-        <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
+        {/* <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} /> */}
       </section>
     );
   }

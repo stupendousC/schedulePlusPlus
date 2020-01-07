@@ -14,13 +14,14 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "",       // TEMPORARY
+      authenticatedRole: "EMPLOYEE",       // TEMPORARY
       googleId: "",
-      username: ""// TEMPORARY
+      username: "TEMPORARY OVERRIDE EMPLOYEE",// TEMPORARY
+      databaseId: ""
     }
-    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', 'EMPLOYEE');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', '');// TEMPORARY
+    sessionStorage.setItem('username', 'TEMPORARY OVERRIDE EMPLOYEE');// TEMPORARY
   }
 
   login = (googleId) => {
@@ -40,15 +41,18 @@ class App extends React.Component {
 
         const authenticatedRoleDB = Object.keys(response.data)[0];
         const usernameDB = Object.values(response.data)[0].name;
+        const databaseId = Object.values(response.data)[0].id;
 
         sessionStorage.setItem('authenticatedRole', authenticatedRoleDB);
         sessionStorage.setItem('username', usernameDB);
         sessionStorage.setItem('googleId', googleId);
+        sessionStorage.setItem('databaseId', databaseId);
 
         this.setState({
           authenticatedRole: authenticatedRoleDB,
           googleId: googleId,
-          username: usernameDB      
+          username: usernameDB,
+          databaseId: databaseId      
       })
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
@@ -59,11 +63,10 @@ class App extends React.Component {
     this.setState({
       authenticatedRole: "",  
       googleId: "",
-      username: ""
+      username: "",
+      databaseId: ""
     })
-    sessionStorage.setItem('authenticatedRole', '');
-    sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', '');
+    sessionStorage.clear();
   }
 
   render() {
@@ -77,7 +80,7 @@ class App extends React.Component {
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
-            <Route path="/employeeDash" component={EmployeeDash} />
+            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
           </Switch>
       </Router>
   );
