@@ -45,7 +45,7 @@ class LoginBanner extends React.Component {
     if (authenticatedRole === "ADMIN") {
       return (
         <section>
-          Welcome back... {sessionStorage.getItem("username")}
+          Hello {sessionStorage.getItem("username")}
           <button className="btn btn-warning"><Link to="/adminDash">ADMIN Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
@@ -53,7 +53,7 @@ class LoginBanner extends React.Component {
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
         <section>
-          Welcome back... {sessionStorage.getItem("username")}
+          Hello {sessionStorage.getItem("username")}
           <button className="btn btn-warning"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
