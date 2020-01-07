@@ -77,8 +77,6 @@ export default class AdminDash extends React.Component {
     } else {
       console.log("YOU ARE *NOT* AN ADMIN!");
     }   
-    
-    
   }
 
   ////////////////////// DISPLAY: calendar vs employees vs clients vs admin //////////////////////
@@ -209,13 +207,11 @@ export default class AdminDash extends React.Component {
   }
   
 
-
   ////////////////////// render //////////////////////
     render() {
 
       return (
         <section>
-
 
           <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -234,13 +230,9 @@ export default class AdminDash extends React.Component {
 
           {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first"/>}  
 
-
         </section>
         
       );
     }
-  
-  
-  
   
 }

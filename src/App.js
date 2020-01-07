@@ -7,7 +7,7 @@ import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
 
 import {} from './components/Helpers';
-import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Homepage from './components/Homepage';
 
 class App extends React.Component {
