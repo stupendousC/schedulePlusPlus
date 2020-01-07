@@ -5,6 +5,8 @@ import CalendarDay from './CalendarDay';
 import NewShift from './NewShift';
 import {convertDateString} from './Helpers';
 
+import Error from './Error';
+
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
@@ -24,8 +26,7 @@ export default class AdminDash extends React.Component {
       personSpotlight: "",
       daySpotlight: "",
       shiftsSpotlight: [],
-      message: "",
-      error: ""
+      show: "calendar"
     }
   }
 
@@ -62,16 +63,51 @@ export default class AdminDash extends React.Component {
   }
 
   componentDidMount() {
-    this.getAllEmpsDB();
-    this.getAllClientsDB();
-    this.getAllAdminsDB();
-    this.getAllShiftsDB();
-    this.getAllUnavailsDB();
+    console.log("HELLO", this.props.username, this.props.authenticatedRole);
 
-    // NO THIS WON'T WORK BC the db retrieval is too slow, this one will run first :-(
+    if (this.props.authenticatedRole === "ADMIN") {
+      this.getAllEmpsDB();
+      this.getAllClientsDB();
+      this.getAllAdminsDB();
+      this.getAllShiftsDB();
+      this.getAllUnavailsDB();
+
+      // NO THIS WON'T WORK BC the db retrieval is too slow, this one will run first :-(
     this.getDayDetails(new Date());
+    } else {
+      console.log("YOU ARE *NOT* AN ADMIN!");
+    }   
+    
+    
   }
 
+  ////////////////////// DISPLAY: calendar vs employees vs clients vs admin //////////////////////
+  setShowCategory = (chosen) => this.setState({show: chosen});
+
+  showChosenCategory = () => {
+    const chosen = this.state.show;
+    
+    if (chosen === "calendar") {
+      return this.showCalendar();
+    } else if (chosen === "admin") {
+      return this.showAllAdmins();
+    } else if (chosen === "employees") {
+      return this.showAllEmployees();
+    } else if (chosen === "clients") {
+      return this.showAllClients();
+    }
+  }
+
+  showCalendar = () => {
+    return (
+      <section>
+        <NewShift /> 
+        <Calendar onChange={this.getDayDetails} value={new Date()}/>
+        {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
+      </section>
+    );
+  }
 
   ////////////////////// generate data in rows //////////////////////
   showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);
@@ -172,59 +208,34 @@ export default class AdminDash extends React.Component {
     .catch(error => console.log("ERROR:", error.messages));
   }
   
+
+
   ////////////////////// render //////////////////////
     render() {
-      const allEmployees = this.showAllEmployees();
-      const allAdmins = this.showAllAdmins();
-      const allClients = this.showAllClients();
-      
+
       return (
         <section>
-          <nav id="allLists" className="navbar navbar-light bg-light">
-            
-            <nav className="nav nav-pills flex-row">
-              <a className="nav-link" href="#calendar">CALENDAR</a>
-              <a className="nav-link" href="#employeeList">EMPLOYEES</a>
-              <a className="nav-link" href="#clientsList">CLIENTS</a>
-              <a className="nav-link" href="#adminsList">ADMINS</a>
-            </nav>
-          </nav>
 
 
+          <ul class="nav nav-tabs">
+            <li class="nav-item">
+              <button class="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" onClick={()=>this.setShowCategory('clients')}>CLIENTS</button>
+            </li>
+            <li class="nav-item">
+              <button class="nav-link" onClick={()=>this.setShowCategory('admin')}>ADMIN</button>
+            </li>
+          </ul>
 
-          {/* CALENDAR SECTION */}
-          <section data-spy="scroll" data-target="#calendar" id="calendar">
-            <h4 id="calendar">MASTER CALENDAR</h4>
-            <NewShift /> 
-            <Calendar onChange={this.getDayDetails} value={new Date()}/>
-            {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-            <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
-          </section>
+          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first"/>}  
 
-
-
-          {/* PEOPLE SECTION ... think about moving this to separate routes...*/}
-          <section data-spy="scroll" data-target="#allLists">
-            <h4 id="employeeList">EMPLOYEES collapsible plz!</h4>
-              <table>
-                <thead></thead>
-                <tbody>{allEmployees}</tbody>
-              </table>
-            
-            <h5 id="clientsList">CLIENTS</h5>
-            <table>
-                <thead></thead>
-                <tbody>{allClients}</tbody>
-              </table>
-            <h5 id="adminsList">ADMINS</h5>
-            <table>
-                <thead></thead>
-                <tbody>{allAdmins}</tbody>
-              </table>
-          </section>
 
         </section>
-
         
       );
     }

@@ -18,7 +18,7 @@ class App extends React.Component {
       googleId: "",
       username: ""
     }
-    sessionStorage.setItem('authenticatedRole', '');
+    sessionStorage.setItem('authenticatedRole', 'ADMIN');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
     sessionStorage.setItem('username', '');
   }
@@ -58,7 +58,7 @@ class App extends React.Component {
   logout = () => {
     console.log("APP.js is logging you out!!!");
     this.setState({
-      authenticatedRole: "",
+      authenticatedRole: "",  
       googleId: "",
       username: ""
     })
@@ -67,37 +67,17 @@ class App extends React.Component {
     sessionStorage.setItem('username', '');
   }
 
-  showCorrectDashboard = () => {
-    
-    const authenticatedRole = sessionStorage.getItem('authenticatedRole');
-    
-    console.log("session says..", authenticatedRole);
-    
-    if (authenticatedRole === "ADMIN") {
-      return <Redirect to="/adminDash" />
-    } else if (authenticatedRole === "EMPLOYEE") {
-      return <Redirect to="/employeeDash" />
-    } else {
-      console.log("Nobody logged in -> HOME");
-      return <Redirect to="/" />
-    }
-  }
-
   render() {
     
-    this.showCorrectDashboard();
-
     return (
       
       <Router>
           <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
-          {/* {this.state.authenticatedRole === "ADMIN" ? <AdminDash /> : null}  
-          {this.state.authenticatedRole === "EMPLOYEE" ? <EmployeeDash /> : null}   */}
-
-          <Switch>  
+          
+          <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
-            <Route path="/" exact component={Homepage}/>    use 'exact' so it won't accidentally outrank anything below
-            <Route path="/adminDash" component={AdminDash} />
+            <Route path="/" exact component={Homepage}/>    
+            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
             <Route path="/employeeDash" component={EmployeeDash} />
           </Switch>
       </Router>
@@ -107,3 +87,19 @@ class App extends React.Component {
 
 
 export default App;
+
+       // showCorrectDashboard = () => {
+    
+    // const authenticatedRole = sessionStorage.getItem('authenticatedRole');
+    
+    // console.log("session says..", authenticatedRole);
+    
+    // if (authenticatedRole === "ADMIN") {
+    //   return <Redirect to="/adminDash" />
+    // } else if (authenticatedRole === "EMPLOYEE") {
+    //   return <Redirect to="/employeeDash" />
+    // } else {
+    //   console.log("Nobody logged in -> HOME");
+    //   return <Redirect to="/" />
+    // }
+  // }     
