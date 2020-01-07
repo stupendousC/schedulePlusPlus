@@ -44,6 +44,19 @@ export const convertDateString = (timeObj) => {
   return `${year}-${month}-${day}`;
 }
 
+export const formatTimeString = (timeStr) => {
+  // takes "HH:MM:SS" and turns it into "HH:MM AM/PM"
+  console.log("receiving ", timeStr);
+  let hours = parseInt(timeStr.slice(0,2));
+  if (hours < 12) {
+    return (timeStr.slice(0,5)+" A.M.");
+  } else {
+    hours -= 12;
+    return (hours+timeStr.slice(2,5)+" P.M.");
+  }
+  
+
+}
 
 
 // FROM VIDEO STORE, MIGHT RECYCLE LATER

@@ -126,6 +126,7 @@ export default class EmployeeDash extends React.Component {
     } else {
       return(
         <section>
+          Would be nice to show client info, not just random id.  also truncate working time
           {this.state.empShifts.map(shift => {
             return (
               <section key = {shift.id} className="section-4-col">
@@ -154,6 +155,7 @@ export default class EmployeeDash extends React.Component {
     } else {
       return(
       <section>
+        It'd be nice to sort these, and to hide all the ones in the past, can click on them if u really want to
         {sortedByDate.map(unavail => {return <li key = {unavail.id}>{unavail.day_off}</li>})}
       </section>
     );
