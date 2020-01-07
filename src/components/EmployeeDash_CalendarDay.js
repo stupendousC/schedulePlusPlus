@@ -1,4 +1,5 @@
 import React from 'react';
+import { convertDateString } from './Helpers';
 
 const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
 
@@ -16,25 +17,14 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
   }
 
 
-  const showTableOrNothing = () => {
+  const showAgendaOrOptions = () => {
     console.log("\nCalendarDay received: ", tempInfo, " availStatus = ", availStatus);
 
-    if (tempInfo.length === 0 && availStatus === true) {
-      return (
-        <section>
-          <h3>No shifts scheduled</h3>
-          <button onClick={() => {toggleAvail(false)}}>Take the day off</button>
-        </section>
-        
-      );
-    } else if (tempInfo.length === 0 && availStatus === false) {
-      return (
-        <section>
-          <h3>You have the day off</h3>
-          <button onClick={() => {toggleAvail(true)}}>I'm free to work</button>
-        </section>
-      );
-    } else {
+    // is the day in the past?
+    const today = convertDateString(new Date());
+    const inThePast = dateStr < today;
+
+    if (tempInfo.length > 0) {
       return (
         <section>
           <section className="section-4-col"> 
@@ -49,7 +39,25 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
           </section>
         </section>
       );
-    }
+    } else if (inThePast) {
+      return (
+        <section>Nothing for this date</section>
+      );
+    } else if (tempInfo.length === 0 && availStatus === true) {
+      return (
+        <section>
+          <h3>No shifts scheduled</h3>
+          <button onClick={() => {toggleAvail(false)}}>Take the day off</button>
+        </section>
+      );
+    } else if (tempInfo.length === 0 && availStatus === false) {
+      return (
+        <section>
+          <h3>You have the day off</h3>
+          <button onClick={() => {toggleAvail(true)}}>I'm free to work</button>
+        </section>
+      );
+    } 
   }
 
   const toggleAvail = (bool) => {
@@ -68,7 +76,7 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
 
     <section> 
       <h1>All Shifts For {dateStr}</h1>
-      {showTableOrNothing()}
+      {showAgendaOrOptions()}
     </section>
   );
   
