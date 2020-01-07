@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from 'react-calendar';
-import CalendarDay from './CalendarDay';
+import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
 import { convertDateString } from './Helpers';
@@ -16,11 +16,14 @@ export default class EmployeeDash extends React.Component {
 
   constructor() {
     super()
+    const today = convertDateString(new Date())
     this.state = {
       empInfo: [],
       empUnavails: [],
       empShifts: [],
-      daySpotlight: convertDateString(new Date()),
+      daySpotlight: today,
+      shiftsOfDay: [],
+      availStatusOfDay: null,
       show: 'calendar'
     }
   }
@@ -39,21 +42,24 @@ export default class EmployeeDash extends React.Component {
     // get employee's own Unavails
     axios.get(EMP_DASH+"/unavails")
       .then(response => {
-        this.setState({empUnavails: response.data});
+        const today = convertDateString(new Date());
+        const canWorkBool = this.canWorkThisDay(today);
+        this.setState({empUnavails: response.data, availStatusOfDay: canWorkBool});
       })
       .catch(error => console.log("ERROR downloading employee unavails:", error.message));
 
     // get employee's own Shifts
     axios.get(EMP_DASH+"/shifts")
       .then(response => {
-        this.setState({empShifts: response.data});
+        const today = convertDateString(new Date());
+        const shiftsToday = response.data.filter( shift => shift.shift_date === today );
+        this.setState({empShifts: response.data, shiftsOfDay: shiftsToday});
       })
       .catch(error => console.log("ERROR downloading employee shifts:", error.message));
 
     } else {
       console.log("YOU ARE *NOT* AN EMPLOYEE!");
-    }   
-    
+    }    
   }
   
   ////////////////////// set DISPLAY choice //////////////////////
@@ -158,68 +164,46 @@ export default class EmployeeDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        CALENDAR HERE
-        <Calendar onChange={this.showSchedOrToggleUnavail} value={new Date()}/>
-        {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-        {/* <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} /> */}
+        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <CalendarDay tempInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} completeShiftsInfo={this.getCompleteShiftsInfo} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
   }
 
-  showSchedOrToggleUnavail = (e) => {
-    console.log("CLICKED on ", e);
-    console.log("should we show schedule? or toggle availability?")
-    
-    
-    
-    // LEFT HERE!!!
-    
-    
-    // If have shifts, show them. Else show button to allow day off
+  updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
 
-
-
-    // const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
-    // this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
+    const shiftsOfDay = this.state.empShifts.filter( shift => shift.shift_date === dateStr);
+    const canWorkBool = this.canWorkThisDay(dateStr);
+    this.setState({ 
+      daySpotlight: dateStr, 
+      shiftsOfDay: shiftsOfDay, 
+      availStatusOfDay: canWorkBool })
   }
 
-  // changeDaySpotlight = (e) => {
-  //   // convert chosen event value to yyyy-mm-dd format
-  //   const dateStr = convertDateString(e);
-  //   const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
-  //   this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
-  // }
+  getCompleteShiftsInfo = () => {
+    // need to get client name & STUFF
+  }
 
-  // // TODO: BUG!!! it seRches only ACTIVE clients & employees, maybe get this info from backend???
-  // getCompleteShiftsInfo = () => {
-  //   const allShifts = this.state.shiftsSpotlight;
+  canWorkThisDay = () => {
+    // are you already working today?
+    if (this.state.shiftsOfDay.length > 0) {
+      return false;
+    }
 
-  //   // console.log("STARTING WITH #allShifts =", allShifts.length);
-
-  //   if (allShifts) {
-  //     let completeShiftsInfo = [];
-  //     for (let shift of allShifts) {
-  //       let thisShift = [];
-  //       // part 1: the shift itself goes into thisShift[]
-  //       thisShift.push(shift);
-  //       // part 2 & 3: relevant employee & client also go into thisShift[]
-  //       const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
-  //       thisShift.push(employee);
-  //       const client = this.state.allClients.find( client => client.id === shift.client_id );
-  //       thisShift.push(client);
-  //       // put the triple combo of thisShift into completeShiftsInfo
-  //       completeShiftsInfo.push(thisShift);
-  //     }
-  //     return completeShiftsInfo;
-  //   }
-  // }
+    // do u have today off?
+    for (const unavail of this.state.empUnavails) {
+      if (unavail.day_off === this.state.daySpotlight) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
 
   ////////////////////// render //////////////////////
     
-  
   render() {
-
       return (
         <section>
 
@@ -241,7 +225,6 @@ export default class EmployeeDash extends React.Component {
           {this.props.authenticatedRole === "EMPLOYEE" ? this.showChosenCategory() : <Error message="You need to log in first to see EMPLOYEE dashboard"/>}  
 
         </section>
-        
       );
     }
 
