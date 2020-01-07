@@ -46,14 +46,14 @@ class LoginBanner extends React.Component {
       return (
         <section>
           <button className="btn btn-warning"><Link to="/adminDash">ADMIN Dashboard</Link></button>
-          <button onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
         <section>
           <button className="btn btn-warning"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
-          <button onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else {

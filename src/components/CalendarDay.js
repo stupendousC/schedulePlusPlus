@@ -1,7 +1,10 @@
 import React from 'react';
 
 const CalendarDay = ({completeShiftsInfo, dateStr}) => {
-  console.log("CalendarDay received date=", dateStr);
+
+
+  // console.log("CalendarDay received date=", dateStr);
+  // console.log(completeShiftsInfo);
 
   // completeShiftsInfo = [ [shift1], [shift2], etc ]
     // triplet subarray = [[shiftInfo], [employeeInfo], [clientInfo]] 
@@ -10,14 +13,15 @@ const CalendarDay = ({completeShiftsInfo, dateStr}) => {
     return ( completeShiftsInfo.map (tripletArray => {
       return (
         <tr key={tripletArray.id} className="table-4-col"> 
-          <td>{tripletArray[1].name}</td>
-          <td>{tripletArray[2].name}</td>
+          <td>{tripletArray[1].id}</td>
+          <td>{tripletArray[2].id}</td>
           <td>{tripletArray[0].start_time}</td>
           <td>{tripletArray[0].end_time}</td>
         </tr>
         );
     }));
   }
+
 
   const showTableOrNothing = () => {
     if (completeShiftsInfo.length === 0) {
