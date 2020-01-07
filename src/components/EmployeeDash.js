@@ -74,19 +74,46 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: own info //////////////////////
+  showAllInfo = () => {
+    const info = this.state.empInfo;
+
+    return(
+      <section>
+        <form>
+          <fieldset>
+            <div className="form-group">
+              <label>Name</label>
+              <input disabled type="text" className="form-control" placeholder={info.name}/>
+              <label>Address</label>
+              <input disabled type="text" className="form-control" placeholder={info.address}/>
+              <label>Phone</label>
+              <input disabled type="text" className="form-control" placeholder={info.phone}/>
+              <label>Email</label>
+              <input disabled type="text" className="form-control" placeholder={info.email}/>
+            </div>
+            {/* <div className="form-check">
+              <input className="form-check-input" type="checkbox"/>
+              <label className="form-check-label">
+                Check this box to enable updating my info
+                //TODO: planning to have all inputs disabled first, then enable it once this box is clicked
+              </label>
+            </div> */}
+            <button onClick={this.update} className="btn btn-primary">Update My Info (UPCOMING)</button>
+          </fieldset>
+        </form>
+      </section>
+    );
+  }
     // read = (i, listFromState) => {
     //   const selectedPerson = listFromState[i];
     //   this.setState({ personSpotlight: selectedPerson });
     //   return selectedPerson;    
     // }
   
-    // update = (i, listFromState) => {
-    //   console.log("TODO: UPDATE");
-    //   const selectedPerson = listFromState[i];
-    //   this.setState({personSpotlight: selectedPerson});
-  
-    //   // TODO: add fields for input
-    // }
+    update = (e) => {
+      e.preventDefault();
+      console.log("TODO: UPDATE");
+    }
   
     // deactivate = (person, URL_endpoint) => {
     //   console.log("deactivate", person.name, "from", URL_endpoint);
@@ -170,10 +197,4 @@ export default class EmployeeDash extends React.Component {
     }
 
 }
-
-
-
-
-
-  
 
