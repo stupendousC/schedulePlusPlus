@@ -99,7 +99,7 @@ export default class AdminDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
-        {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
         <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
       </section>
@@ -218,7 +218,7 @@ export default class AdminDash extends React.Component {
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first"/>}  
+          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first TO SEE ADMIN dashboard"/>}  
 
         </section>
         

@@ -14,22 +14,26 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "ADMIN",       // TEMPORARY
+      authenticatedRole: "",       // TEMPORARY
       googleId: "",
       username: "TEMPORARY!!!"// TEMPORARY
     }
-    sessionStorage.setItem('authenticatedRole', 'ADMIN');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
     sessionStorage.setItem('username', 'TEMPORARY!!!');// TEMPORARY
   }
 
   login = (googleId) => {
     const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
-    
+    // const endpoint = process.env.REACT_APP_LOGIN + "/?googleId=" + googleId;
+
     axios.get(endpoint)
       .then(response => {
+        console.log("got this back from backend:", response.data);
+
+
         if (Object.entries(response.data).length === 0) {
-          console.log("NOT IN OUR DB!!!");
+          console.log("NOT IN OUR DB!!! ");
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
           this.setState({ authenticatedRole: "NEED UUID" });
         }
@@ -47,7 +51,7 @@ class App extends React.Component {
           username: usernameDB      
       })
       })
-      .catch(error => console.log("LOGIN error!", error.message));
+      .catch(error => console.log("LOGIN ERROR!", error.message));
 
       // check to see what the authenticatedRole is... 
       // console.log("session storage ready? ", sessionStorage.getItem('authenticatedRole'));
