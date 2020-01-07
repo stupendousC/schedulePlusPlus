@@ -34,21 +34,21 @@ export default class EmployeeDash extends React.Component {
       .then(response => {
         this.setState({empInfo: response.data});
       })
-      .catch(error => console.log("ERROR downloading employee dash:", error.message));
+      .catch(error => console.log("ERROR downloading employee info:", error.message));
 
     // get employee's own Unavails
     axios.get(EMP_DASH+"/unavails")
       .then(response => {
         this.setState({empUnavails: response.data});
       })
-      .catch(error => console.log("ERROR downloading employee dash:", error.message));
+      .catch(error => console.log("ERROR downloading employee unavails:", error.message));
 
     // get employee's own Shifts
-    // axios.get(EMP_DASH+"/")
-    //   .then(response => {
-    //     this.setState({empInfo: response.data});
-    //   })
-    //   .catch(error => console.log("ERROR downloading employee dash:", error.message));
+    axios.get(EMP_DASH+"/shifts")
+      .then(response => {
+        this.setState({empShifts: response.data});
+      })
+      .catch(error => console.log("ERROR downloading employee shifts:", error.message));
 
     } else {
       console.log("YOU ARE *NOT* AN EMPLOYEE!");
@@ -105,22 +105,35 @@ export default class EmployeeDash extends React.Component {
     );
   }
 
-    update = (e) => {
-      e.preventDefault();
-      console.log("TODO: UPDATE");
-    }
+  update = (e) => {
+    e.preventDefault();
+    console.log("TODO: UPDATE");
+  }
 
   ////////////////////// DISPLAY: own shifts //////////////////////
-      // DO THIS NEXT!!!
-      showAllShifts = () => {
-        return(
-          <section>
-            Show all shifts here
-          </section>
-        );
-      }
 
-
+  showAllShifts = () => {
+    if (this.state.empShifts.length === 0) {
+      return (
+        <section>No upcoming shifts</section>
+      );
+    } else {
+      return(
+        <section>
+          {this.state.empShifts.map(shift => {
+            return (
+              <section key = {shift.id} className="section-4-col">
+                <section>{shift.shift_date}</section>
+                <section>{shift.client_id}</section>
+                <section>{shift.start_time}</section>
+                <section>{shift.end_time}</section>
+              </section>
+            )}
+          )}
+        </section>
+      );
+    }    
+  }
 
   ////////////////////// DISPLAY: own unavails //////////////////////
   showAllUnavails = () => {
@@ -130,9 +143,7 @@ export default class EmployeeDash extends React.Component {
     
     if (empUnavails.length === 0) {
       return (
-        <section>
-          No upcoming unavailable days :-)
-        </section>
+        <section>No upcoming unavailable days</section>
       );
     } else {
       return(
@@ -141,16 +152,8 @@ export default class EmployeeDash extends React.Component {
       </section>
     );
     }
-
-    
   }
-
-
-
-  //////// TEST
-
-
-
+  
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
     return (
