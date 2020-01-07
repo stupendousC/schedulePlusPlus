@@ -124,14 +124,30 @@ export default class EmployeeDash extends React.Component {
 
   ////////////////////// DISPLAY: own unavails //////////////////////
   showAllUnavails = () => {
-    return(
+    const empUnavails = this.state.empUnavails;
+    const sortedByDate = empUnavails.sort((a,b) => b.day_off - a.day_off);
+    console.log("should be sorted...", sortedByDate);
+    
+    if (empUnavails.length === 0) {
+      return (
+        <section>
+          No upcoming unavailable days :-)
+        </section>
+      );
+    } else {
+      return(
       <section>
-        show all unavails here
+        {sortedByDate.map(unavail => {return <li key = {unavail.id}>{unavail.day_off}</li>})}
       </section>
     );
+    }
+
+    
   }
 
 
+
+  //////// TEST
 
 
 
@@ -139,11 +155,30 @@ export default class EmployeeDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
-        {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        CALENDAR HERE
+        <Calendar onChange={this.showSchedOrToggleUnavail} value={new Date()}/>
+        {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         {/* <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} /> */}
       </section>
     );
+  }
+
+  showSchedOrToggleUnavail = (e) => {
+    console.log("CLICKED on ", e);
+    console.log("should we show schedule? or toggle availability?")
+    
+    
+    
+    // LEFT HERE!!!
+    
+    
+    // If have shifts, show them. Else show button to allow day off
+    const dateStr = convertDateString(e);
+
+
+
+    // const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
+    // this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
   }
 
   // changeDaySpotlight = (e) => {
@@ -178,7 +213,9 @@ export default class EmployeeDash extends React.Component {
   // }
 
   ////////////////////// render //////////////////////
-    render() {
+    
+  
+  render() {
 
       return (
         <section>
