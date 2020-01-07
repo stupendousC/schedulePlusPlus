@@ -10,7 +10,7 @@ import { convertDateString } from './Helpers';
 // 1366 x 768
 // 1920x1080   
 
-const EMP_DASH = process.env.REACT_APP_EMP_DASH;
+const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
 
 export default class EmployeeDash extends React.Component {
 
@@ -30,21 +30,21 @@ export default class EmployeeDash extends React.Component {
     if (this.props.authenticatedRole === "EMPLOYEE") {
 
       // get employee's own info
-      axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
+      axios.get(EMP_DASH)
       .then(response => {
         this.setState({empInfo: response.data});
       })
       .catch(error => console.log("ERROR downloading employee dash:", error.message));
 
     // get employee's own Unavails
-    // axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
-    //   .then(response => {
-    //     this.setState({empInfo: response.data});
-    //   })
-    //   .catch(error => console.log("ERROR downloading employee dash:", error.message));
+    axios.get(EMP_DASH+"/unavails")
+      .then(response => {
+        this.setState({empUnavails: response.data});
+      })
+      .catch(error => console.log("ERROR downloading employee dash:", error.message));
 
     // get employee's own Shifts
-    // axios.get(EMP_DASH+"/"+sessionStorage.getItem('databaseId'))
+    // axios.get(EMP_DASH+"/")
     //   .then(response => {
     //     this.setState({empInfo: response.data});
     //   })
@@ -104,26 +104,35 @@ export default class EmployeeDash extends React.Component {
       </section>
     );
   }
-    // read = (i, listFromState) => {
-    //   const selectedPerson = listFromState[i];
-    //   this.setState({ personSpotlight: selectedPerson });
-    //   return selectedPerson;    
-    // }
-  
+
     update = (e) => {
       e.preventDefault();
       console.log("TODO: UPDATE");
     }
-  
-    // deactivate = (person, URL_endpoint) => {
-    //   console.log("deactivate", person.name, "from", URL_endpoint);
-  
-    //   this.setState({personSpotlight: ""});
-    //   axios.delete(URL_endpoint + "/" + person.id)
-    //   .then(response => this.setState({message: `deactivated ${person.name} from database`}))
-    //   .catch(error => console.log("ERROR:", error.messages));
-    // }
-    
+
+  ////////////////////// DISPLAY: own shifts //////////////////////
+      // DO THIS NEXT!!!
+      showAllShifts = () => {
+        return(
+          <section>
+            Show all shifts here
+          </section>
+        );
+      }
+
+
+
+  ////////////////////// DISPLAY: own unavails //////////////////////
+  showAllUnavails = () => {
+    return(
+      <section>
+        show all unavails here
+      </section>
+    );
+  }
+
+
+
 
 
   ////////////////////// DISPLAY: calendar  //////////////////////
@@ -182,7 +191,7 @@ export default class EmployeeDash extends React.Component {
               <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABILE DAYS</button>
+              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
             </li>
             <li className="nav-item">
               <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
