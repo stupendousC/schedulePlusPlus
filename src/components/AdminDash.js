@@ -5,6 +5,8 @@ import CalendarDay from './CalendarDay';
 import NewShift from './NewShift';
 import {convertDateString} from './Helpers';
 
+import Error from './Error';
+
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
@@ -22,10 +24,9 @@ export default class AdminDash extends React.Component {
       allShifts: [],
       allUnavails: [],
       personSpotlight: "",
-      daySpotlight: "",
+      daySpotlight: convertDateString(new Date()),
       shiftsSpotlight: [],
-      message: "",
-      error: ""
+      show: "calendar"
     }
   }
 
@@ -62,18 +63,81 @@ export default class AdminDash extends React.Component {
   }
 
   componentDidMount() {
-    this.getAllEmpsDB();
-    this.getAllClientsDB();
-    this.getAllAdminsDB();
-    this.getAllShiftsDB();
-    this.getAllUnavailsDB();
+    console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
 
-    // NO THIS WON'T WORK BC the db retrieval is too slow, this one will run first :-(
-    this.getDayDetails(new Date());
+    if (this.props.authenticatedRole === "ADMIN") {
+      this.getAllEmpsDB();
+      this.getAllClientsDB();
+      this.getAllAdminsDB();
+      this.getAllShiftsDB();
+      this.getAllUnavailsDB();
+
+    } else {
+      console.log("YOU ARE *NOT* AN ADMIN!");
+    }   
   }
 
+  ////////////////////// set DISPLAY choice //////////////////////
+  setShowCategory = (chosen) => this.setState({show: chosen});
 
-  ////////////////////// generate data in rows //////////////////////
+  showChosenCategory = () => {
+    const chosen = this.state.show;
+    
+    if (chosen === "calendar") {
+      return this.showCalendar();
+    } else if (chosen === "admin") {
+      return this.showAllAdmins();
+    } else if (chosen === "employees") {
+      return this.showAllEmployees();
+    } else if (chosen === "clients") {
+      return this.showAllClients();
+    }
+  }
+
+  ////////////////////// DISPLAY: calendar  //////////////////////
+  showCalendar = () => {
+    return (
+      <section>
+        <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
+        {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
+        <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
+      </section>
+    );
+  }
+
+  changeDaySpotlight = (e) => {
+    // convert chosen event value to yyyy-mm-dd format
+    const dateStr = convertDateString(e);
+    const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
+    this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
+  }
+
+  // TODO: BUG!!! it seRches only ACTIVE clients & employees, maybe get this info from backend???
+  getCompleteShiftsInfo = () => {
+    const allShifts = this.state.shiftsSpotlight;
+
+    // console.log("STARTING WITH #allShifts =", allShifts.length);
+
+    if (allShifts) {
+      let completeShiftsInfo = [];
+      for (let shift of allShifts) {
+        let thisShift = [];
+        // part 1: the shift itself goes into thisShift[]
+        thisShift.push(shift);
+        // part 2 & 3: relevant employee & client also go into thisShift[]
+        const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
+        thisShift.push(employee);
+        const client = this.state.allClients.find( client => client.id === shift.client_id );
+        thisShift.push(client);
+        // put the triple combo of thisShift into completeShiftsInfo
+        completeShiftsInfo.push(thisShift);
+      }
+      return completeShiftsInfo;
+    }
+  }
+
+  ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
   showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);
   showAllAdmins = () => this.showAll(this.state.allAdmins, ALL_ADMINS);
   showAllClients = () => this.showAll(this.state.allClients, ALL_CLIENTS);
@@ -85,8 +149,8 @@ export default class AdminDash extends React.Component {
           <tr key={i} className="table-4-col">
             <td>{person.name}</td>
             <td><button onClick={() => this.read(i, listFromState)} className="btn btn-primary">Info</button></td>
-            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-secondary">TODO: Update</button></td>
-            <td><button onClick={() => this.delete(person, URL_endpoint)} className="btn btn-danger">Delete</button></td>
+            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-secondary">Update</button></td>
+            <td><button onClick={() => this.deactivate(person, URL_endpoint)} className="btn btn-danger">Deactivate</button></td>
           </tr>
           <tr>
             {this.state.personSpotlight === person ? this.showPersonSpotlight(person):null}
@@ -108,47 +172,8 @@ export default class AdminDash extends React.Component {
       </ul>
     );
   }
-
-  ////////////////////// calendar //////////////////////
-
-  getDayDetails = (e) => {
-    console.log("\ngetDayDetails on ", e);
-
-    // convert chosen event value to yyyy-mm-dd format
-    const chosenStr = convertDateString(e);
-
-    // select db's allShifts and save the matching shifts into state.shiftsSpotlight
-    const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === chosenStr)
-
-    // this will trigger <CalendarDay> into rendering this info
-    this.setState({ daySpotlight:chosenStr, shiftsSpotlight: shiftsOfDay });
-  }
-
-  getCompleteShiftsInfo = () => {
-    const allShifts = this.state.shiftsSpotlight;
-
-    console.log("STARTING WITH #allShifts =", allShifts.length);
-
-
-    if (allShifts) {
-      let completeShiftsInfo = [];
-      for (let shift of allShifts) {
-        let thisShift = [];
-        // part 1: the shift itself goes into thisShift[]
-        thisShift.push(shift);
-        // part 2 & 3: relevant employee & client also go into thisShift[]
-        const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
-        thisShift.push(employee);
-        const client = this.state.allClients.find( client => client.id === shift.client_id );
-        thisShift.push(client);
-        // put the triple combo of thisShift into completeShiftsInfo
-        completeShiftsInfo.push(thisShift);
-      }
-      return completeShiftsInfo;
-    }
-  }
   
-  ////////////////////// manipulate data in rows //////////////////////
+  ////////////////////// read/update/deactivate for Employees/Clients/Admins //////////////////////
   read = (i, listFromState) => {
     const selectedPerson = listFromState[i];
     this.setState({ personSpotlight: selectedPerson });
@@ -163,73 +188,41 @@ export default class AdminDash extends React.Component {
     // TODO: add fields for input
   }
 
-  delete = (person, URL_endpoint) => {
-    console.log("DELETE", person.name, "from", URL_endpoint);
+  deactivate = (person, URL_endpoint) => {
+    console.log("deactivate", person.name, "from", URL_endpoint);
 
     this.setState({personSpotlight: ""});
     axios.delete(URL_endpoint + "/" + person.id)
-    .then(response => this.setState({message: `Deleted ${person.name} from database`}))
+    .then(response => this.setState({message: `deactivated ${person.name} from database`}))
     .catch(error => console.log("ERROR:", error.messages));
   }
   
   ////////////////////// render //////////////////////
     render() {
-      const allEmployees = this.showAllEmployees();
-      const allAdmins = this.showAllAdmins();
-      const allClients = this.showAllClients();
-      
+
       return (
         <section>
-          <nav id="allLists" className="navbar navbar-light bg-light">
-            
-            <nav className="nav nav-pills flex-row">
-              <a className="nav-link" href="#calendar">CALENDAR</a>
-              <a className="nav-link" href="#employeeList">EMPLOYEES</a>
-              <a className="nav-link" href="#clientsList">CLIENTS</a>
-              <a className="nav-link" href="#adminsList">ADMINS</a>
-            </nav>
-          </nav>
 
+          <ul className="nav nav-tabs">
+            <li className="nav-item">
+              <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link" onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link" onClick={()=>this.setShowCategory('clients')}>CLIENTS</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link" onClick={()=>this.setShowCategory('admin')}>ADMIN</button>
+            </li>
+          </ul>
 
-
-          {/* CALENDAR SECTION */}
-          <section data-spy="scroll" data-target="#calendar" id="calendar">
-            <h4 id="calendar">MASTER CALENDAR</h4>
-            <NewShift /> 
-            <Calendar onChange={this.getDayDetails} value={new Date()}/>
-            {/* <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-            <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
-          </section>
-
-
-
-          {/* PEOPLE SECTION ... think about moving this to separate routes...*/}
-          <section data-spy="scroll" data-target="#allLists">
-            <h4 id="employeeList">EMPLOYEES collapsible plz!</h4>
-              <table>
-                <thead></thead>
-                <tbody>{allEmployees}</tbody>
-              </table>
-            
-            <h5 id="clientsList">CLIENTS</h5>
-            <table>
-                <thead></thead>
-                <tbody>{allClients}</tbody>
-              </table>
-            <h5 id="adminsList">ADMINS</h5>
-            <table>
-                <thead></thead>
-                <tbody>{allAdmins}</tbody>
-              </table>
-          </section>
+          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first TO SEE ADMIN dashboard"/>}  
 
         </section>
-
         
       );
     }
-  
-  
-  
   
 }

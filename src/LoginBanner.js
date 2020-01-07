@@ -3,9 +3,8 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import bannerLogo from './SPPbanner.png';
 import GoogleLogin from 'react-google-login';
-import axios from 'axios';
 
-import { BrowserRouter as Router, Switch, Route, Link, Redirect} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 
 class LoginBanner extends React.Component {
   constructor() {
@@ -19,12 +18,8 @@ class LoginBanner extends React.Component {
   responseGoogle = (response) => {
     console.log(response.profileObj);
 
-    // 
-    
-
     // send info up to App.js     
     this.props.googleAuthCB(response.profileObj.googleId);
-    
     
   }
 
@@ -51,14 +46,14 @@ class LoginBanner extends React.Component {
       return (
         <section>
           <button className="btn btn-warning"><Link to="/adminDash">ADMIN Dashboard</Link></button>
-          <button onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
         <section>
           <button className="btn btn-warning"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
-          <button onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else {
@@ -88,70 +83,3 @@ class LoginBanner extends React.Component {
 }
 
 export default LoginBanner;
-
-
-  // showLogins = () => {
-  //   if (this.getLoggedInPerson()) {
-  //     return (
-  //       <section className = 'navbar'>
-  //         <section>You're logged in as... {this.getLoggedInRole()}: {this.getLoggedInPerson()}</section>
-  //         { this.showDashboardChoice() }
-  //         <button onClick={this.logout}><Link to="/">LOGOUT</Link></button>
-  //       </section>
-  //     );
-  //   } else {
-  //     return (
-  //       <section className="giant-in-middle">
-  //         <GoogleLogin
-  //           clientId="10529880190-r19j0h35rit1kcoki6dnk9itkhpkqs9e.apps.googleusercontent.com"
-  //           buttonText="ADMIN LOGIN"
-  //           onSuccess={this.responseGoogle}
-  //           onFailure={this.responseGoogle}
-  //           cookiePolicy={'single_host_origin'}
-  //         />
-
-  //         <GoogleLogin
-  //           clientId="10529880190-r19j0h35rit1kcoki6dnk9itkhpkqs9e.apps.googleusercontent.com"
-  //           buttonText="EMPLOYEE LOGIN"
-  //           onSuccess={this.responseGoogle}
-  //           onFailure={this.responseGoogle}
-  //           cookiePolicy={'single_host_origin'}
-  //         />
-  //         {/* <button onClick={this.loginAdmin} className="btn btn-warning"><Link to="/adminDash">ADMIN LOGIN</Link></button>
-  //         <button onClick={this.loginEmployee} className="btn btn-warning"><Link to="/employeeDash">EMPLOYEE LOGIN</Link></button> */}
-  //       </section>
-  //     );
-  //   }
-  // }
-
-
-
-  ////////////////////// GARBAGE NOW??? LOGIN //////////////////////
-  // loginAdmin = () => this.login("admin");
-
-  // loginEmployee = () => this.login("employee");
-
-  // login = (role) => {
-  //   console.log('logging into table for', role);
-  //   // TODO: oAuth login
-
-    
-  //   const oAuthSuccessful = true;   
-
-  //   // if successful, .setState to affect the login buttons 
-  //   // TODO: switch out role with loggedInPerson.name
-  //   if (oAuthSuccessful) {
-  //     sessionStorage.setItem('authenticatedRole', role);
-  //     sessionStorage.setItem('loggedInPerson', 'NAME HERE');
-
-  //     if (role === "admin") {
-  //       this.setState({ adminLoggedIn: true, loggedInPerson: role});
-  //       console.log(this.getLoggedInPerson());
-  //     } else {
-  //       this.setState({ employeeLoggedIn: true, loggedInPerson: role});
-  //       console.log(this.getLoggedInPerson());
-  //     } 
-  //   }
-  // }
-
-  
