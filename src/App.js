@@ -14,13 +14,14 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "",       // TEMPORARY
+      authenticatedRole: "EMPLOYEE",       // TEMPORARY
       googleId: "",
-      username: "TEMPORARY!!!"// TEMPORARY
+      username: "TEMPORARY OVERRIDE EMPLOYEE",// TEMPORARY
+      databaseId: ""
     }
-    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', 'EMPLOYEE');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', 'TEMPORARY!!!');// TEMPORARY
+    sessionStorage.setItem('username', 'TEMPORARY OVERRIDE EMPLOYEE');// TEMPORARY
   }
 
   login = (googleId) => {
@@ -40,23 +41,21 @@ class App extends React.Component {
 
         const authenticatedRoleDB = Object.keys(response.data)[0];
         const usernameDB = Object.values(response.data)[0].name;
+        const databaseId = Object.values(response.data)[0].id;
 
         sessionStorage.setItem('authenticatedRole', authenticatedRoleDB);
-        sessionStorage.setItem('userName', usernameDB);
+        sessionStorage.setItem('username', usernameDB);
         sessionStorage.setItem('googleId', googleId);
+        sessionStorage.setItem('databaseId', databaseId);
 
         this.setState({
           authenticatedRole: authenticatedRoleDB,
           googleId: googleId,
-          username: usernameDB      
+          username: usernameDB,
+          databaseId: databaseId      
       })
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
-
-      // check to see what the authenticatedRole is... 
-      // console.log("session storage ready? ", sessionStorage.getItem('authenticatedRole'));
-      // console.log("state ready?", this.state.authenticatedRole);
-      // DO NOT ASK FOR UUID at this point, b/c both session & state updates are not ready yet! 
   }
 
   logout = () => {
@@ -64,11 +63,10 @@ class App extends React.Component {
     this.setState({
       authenticatedRole: "",  
       googleId: "",
-      username: ""
+      username: "",
+      databaseId: ""
     })
-    sessionStorage.setItem('authenticatedRole', '');
-    sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', '');
+    sessionStorage.clear();
   }
 
   render() {
@@ -82,7 +80,7 @@ class App extends React.Component {
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
-            <Route path="/employeeDash" component={EmployeeDash} />
+            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
           </Switch>
       </Router>
   );
@@ -91,19 +89,3 @@ class App extends React.Component {
 
 
 export default App;
-
-       // showCorrectDashboard = () => {
-    
-    // const authenticatedRole = sessionStorage.getItem('authenticatedRole');
-    
-    // console.log("session says..", authenticatedRole);
-    
-    // if (authenticatedRole === "ADMIN") {
-    //   return <Redirect to="/adminDash" />
-    // } else if (authenticatedRole === "EMPLOYEE") {
-    //   return <Redirect to="/employeeDash" />
-    // } else {
-    //   console.log("Nobody logged in -> HOME");
-    //   return <Redirect to="/" />
-    // }
-  // }     

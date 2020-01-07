@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from 'react-calendar';
-import CalendarDay from './CalendarDay';
+import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
 import { convertDateString } from './Helpers';
@@ -10,15 +10,20 @@ import { convertDateString } from './Helpers';
 // 1366 x 768
 // 1920x1080   
 
+const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
+
 export default class EmployeeDash extends React.Component {
 
   constructor() {
     super()
+    const today = convertDateString(new Date())
     this.state = {
       empInfo: [],
       empUnavails: [],
       empShifts: [],
-      daySpotlight: convertDateString(new Date()),
+      daySpotlight: today,
+      shiftsOfDay: [],
+      availStatusOfDay: null,
       show: 'calendar'
     }
   }
@@ -27,19 +32,34 @@ export default class EmployeeDash extends React.Component {
     console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
     if (this.props.authenticatedRole === "EMPLOYEE") {
 
-      // THIS IS WHERE I LEFT OFF!!!!!!!
       // get employee's own info
-      axios.get()
-      .then()
-      .catch()
+      axios.get(EMP_DASH)
+      .then(response => {
+        this.setState({empInfo: response.data});
+      })
+      .catch(error => console.log("ERROR downloading employee info:", error.message));
+
     // get employee's own Unavails
+    axios.get(EMP_DASH+"/unavails")
+      .then(response => {
+        const today = convertDateString(new Date());
+        const canWorkBool = this.canWorkThisDay(today);
+        this.setState({empUnavails: response.data, availStatusOfDay: canWorkBool});
+      })
+      .catch(error => console.log("ERROR downloading employee unavails:", error.message));
 
     // get employee's own Shifts
+    axios.get(EMP_DASH+"/shifts")
+      .then(response => {
+        const today = convertDateString(new Date());
+        const shiftsToday = response.data.filter( shift => shift.shift_date === today );
+        this.setState({empShifts: response.data, shiftsOfDay: shiftsToday});
+      })
+      .catch(error => console.log("ERROR downloading employee shifts:", error.message));
 
     } else {
       console.log("YOU ARE *NOT* AN EMPLOYEE!");
-    }   
-    
+    }    
   }
   
   ////////////////////// set DISPLAY choice //////////////////////
@@ -60,76 +80,130 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: own info //////////////////////
-    // read = (i, listFromState) => {
-    //   const selectedPerson = listFromState[i];
-    //   this.setState({ personSpotlight: selectedPerson });
-    //   return selectedPerson;    
-    // }
-  
-    // update = (i, listFromState) => {
-    //   console.log("TODO: UPDATE");
-    //   const selectedPerson = listFromState[i];
-    //   this.setState({personSpotlight: selectedPerson});
-  
-    //   // TODO: add fields for input
-    // }
-  
-    // deactivate = (person, URL_endpoint) => {
-    //   console.log("deactivate", person.name, "from", URL_endpoint);
-  
-    //   this.setState({personSpotlight: ""});
-    //   axios.delete(URL_endpoint + "/" + person.id)
-    //   .then(response => this.setState({message: `deactivated ${person.name} from database`}))
-    //   .catch(error => console.log("ERROR:", error.messages));
-    // }
-    
+  showAllInfo = () => {
+    const info = this.state.empInfo;
 
-
-  ////////////////////// DISPLAY: calendar  //////////////////////
-  showCalendar = () => {
-    return (
+    return(
       <section>
-        <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
-        {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-        <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
+        <form>
+          <fieldset>
+            <div className="form-group">
+              <label>Name</label>
+              <input disabled type="text" className="form-control" placeholder={info.name}/>
+              <label>Address</label>
+              <input disabled type="text" className="form-control" placeholder={info.address}/>
+              <label>Phone</label>
+              <input disabled type="text" className="form-control" placeholder={info.phone}/>
+              <label>Email</label>
+              <input disabled type="text" className="form-control" placeholder={info.email}/>
+            </div>
+            {/* <div className="form-check">
+              <input className="form-check-input" type="checkbox"/>
+              <label className="form-check-label">
+                Check this box to enable updating my info
+                //TODO: planning to have all inputs disabled first, then enable it once this box is clicked
+              </label>
+            </div> */}
+            <button onClick={this.update} className="btn btn-primary">Update My Info (UPCOMING)</button>
+          </fieldset>
+        </form>
       </section>
     );
   }
 
-  // changeDaySpotlight = (e) => {
-  //   // convert chosen event value to yyyy-mm-dd format
-  //   const dateStr = convertDateString(e);
-  //   const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
-  //   this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
-  // }
+  update = (e) => {
+    e.preventDefault();
+    console.log("TODO: UPDATE");
+  }
 
-  // // TODO: BUG!!! it seRches only ACTIVE clients & employees, maybe get this info from backend???
-  // getCompleteShiftsInfo = () => {
-  //   const allShifts = this.state.shiftsSpotlight;
+  ////////////////////// DISPLAY: own shifts //////////////////////
 
-  //   // console.log("STARTING WITH #allShifts =", allShifts.length);
+  showAllShifts = () => {
+    if (this.state.empShifts.length === 0) {
+      return (
+        <section>No upcoming shifts</section>
+      );
+    } else {
+      return(
+        <section>
+          {this.state.empShifts.map(shift => {
+            return (
+              <section key = {shift.id} className="section-4-col">
+                <section>{shift.shift_date}</section>
+                <section>{shift.client_id}</section>
+                <section>{shift.start_time}</section>
+                <section>{shift.end_time}</section>
+              </section>
+            )}
+          )}
+        </section>
+      );
+    }    
+  }
 
-  //   if (allShifts) {
-  //     let completeShiftsInfo = [];
-  //     for (let shift of allShifts) {
-  //       let thisShift = [];
-  //       // part 1: the shift itself goes into thisShift[]
-  //       thisShift.push(shift);
-  //       // part 2 & 3: relevant employee & client also go into thisShift[]
-  //       const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
-  //       thisShift.push(employee);
-  //       const client = this.state.allClients.find( client => client.id === shift.client_id );
-  //       thisShift.push(client);
-  //       // put the triple combo of thisShift into completeShiftsInfo
-  //       completeShiftsInfo.push(thisShift);
-  //     }
-  //     return completeShiftsInfo;
-  //   }
-  // }
+  ////////////////////// DISPLAY: own unavails //////////////////////
+  showAllUnavails = () => {
+    const empUnavails = this.state.empUnavails;
+    const sortedByDate = empUnavails.sort((a,b) => b.day_off - a.day_off);
+    console.log("should be sorted...", sortedByDate);
+    
+    if (empUnavails.length === 0) {
+      return (
+        <section>No upcoming unavailable days</section>
+      );
+    } else {
+      return(
+      <section>
+        {sortedByDate.map(unavail => {return <li key = {unavail.id}>{unavail.day_off}</li>})}
+      </section>
+    );
+    }
+  }
+  
+  ////////////////////// DISPLAY: calendar  //////////////////////
+  showCalendar = () => {
+    return (
+      <section>
+        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <CalendarDay tempInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} completeShiftsInfo={this.getCompleteShiftsInfo} availStatus={this.state.availStatusOfDay}/>
+      </section>
+    );
+  }
+
+  updateStateForCalendarDay = (e) => {
+    const dateStr = convertDateString(e);
+
+    const shiftsOfDay = this.state.empShifts.filter( shift => shift.shift_date === dateStr);
+    const canWorkBool = this.canWorkThisDay(dateStr);
+    this.setState({ 
+      daySpotlight: dateStr, 
+      shiftsOfDay: shiftsOfDay, 
+      availStatusOfDay: canWorkBool })
+  }
+
+  getCompleteShiftsInfo = () => {
+    // need to get client name & STUFF
+  }
+
+  canWorkThisDay = () => {
+    // are you already working today?
+    if (this.state.shiftsOfDay.length > 0) {
+      return false;
+    }
+
+    // do u have today off?
+    for (const unavail of this.state.empUnavails) {
+      if (unavail.day_off === this.state.daySpotlight) {
+        return false;
+      }
+    }
+    
+    return true;
+  }
 
   ////////////////////// render //////////////////////
-    render() {
-
+    
+  render() {
       return (
         <section>
 
@@ -141,7 +215,7 @@ export default class EmployeeDash extends React.Component {
               <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABILE DAYS</button>
+              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
             </li>
             <li className="nav-item">
               <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
@@ -151,15 +225,8 @@ export default class EmployeeDash extends React.Component {
           {this.props.authenticatedRole === "EMPLOYEE" ? this.showChosenCategory() : <Error message="You need to log in first to see EMPLOYEE dashboard"/>}  
 
         </section>
-        
       );
     }
 
 }
-
-
-
-
-
-  
 
