@@ -24,7 +24,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
           return (
             <section key = {shift.id} className="section-4-col">
               <section>{formatDate(shift.shift_date)}</section>
-              <section>Client #{shift.client_id}</section>
+              <section>{shift.client.name}</section>
               <section>{convertTimeString(shift.start_time)}</section>
               <section>{convertTimeString(shift.end_time)}</section>
             </section>

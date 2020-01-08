@@ -34,3 +34,17 @@ export const formatDate = (arg_date) => {
 
   return `${month} ${day}, ${year}`
 }
+
+export const sortUnavailsByDate = (listOfUnavails) => {
+  const sorted = listOfUnavails.sort((a,b) => {
+    return (b.day_off < a.day_off ? 1:-1);
+  });
+  return sorted;
+}
+
+export const sortShiftsByDate = (listOfShifts) => {
+  const sorted = listOfShifts.sort((a,b) => {
+    return (b.shift_date < a.shift_date ? 1:-1);
+  });
+  return sorted;
+}
