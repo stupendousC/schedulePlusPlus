@@ -1,5 +1,5 @@
 import React from 'react';
-import { convertDateString, convertTimeString } from './Helpers';
+import { convertDateString, convertTimeString, formatDate } from './Helpers';
 
 const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
 
@@ -7,7 +7,7 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
     return ( tempInfo.map (shift => {
       return (
         <section key={shift.id} className="table-4-col"> 
-          <section>{shift.shift_date}</section>
+          <section>{formatDate(shift.shift_date)}</section>
           <section>{shift.client_id}</section>
           <section>{convertTimeString(shift.start_time)}</section>
           <section>{convertTimeString(shift.end_time)}</section>

@@ -3,7 +3,7 @@ import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
-import { convertDateString, convertTimeString } from './Helpers';
+import { convertDateString, convertTimeString, formatDate } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -130,8 +130,8 @@ export default class EmployeeDash extends React.Component {
           {this.state.empShifts.map(shift => {
             return (
               <section key = {shift.id} className="section-4-col">
-                <section>{shift.shift_date}</section>
-                <section>{shift.client_id}</section>
+                <section>{formatDate(shift.shift_date)}</section>
+                <section>Client #{shift.client_id}</section>
                 <section>{convertTimeString(shift.start_time)}</section>
                 <section>{convertTimeString(shift.end_time)}</section>
               </section>
@@ -156,7 +156,7 @@ export default class EmployeeDash extends React.Component {
       return(
       <section>
         It'd be nice to sort these, and to hide all the ones in the past, can click on them if u really want to
-        {sortedByDate.map(unavail => {return <li key = {unavail.id}>{unavail.day_off}</li>})}
+        {sortedByDate.map(unavail => {return <li key = {unavail.id}>{formatDate(unavail.day_off)}</li>})}
       </section>
     );
     }
