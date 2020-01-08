@@ -44,7 +44,7 @@ export default class EmployeeDash extends React.Component {
       .then(axios.spread((...responses) => {
         const empInfo = responses[0].data;
         const empShifts = responses[1].data;
-        const empUnavails = responses[2].data;
+        const empUnavails = responses[2].data;;
 
         // meanwhile find out if there's any shifts to autoload for today's calendar
         const today = convertDateString(new Date());
