@@ -1,10 +1,10 @@
 import React from 'react';
 import { convertDateString, convertTimeString, formatDate } from './Helpers';
 
-const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
+const CalendarDay = ({basicShiftInfo, completeShiftsInfo, dateStr, availStatus, toggleAvailCallback}) => {
 
   const showShifts = () => {
-    return ( tempInfo.map (shift => {
+    return ( basicShiftInfo.map (shift => {
       return (
         <section key={shift.id} className="table-4-col"> 
           <section>{formatDate(shift.shift_date)}</section>
@@ -18,13 +18,13 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
 
 
   const showAgendaOrOptions = () => {
-    console.log("\nCalendarDay received: ", tempInfo, " availStatus = ", availStatus);
+    // console.log("\nCalendarDay received: ", basicShiftInfo, " availStatus = ", availStatus, "on", dateStr);
 
     // is the day in the past?
     const today = convertDateString(new Date());
     const inThePast = dateStr < today;
 
-    if (tempInfo.length > 0) {
+    if (basicShiftInfo.length > 0) {
       return (
         <section>
           <section className="section-4-col"> 
@@ -43,39 +43,29 @@ const CalendarDay = ({tempInfo, completeShiftsInfo, dateStr, availStatus}) => {
       return (
         <section>Nothing for this date</section>
       );
-    } else if (tempInfo.length === 0 && availStatus === true) {
+    } else if (basicShiftInfo.length === 0 && availStatus === true) {
       return (
         <section>
           <h3>No shifts scheduled</h3>
-          <button onClick={() => {toggleAvail(false)}}>Take the day off</button>
+          {console.log("RENDERING CALENDAR DAY under no shifts sched'd")}
+          <button onClick={() => {toggleAvailCallback(false)}} className="btn btn-danger">Take the day off</button>
         </section>
       );
-    } else if (tempInfo.length === 0 && availStatus === false) {
+    } else if (basicShiftInfo.length === 0 && availStatus === false) {
       return (
         <section>
           <h3>You have the day off</h3>
-          <button onClick={() => {toggleAvail(true)}}>I'm free to work</button>
+          {console.log("RENDERING CALENDAR DAY under u have day off")}
+          <button onClick={() => {toggleAvailCallback(true)}} className="btn btn-success">I'm free to work</button>
         </section>
       );
     } 
   }
 
-  const toggleAvail = (bool) => {
-    console.log("YOU want to toggle availability to...", bool);
-    console.log("pretending to send api call to backend!!!")
-
-
-
-
-  }
-
-
   return(
 
-   
-
     <section> 
-      <h1>All Shifts For {dateStr}</h1>
+      <h1>AGENDA for {formatDate(dateStr)}</h1>
       {showAgendaOrOptions()}
     </section>
   );

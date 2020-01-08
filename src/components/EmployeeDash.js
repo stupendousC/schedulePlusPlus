@@ -3,13 +3,15 @@ import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
-import { convertDateString, convertTimeString, formatDate } from './Helpers';
+import ShiftsTable from './EmployeeDash_ShiftsTable';
+import { convertDateString, formatDate } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
 // 1366 x 768
 // 1920x1080   
 
+// const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+this.state.empInfo.id;
 const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
 
 export default class EmployeeDash extends React.Component {
@@ -28,38 +30,44 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
+  getEmpInfo = () => axios.get(EMP_DASH);
+  getEmpShifts = () => axios.get(EMP_DASH+"/shifts");
+  getEmpUnavails = () => axios.get(EMP_DASH+"/unavails");
+  
   componentDidMount() {
-    console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
-    if (this.props.authenticatedRole === "EMPLOYEE") {
+    if (this.props.authenticatedRole !== "EMPLOYEE") {
+      console.log("\n\nYou are *NOT* an employee!!!!");
+      return;
+    }
 
-      // get employee's own info
-      axios.get(EMP_DASH)
-      .then(response => {
-        this.setState({empInfo: response.data});
-      })
-      .catch(error => console.log("ERROR downloading employee info:", error.message));
+    // initial loading of data from database
+    axios.all([this.getEmpInfo(), this.getEmpShifts(), this.getEmpUnavails()])
+      .then(axios.spread((...responses) => {
+        const empInfo = responses[0].data;
+        const empShifts = responses[1].data;
+        const empUnavails = responses[2].data;
 
-    // get employee's own Unavails
-    axios.get(EMP_DASH+"/unavails")
-      .then(response => {
+        // meanwhile find out if there's any shifts to autoload for today's calendar
         const today = convertDateString(new Date());
-        const canWorkBool = this.canWorkThisDay(today);
-        this.setState({empUnavails: response.data, availStatusOfDay: canWorkBool});
-      })
-      .catch(error => console.log("ERROR downloading employee unavails:", error.message));
+        const shiftsToday = empShifts.filter( shift => shift.shift_date === today );
+        // also find out if need to autoload if today is a day off
+        const canWorkBool = this.canTheyWorkThisDay(today, shiftsToday, empUnavails);
 
-    // get employee's own Shifts
-    axios.get(EMP_DASH+"/shifts")
-      .then(response => {
-        const today = convertDateString(new Date());
-        const shiftsToday = response.data.filter( shift => shift.shift_date === today );
-        this.setState({empShifts: response.data, shiftsOfDay: shiftsToday});
+        this.setState({
+          empInfo: empInfo,
+          empShifts: empShifts,
+          empUnavails: empUnavails,
+          shiftsOfDay: shiftsToday,
+          availStatusOfDay: canWorkBool
+        });
+      }))
+      .catch(errors => {
+        console.log(errors);
+        // const empInfoError = errors[0].message;
+        // const empShiftsError = errors[1].message;
+        // const empUnavailsError = errors[2].message;
+        // console.log(`empInfoError = ${empInfoError}\nempShiftsError = ${empShiftsError}\nempUnavailsError = ${empUnavailsError}`)
       })
-      .catch(error => console.log("ERROR downloading employee shifts:", error.message));
-
-    } else {
-      console.log("YOU ARE *NOT* AN EMPLOYEE!");
-    }    
   }
   
   ////////////////////// set DISPLAY choice //////////////////////
@@ -82,29 +90,22 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// DISPLAY: own info //////////////////////
   showAllInfo = () => {
     const info = this.state.empInfo;
-
+    
     return(
-      <section>
+      <section>   
         <form>
           <fieldset>
             <div className="form-group">
               <label>Name</label>
-              <input disabled type="text" className="form-control" placeholder={info.name}/>
+              <input type="text" className="form-control" placeholder={info.name}/>
               <label>Address</label>
-              <input disabled type="text" className="form-control" placeholder={info.address}/>
+              <input type="text" className="form-control" placeholder={info.address}/>
               <label>Phone</label>
-              <input disabled type="text" className="form-control" placeholder={info.phone}/>
+              <input type="text" className="form-control" placeholder={info.phone}/>
               <label>Email</label>
-              <input disabled type="text" className="form-control" placeholder={info.email}/>
+              <input type="text" className="form-control" placeholder={info.email}/>
             </div>
-            {/* <div className="form-check">
-              <input className="form-check-input" type="checkbox"/>
-              <label className="form-check-label">
-                Check this box to enable updating my info
-                //TODO: planning to have all inputs disabled first, then enable it once this box is clicked
-              </label>
-            </div> */}
-            <button onClick={this.update} className="btn btn-primary">Update My Info (UPCOMING)</button>
+            <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
           </fieldset>
         </form>
       </section>
@@ -119,27 +120,7 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// DISPLAY: own shifts //////////////////////
 
   showAllShifts = () => {
-    if (this.state.empShifts.length === 0) {
-      return (
-        <section>No upcoming shifts</section>
-      );
-    } else {
-      return(
-        <section>
-          Would be nice to show client info, not just random id.  also truncate working time
-          {this.state.empShifts.map(shift => {
-            return (
-              <section key = {shift.id} className="section-4-col">
-                <section>{formatDate(shift.shift_date)}</section>
-                <section>Client #{shift.client_id}</section>
-                <section>{convertTimeString(shift.start_time)}</section>
-                <section>{convertTimeString(shift.end_time)}</section>
-              </section>
-            )}
-          )}
-        </section>
-      );
-    }    
+    return (<ShiftsTable allShifts={this.state.empShifts}/>);
   }
 
   ////////////////////// DISPLAY: own unavails //////////////////////
@@ -167,16 +148,17 @@ export default class EmployeeDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
-        <CalendarDay tempInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} completeShiftsInfo={this.getCompleteShiftsInfo} availStatus={this.state.availStatusOfDay}/>
+        <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} completeShiftsInfo={this.getCompleteShiftsInfo} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
   }
 
   updateStateForCalendarDay = (e) => {
+    console.log("\nYOU CLICKED ON ", e)
     const dateStr = convertDateString(e);
 
     const shiftsOfDay = this.state.empShifts.filter( shift => shift.shift_date === dateStr);
-    const canWorkBool = this.canWorkThisDay(dateStr);
+    const canWorkBool = this.canTheyWorkThisDay(dateStr, shiftsOfDay, this.state.empUnavails);
     this.setState({ 
       daySpotlight: dateStr, 
       shiftsOfDay: shiftsOfDay, 
@@ -187,24 +169,53 @@ export default class EmployeeDash extends React.Component {
     // need to get client name & STUFF
   }
 
-  canWorkThisDay = () => {
+  canTheyWorkThisDay = (dateStr, shiftsOfThatDay, unavails_list) => {
     // are you already working today?
-    if (this.state.shiftsOfDay.length > 0) {
+    if (shiftsOfThatDay.length > 0) {
       return false;
     }
-
     // do u have today off?
-    for (const unavail of this.state.empUnavails) {
-      if (unavail.day_off === this.state.daySpotlight) {
+    for (const unavail of unavails_list) {
+      if (unavail.day_off === dateStr) {
         return false;
       }
     }
-    
     return true;
   }
 
+  ////////////////////// toggleAvail //////////////////////
+  toggleAvail = (availBoolean) => {
+    console.log("empDash to toggleAvail() to backend to set avail to:", availBoolean, "for", this.state.daySpotlight);
+
+    let latestEmpUnavails = [...this.state.empUnavails];
+
+    if (availBoolean) {
+      // emp wants to work -> delete row from unavails table in db
+      // find id from this.state.empUnavails
+      const unavailObj = this.state.empUnavails.find( unavail => unavail.day_off === this.state.daySpotlight );
+      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
+      .then( response => {
+        // quick update on front end to match db
+        // latestEmpUnavails = this.state.empUnavails.filter( unavail => { return unavail.day_off !== this.state.daySpotlight });
+        console.log("back end sending...", response.data);
+        this.setState({ empUnavails: response.data });
+      })  
+      .catch(error => console.log("ERROR deleting from db: ", error.message));
+      
+    } else {
+      // emp wants day off -> post/add to unavails table in db
+      axios.post((EMP_DASH + `/unavails`), { employee_id: this.state.empInfo.id, day_off: this.state.daySpotlight })
+      .then( response => {
+        // quick update on front end to match db
+        latestEmpUnavails.push( response.data );
+        console.log("latestEmpUnavails... ", latestEmpUnavails);
+        this.setState({ empUnavails: latestEmpUnavails });
+      } )   
+      .catch(error => console.log("ERROR adding to db: ", error.message));
+    }
+  }
+
   ////////////////////// render //////////////////////
-    
   render() {
       return (
         <section>
@@ -229,6 +240,5 @@ export default class EmployeeDash extends React.Component {
         </section>
       );
     }
-
 }
 
