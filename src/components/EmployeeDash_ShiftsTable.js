@@ -3,12 +3,19 @@ import { convertTimeString, formatDate } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
+  
+
+
+  console.log("LET's SEE WHAT WE GOT!", allShifts)
+
   if (allShifts.length === 0) {
+
     return (
       <section>No upcoming shifts</section>
     );
 
   } else {
+
     return(
       <section>
         Would be nice to show 1. client info 2. chronologically. 3. click on row for more info, like address & sich
