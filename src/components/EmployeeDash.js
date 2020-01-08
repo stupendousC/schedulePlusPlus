@@ -11,7 +11,6 @@ import { convertDateString, formatDate } from './Helpers';
 // 1366 x 768
 // 1920x1080   
 
-// const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+this.state.empInfo.id;
 const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
 
 export default class EmployeeDash extends React.Component {
@@ -60,14 +59,8 @@ export default class EmployeeDash extends React.Component {
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool
         });
-      }))
-      .catch(errors => {
-        console.log(errors);
-        // const empInfoError = errors[0].message;
-        // const empShiftsError = errors[1].message;
-        // const empUnavailsError = errors[2].message;
-        // console.log(`empInfoError = ${empInfoError}\nempShiftsError = ${empShiftsError}\nempUnavailsError = ${empUnavailsError}`)
-      })
+        }))
+        .catch(errors => console.log(errors));
   }
   
   ////////////////////// set DISPLAY choice //////////////////////
@@ -114,7 +107,6 @@ export default class EmployeeDash extends React.Component {
 
   update = (e) => {
     e.preventDefault();
-    console.log("TODO: UPDATE");
   }
 
   ////////////////////// DISPLAY: own shifts //////////////////////
@@ -127,7 +119,6 @@ export default class EmployeeDash extends React.Component {
   showAllUnavails = () => {
     const empUnavails = this.state.empUnavails;
     const sortedByDate = empUnavails.sort((a,b) => b.day_off - a.day_off);
-    console.log("should be sorted...", sortedByDate);
     
     if (empUnavails.length === 0) {
       return (
@@ -148,13 +139,12 @@ export default class EmployeeDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
-        <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} completeShiftsInfo={this.getCompleteShiftsInfo} availStatus={this.state.availStatusOfDay}/>
+        <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
   }
 
   updateStateForCalendarDay = (e) => {
-    console.log("\nYOU CLICKED ON ", e)
     const dateStr = convertDateString(e);
 
     const shiftsOfDay = this.state.empShifts.filter( shift => shift.shift_date === dateStr);
@@ -163,10 +153,6 @@ export default class EmployeeDash extends React.Component {
       daySpotlight: dateStr, 
       shiftsOfDay: shiftsOfDay, 
       availStatusOfDay: canWorkBool })
-  }
-
-  getCompleteShiftsInfo = () => {
-    // need to get client name & STUFF
   }
 
   canTheyWorkThisDay = (dateStr, shiftsOfThatDay, unavails_list) => {
@@ -185,8 +171,6 @@ export default class EmployeeDash extends React.Component {
 
   ////////////////////// toggleAvail //////////////////////
   toggleAvail = (availBoolean) => {
-    console.log("empDash to toggleAvail() to backend to set avail to:", availBoolean, "for", this.state.daySpotlight);
-
     let latestEmpUnavails = [...this.state.empUnavails];
 
     if (availBoolean) {
@@ -197,8 +181,7 @@ export default class EmployeeDash extends React.Component {
       .then( response => {
         // quick update on front end to match db
         // latestEmpUnavails = this.state.empUnavails.filter( unavail => { return unavail.day_off !== this.state.daySpotlight });
-        console.log("back end sending...", response.data);
-        this.setState({ empUnavails: response.data });
+        this.setState({ empUnavails: response.data, availStatusOfDay: true });
       })  
       .catch(error => console.log("ERROR deleting from db: ", error.message));
       
@@ -208,8 +191,7 @@ export default class EmployeeDash extends React.Component {
       .then( response => {
         // quick update on front end to match db
         latestEmpUnavails.push( response.data );
-        console.log("latestEmpUnavails... ", latestEmpUnavails);
-        this.setState({ empUnavails: latestEmpUnavails });
+        this.setState({ empUnavails: latestEmpUnavails, availStatusOfDay: false });
       } )   
       .catch(error => console.log("ERROR adding to db: ", error.message));
     }
