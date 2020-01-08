@@ -47,7 +47,6 @@ const CalendarDay = ({basicShiftInfo, dateStr, availStatus, toggleAvailCallback}
       return (
         <section>
           <h3>No shifts scheduled</h3>
-          {console.log("RENDERING CALENDAR DAY under no shifts sched'd")}
           <button onClick={() => {toggleAvailCallback(false)}} className="btn btn-danger">Take the day off</button>
         </section>
       );
@@ -55,7 +54,6 @@ const CalendarDay = ({basicShiftInfo, dateStr, availStatus, toggleAvailCallback}
       return (
         <section>
           <h3>You have the day off</h3>
-          {console.log("RENDERING CALENDAR DAY under u have day off")}
           <button onClick={() => {toggleAvailCallback(true)}} className="btn btn-success">I'm free to work</button>
         </section>
       );

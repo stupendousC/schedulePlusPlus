@@ -4,7 +4,7 @@ import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate } from './Helpers';
+import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -112,14 +112,15 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// DISPLAY: own shifts //////////////////////
 
   showAllShifts = () => {
-    return (<ShiftsTable allShifts={this.state.empShifts}/>);
+    const sortedByDate = sortShiftsByDate(this.state.empShifts);
+    return (<ShiftsTable allShifts={sortedByDate}/>);
   }
 
   ////////////////////// DISPLAY: own unavails //////////////////////
   showAllUnavails = () => {
     const empUnavails = this.state.empUnavails;
-    const sortedByDate = empUnavails.sort((a,b) => b.day_off - a.day_off);
-    
+    const sortedByDate = sortUnavailsByDate(empUnavails)
+
     if (empUnavails.length === 0) {
       return (
         <section>No upcoming unavailable days</section>
@@ -177,10 +178,10 @@ export default class EmployeeDash extends React.Component {
       // emp wants to work -> delete row from unavails table in db
       // find id from this.state.empUnavails
       const unavailObj = this.state.empUnavails.find( unavail => unavail.day_off === this.state.daySpotlight );
-      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
+      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`, { employee_id: this.state.empInfo.id })
       .then( response => {
         // quick update on front end to match db
-        // latestEmpUnavails = this.state.empUnavails.filter( unavail => { return unavail.day_off !== this.state.daySpotlight });
+        // response.data is the latest data from Unavails table in db for this employee
         this.setState({ empUnavails: response.data, availStatusOfDay: true });
       })  
       .catch(error => console.log("ERROR deleting from db: ", error.message));
