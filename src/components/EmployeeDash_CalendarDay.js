@@ -8,7 +8,7 @@ const CalendarDay = ({basicShiftInfo, dateStr, availStatus, toggleAvailCallback}
       return (
         <section key={shift.id} className="table-4-col"> 
           <section>{formatDate(shift.shift_date)}</section>
-          <section>{shift.client_id}</section>
+          <section>{shift.client.name}</section>
           <section>{convertTimeString(shift.start_time)}</section>
           <section>{convertTimeString(shift.end_time)}</section>
         </section>
@@ -29,7 +29,7 @@ const CalendarDay = ({basicShiftInfo, dateStr, availStatus, toggleAvailCallback}
         <section>
           <section className="section-4-col"> 
             <section>Date</section>
-            <section>Client ID</section>
+            <section>Client</section>
             <section>Start</section>
             <section>End</section>
           </section>
