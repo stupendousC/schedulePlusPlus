@@ -48,7 +48,11 @@ export const convertTimeString = (timeStr) => {
   // takes "HH:MM:SS" and turns it into "HH:MM AM/PM"
   let hours = parseInt(timeStr.slice(0,2));
   if (hours < 12) {
-    return (timeStr.slice(0,5)+" A.M.");
+    if (timeStr[0] === "0") {
+      return (timeStr.slice(1,5)+" A.M.");
+    } else {
+      return (timeStr.slice(0,5)+" A.M.");
+    }
   } else {
     hours -= 12;
     return (hours+timeStr.slice(2,5)+" P.M.");
