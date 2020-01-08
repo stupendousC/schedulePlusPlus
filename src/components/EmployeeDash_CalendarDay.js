@@ -1,7 +1,7 @@
 import React from 'react';
 import { convertDateString, convertTimeString, formatDate } from './Helpers';
 
-const CalendarDay = ({basicShiftInfo, completeShiftsInfo, dateStr, availStatus, toggleAvailCallback}) => {
+const CalendarDay = ({basicShiftInfo, dateStr, availStatus, toggleAvailCallback}) => {
 
   const showShifts = () => {
     return ( basicShiftInfo.map (shift => {
