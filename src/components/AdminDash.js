@@ -4,6 +4,7 @@ import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
 import ShiftsTable from './AdminDash_ShiftsTable';
+import PeopleTable from './AdminDash_PeopleTable.js';
 import {convertDateString, formatDate, convertTimeString, convertToPST} from './Helpers';
 
 import Error from './Error';
@@ -26,7 +27,7 @@ export default class AdminDash extends React.Component {
       allShifts: [],
       allUnavails: [],
       
-      personSpotlight: "",
+      // personSpotlight: "",
       daySpotlight: today,
       shiftsOfDay: [],
       show: "calendar"
@@ -102,9 +103,11 @@ export default class AdminDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
+        <h3>A thought... make sub sections or collapsibles right here for 1. newShift, 2. agenda, 3. availabilities</h3>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
         <CalendarDay basicShiftsInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
+        {/* <Avails /> */}
       </section>
     );
   }
@@ -125,65 +128,16 @@ export default class AdminDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
-  showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);
-  showAllAdmins = () => this.showAll(this.state.allAdmins, ALL_ADMINS);
-  showAllClients = () => this.showAll(this.state.allClients, ALL_CLIENTS);
+  showAllEmployees = () => <PeopleTable peopleList={this.state.allEmployees} URL_endpoint={ALL_EMPS} setStateKey="allEmployees" updatePeopleListCB={this.updatePeopleList}/>
+  showAllAdmins = () => <PeopleTable peopleList={this.state.allAdmins} URL_endpoint={ALL_ADMINS} setStateKey="allAdmins" updatePeopleListCB={this.updatePeopleList}/>
+  showAllClients = () => <PeopleTable peopleList={this.state.allClients} URL_endpoint={ALL_CLIENTS} setStateKey="allClients" updatePeopleListCB={this.updatePeopleList}/>
 
-  showAll = (listFromState, URL_endpoint) => {
-    return ( listFromState.map((person, i) => {
-      return (
-        <section>
-          <tr key={i} className="table-4-col">
-            <td>{person.name}</td>
-            <td><button onClick={() => this.read(i, listFromState)} className="btn btn-primary">Info</button></td>
-            <td><button onClick={() => this.update(i, listFromState)} className="btn btn-secondary">Update</button></td>
-            <td><button onClick={() => this.deactivate(person, URL_endpoint)} className="btn btn-danger">Deactivate</button></td>
-          </tr>
-          <tr>
-            {this.state.personSpotlight === person ? this.showPersonSpotlight(person):null}
-          </tr>
-        </section>
-      )})
-    );
+  updatePeopleList = (setStateKey, updatedPeopleList) => {
+    // this is a callback function for <PeopleTable> to send back updated peopleList
+    // so we can .setState here to allow re-rendering of visuals
+    this.setState({ [setStateKey]: updatedPeopleList });
   }
 
-  showPersonSpotlight = (person) => {
-    return (
-      <ul>
-        <li>ID: {person.id}</li>
-        <li>OAuthId:{person.oauthid}</li>
-        <li>Name: {person.name}</li>
-        <li>Address: {person.address}</li>
-        <li>Phone: {person.phone}</li>
-        <li>Email: {person.email}</li>
-      </ul>
-    );
-  }
-  
-  ////////////////////// read/update/deactivate for Employees/Clients/Admins //////////////////////
-  read = (i, listFromState) => {
-    const selectedPerson = listFromState[i];
-    this.setState({ personSpotlight: selectedPerson });
-    return selectedPerson;    
-  }
-
-  update = (i, listFromState) => {
-    console.log("TODO: UPDATE");
-    const selectedPerson = listFromState[i];
-    this.setState({personSpotlight: selectedPerson});
-
-    // TODO: add fields for input
-  }
-
-  deactivate = (person, URL_endpoint) => {
-    console.log("deactivate", person.name, "from", URL_endpoint);
-
-    this.setState({personSpotlight: ""});
-    axios.delete(URL_endpoint + "/" + person.id)
-    .then(response => this.setState({message: `deactivated ${person.name} from database`}))
-    .catch(error => console.log("ERROR:", error.messages));
-  }
-  
   ////////////////////// render //////////////////////
     render() {
 
@@ -214,5 +168,4 @@ export default class AdminDash extends React.Component {
         
       );
     }
-  
 }

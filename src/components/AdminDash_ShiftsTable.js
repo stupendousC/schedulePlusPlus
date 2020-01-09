@@ -1,4 +1,6 @@
 import React from 'react';
+import axios from 'axios';
+
 import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({allShifts}) => {
@@ -14,8 +16,15 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
   }
 
   const getAvailEmps = (shift) => {
-    console.log("ok, gonna find soemone...", shift.shift_date);
+    console.log("ok, gonna find soemone...", shift.shift_date, "for shift obj", shift);
     
+    const URL = process.env.REACT_APP_GET_AVAIL_EMPS;
+    axios.get(URL+`/${shift.id}`)
+    .then(response => {
+      console.log("backend says: ", response.data);
+    })
+    .catch(error => console.log("Error getting availEmps:", error.message));
+    // 
   }
 
 
