@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Accordion from 'react-bootstrap/Accordion';
 
 import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
 
@@ -44,36 +45,28 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
         <li>collapsible menu for more info</li>
         <li>collapsible menu for those in the past</li>
 
-        <div id="accordion">
-  <div className="card">
-    <div className="card-header">
-        <button className="btn btn-link" data-toggle="collapse" data-target="#collapseOne" />
-          Collapsible Group Item #1
-        
-    </div>
-
-    <div id="collapseOne" className="collapse show"data-parent="#accordion">
-      <div className="card-body">
-        ok...
-      </div>
-    </div>
-  </div>
-
-  <div className="card">
-    <div className="card-header" id="headingTwo">
-        <button className="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" />
-          Collapsible Group Item #2
-        
-    </div>
-
-    <div id="collapseTwo" className="collapse" data-parent="#accordion">
-      <div className="card-body">
-        hi there
-      </div>
-    </div>
-  </div>
-
-</div>
+        <Accordion defaultActiveKey="0">
+  <Card>
+    <Card.Header>
+      <Accordion.Toggle as={Button} variant="link" eventKey="0">
+        Click me!
+      </Accordion.Toggle>
+    </Card.Header>
+    <Accordion.Collapse eventKey="0">
+      <Card.Body>Hello! I'm the body</Card.Body>
+    </Accordion.Collapse>
+  </Card>
+  <Card>
+    <Card.Header>
+      <Accordion.Toggle as={Button} variant="link" eventKey="1">
+        Click me!
+      </Accordion.Toggle>
+    </Card.Header>
+    <Accordion.Collapse eventKey="1">
+      <Card.Body>Hello! I'm another body</Card.Body>
+    </Accordion.Collapse>
+  </Card>
+</Accordion>
 
 
 
