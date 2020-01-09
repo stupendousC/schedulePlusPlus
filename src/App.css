@@ -49,15 +49,20 @@
   background-color: pink;
 }
 
-.table-4-col, .section-4-col {
+.section-4-col {
   display: grid;
-  grid-template-columns: 1fr 3fr 3fr 3fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  background-color: yellow;
+}
+
+.section-2-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   background-color: yellow;
 }
 
 .accordian-toggle_button {
   width: 100%;
-  background-color: yellowgreen;
 }
 
 .card-shift, .card-client, .card-employee {
@@ -65,10 +70,10 @@
   grid-template-columns: 1fr 2fr;
 }
 
-.card-shift, .card-client {
+.card-shift, .card-employee {
   background-color: lightblue;
 }
 
-.card-employee {
+.card-client {
 
 }
