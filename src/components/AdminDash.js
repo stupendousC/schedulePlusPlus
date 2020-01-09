@@ -104,14 +104,13 @@ export default class AdminDash extends React.Component {
         <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
-        <CalendarDay basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
+        <CalendarDay basicShiftsInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
       </section>
     );
   }
 
   updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
-    // const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
     const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
 
     this.setState({ 
