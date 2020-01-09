@@ -208,13 +208,13 @@ export default class EmployeeDash extends React.Component {
               <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('info')}>INFO</button>
             </li>
           </ul>
 

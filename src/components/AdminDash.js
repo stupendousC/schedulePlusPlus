@@ -2,7 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
-import NewShift from './NewShift';
+import NewShift from './AdminDash_NewShift';
+import ShiftsTable from './AdminDash_ShiftsTable';
 import {convertDateString, formatDate, convertTimeString} from './Helpers';
 
 import Error from './Error';
@@ -91,6 +92,8 @@ export default class AdminDash extends React.Component {
       return this.showAllEmployees();
     } else if (chosen === "clients") {
       return this.showAllClients();
+    } else if (chosen === 'shifts') {
+      return this.showAllShifts();
     }
   }
 
@@ -115,6 +118,11 @@ export default class AdminDash extends React.Component {
       daySpotlight: dateStr, 
       shiftsOfDay: shiftsOfDay 
     })
+  }
+
+  ////////////////////// DISPLAY: Shifts  //////////////////////
+  showAllShifts = () => {
+    return <ShiftsTable allShifts={this.state.allShifts}/>
   }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
@@ -188,13 +196,16 @@ export default class AdminDash extends React.Component {
               <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('clients')}>CLIENTS</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('admin')}>ADMIN</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('clients')}>CLIENTS</button>
+            </li>
+            <li className="nav-item">
+              <button className="nav-link active" onClick={()=>this.setShowCategory('admin')}>ADMIN</button>
             </li>
           </ul>
 
