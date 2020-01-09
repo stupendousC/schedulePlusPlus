@@ -17,64 +17,65 @@ export default class AdminDash extends React.Component {
 
   constructor() {
     super()
-    const today = convertDateString(new Date())
     this.state = {
       allClients: [],
       allAdmins: [],
       allEmployees: [],
       allShifts: [],
       allUnavails: [],
-      
       personSpotlight: "",
-      daySpotlight: today,
-      shiftsOfDay: [],
+      daySpotlight: convertDateString(new Date()),
+      shiftsSpotlight: [],
       show: "calendar"
     }
   }
 
   ////////////////////// loading db data //////////////////////
-  getAllEmpsDB = () => axios.get(ALL_EMPS);
-  getAllClientsDB = () => axios.get(ALL_CLIENTS);
-  getAllAdminsDB = () => axios.get(ALL_ADMINS);
-  getAllShiftsDB = () => axios.get(ALL_SHIFTS);
-  getAllUnavailsDB = () => axios.get(ALL_UNAVAILS);
+  
+  
+  getAllEmpsDB = () => {
+    axios.get(ALL_EMPS)
+    .then( response => this.setState({allEmployees: response.data}) )
+    .catch(error => console.log("NO!!!", error));
+  }
+
+  getAllClientsDB = () => {
+    axios.get(ALL_CLIENTS)
+    .then( response => this.setState({allClients: response.data}))
+    .catch(error => console.log("NO!!!", error));
+  }
+  
+  getAllAdminsDB = () => {
+    axios.get(ALL_ADMINS)
+    .then( response => this.setState({allAdmins: response.data}))
+    .catch(error => console.log("NO!!!", error));
+  }
+
+  getAllShiftsDB = () => {
+    axios.get(ALL_SHIFTS)
+    .then( response => this.setState({allShifts: response.data}))
+    .catch(error => console.log("NO!!!, error"));
+  }
+
+  getAllUnavailsDB = () => {
+    axios.get(ALL_UNAVAILS)
+    .then( response => this.setState({allUnavails: response.data}))
+    .catch(error => console.log("NO!!!, error"));
+  }
 
   componentDidMount() {
     console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
 
-    if (this.props.authenticatedRole !== "ADMIN") {
+    if (this.props.authenticatedRole === "ADMIN") {
+      this.getAllEmpsDB();
+      this.getAllClientsDB();
+      this.getAllAdminsDB();
+      this.getAllShiftsDB();
+      this.getAllUnavailsDB();
+
+    } else {
       console.log("YOU ARE *NOT* AN ADMIN!");
-      return;
     }   
-
-    // initial loading of data fromd atabase
-    axios.all([
-      this.getAllEmpsDB(),
-      this.getAllClientsDB(),
-      this.getAllAdminsDB(),
-      this.getAllShiftsDB(),
-      this.getAllUnavailsDB()])
-    .then(axios.spread((...responses) => {
-      const allEmployees = responses[0].data;
-      const allClients = responses[1].data;
-      const allAdmins = responses[2].data;
-      const allShifts = responses[3].data;
-      const allUnavails = responses[4].data;
-
-      // meanwhile find out if there's any shifts to autoload for today's calendar
-      const today = convertDateString(new Date());
-      const shiftsToday = allShifts.filter( shift => shift.shift_date === today );
-
-      this.setState({
-        allEmployees: allEmployees,
-        allClients: allClients,
-        allAdmins: allAdmins,
-        allShifts: allShifts,
-        allUnavails: allUnavails,
-        shiftsOfDay: shiftsToday
-      });
-    }))
-    .catch( errors => console.log(errors));
   }
 
   ////////////////////// set DISPLAY choice //////////////////////
@@ -98,49 +99,44 @@ export default class AdminDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <Calendar onChange={this.changeDaySpotlight} value={new Date()}/>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
-        <CalendarDay basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
-
+        <CalendarDay dateStr={this.state.daySpotlight} completeShiftsInfo={ this.getCompleteShiftsInfo()} />
       </section>
     );
   }
 
-  updateStateForCalendarDay = (e) => {
+  changeDaySpotlight = (e) => {
+    // convert chosen event value to yyyy-mm-dd format
     const dateStr = convertDateString(e);
-    const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
-    
-    this.setState({ 
-      daySpotlight: dateStr, 
-      shiftsOfDay: shiftsOfDay 
-    })
+    const shiftsOfDay = this.state.allShifts.filter(shift => shift.shift_date === dateStr)
+    this.setState({ daySpotlight: dateStr, shiftsSpotlight: shiftsOfDay });
   }
 
-
   // TODO: BUG!!! it seRches only ACTIVE clients & employees, maybe get this info from backend???
-  // getCompleteShiftsInfo = () => {
-  //   const allShifts = this.state.shiftsOfDay;
+  getCompleteShiftsInfo = () => {
+    const allShifts = this.state.shiftsSpotlight;
 
-  //   // console.log("STARTING WITH #allShifts =", allShifts.length);
+    // console.log("STARTING WITH #allShifts =", allShifts.length);
 
-  //   if (allShifts) {
-  //     let completeShiftsInfo = [];
-  //     for (let shift of allShifts) {
-  //       let thisShift = [];
-  //       // part 1: the shift itself goes into thisShift[]
-  //       thisShift.push(shift);
-  //       // part 2 & 3: relevant employee & client also go into thisShift[]
-  //       const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
-  //       thisShift.push(employee);
-  //       const client = this.state.allClients.find( client => client.id === shift.client_id );
-  //       thisShift.push(client);
-  //       // put the triple combo of thisShift into completeShiftsInfo
-  //       completeShiftsInfo.push(thisShift);
-  //     }
-  //     return completeShiftsInfo;
-  //   }
-  // }
+    if (allShifts) {
+      let completeShiftsInfo = [];
+      for (let shift of allShifts) {
+        let thisShift = [];
+        // part 1: the shift itself goes into thisShift[]
+        thisShift.push(shift);
+        // part 2 & 3: relevant employee & client also go into thisShift[]
+        const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
+        thisShift.push(employee);
+        const client = this.state.allClients.find( client => client.id === shift.client_id );
+        thisShift.push(client);
+        // put the triple combo of thisShift into completeShiftsInfo
+        completeShiftsInfo.push(thisShift);
+      }
+      return completeShiftsInfo;
+    }
+  }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
   showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);

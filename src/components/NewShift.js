@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CSS/NewShift.css';
 
 
 const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShifts}) => {

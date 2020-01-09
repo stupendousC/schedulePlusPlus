@@ -1,30 +1,25 @@
 import React from 'react';
 
-const CalendarDay = ({completeShiftsInfo, dateStr}) => {
+const CalendarDay = ({basicShiftsInfo, dateStr}) => {
 
-
-  console.log("CalendarDay received date=", dateStr);
-  console.log(completeShiftsInfo);
-
-  // completeShiftsInfo = [ [shift1], [shift2], etc ]
-    // triplet subarray = [[shiftInfo], [employeeInfo], [clientInfo]] 
+  console.log("CalendarDay showing", dateStr, "\nbasicShiftsInfo = ", basicShiftsInfo);
 
   const showShifts = () => {
-    return ( completeShiftsInfo.map (tripletArray => {
+    return ( basicShiftsInfo.map (shift => {
       return (
-        <tr key={tripletArray.id} className="table-4-col"> 
-          <td>{tripletArray[1].id}</td>
-          <td>{tripletArray[2].id}</td>
-          <td>{tripletArray[0].start_time}</td>
-          <td>{tripletArray[0].end_time}</td>
-        </tr>
+        <section key={shift.id} className="table-4-col"> 
+          <section>{shift.shift_date}</section>
+          <section>{shift.client.name}</section>
+          <section>{shift.start_time}</section>
+          <section>{shift.end_time}</section>
+        </section>
         );
     }));
   }
 
 
   const showTableOrNothing = () => {
-    if (completeShiftsInfo.length === 0) {
+    if (!basicShiftsInfo) {
       return (
         <h3>No shifts scheduled</h3>
       );
