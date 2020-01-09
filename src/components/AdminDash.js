@@ -98,49 +98,24 @@ export default class AdminDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <Calendar onChange={this.updateStateForCalendarDay} value={new Date(this.state.daySpotlight)}/>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
         <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
         <CalendarDay basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
-
       </section>
     );
   }
 
   updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
+    // const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
     const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
-    
+
     this.setState({ 
       daySpotlight: dateStr, 
       shiftsOfDay: shiftsOfDay 
     })
   }
-
-
-  // TODO: BUG!!! it seRches only ACTIVE clients & employees, maybe get this info from backend???
-  // getCompleteShiftsInfo = () => {
-  //   const allShifts = this.state.shiftsOfDay;
-
-  //   // console.log("STARTING WITH #allShifts =", allShifts.length);
-
-  //   if (allShifts) {
-  //     let completeShiftsInfo = [];
-  //     for (let shift of allShifts) {
-  //       let thisShift = [];
-  //       // part 1: the shift itself goes into thisShift[]
-  //       thisShift.push(shift);
-  //       // part 2 & 3: relevant employee & client also go into thisShift[]
-  //       const employee = this.state.allEmployees.find( emp => (emp.id === shift.employee_id ));
-  //       thisShift.push(employee);
-  //       const client = this.state.allClients.find( client => client.id === shift.client_id );
-  //       thisShift.push(client);
-  //       // put the triple combo of thisShift into completeShiftsInfo
-  //       completeShiftsInfo.push(thisShift);
-  //     }
-  //     return completeShiftsInfo;
-  //   }
-  // }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
   showAllEmployees = () => this.showAll(this.state.allEmployees, ALL_EMPS);

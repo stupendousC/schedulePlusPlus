@@ -139,7 +139,7 @@ export default class EmployeeDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <Calendar onChange={this.updateStateForCalendarDay} value={this.state.daySpotlight}/>
         <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
