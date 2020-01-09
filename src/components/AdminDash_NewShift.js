@@ -52,9 +52,9 @@ const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShift
               {allClients.map(client => <option key={client.id} onClick={()=> setClient(client.id)}>{client.name}</option>)}
             </select>
             <label>Start time</label>
-            <input class="form-control" type="time" value="09:00:00"></input>
+            <input className="form-control" type="time" defaultValue="09:00:00"></input>
             <label>End time</label>
-            <input class="form-control" type="time" value="17:00:00"></input>
+            <input className="form-control" type="time" defaultValue="17:00:00"></input>
           </section>
 
           <button className="btn btn-primary" onClick={() => {makeNewShift()}}>STAFF IT!</button>
@@ -68,7 +68,6 @@ const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShift
 
       {showForm()}
       
-      <li>add start & end times later</li>
       <li>make new unmanned shift for shifts table</li>
       <li>get list of people who are not excluded from unavails table</li>
       <li>send twilio texts</li>

@@ -16,13 +16,9 @@ class LoginBanner extends React.Component {
   
   ////////////////////// LOGIN //////////////////////
   responseGoogle = (response) => {
-    console.log(response.profileObj);
-
     // send info up to App.js     
     this.props.googleAuthCB(response.profileObj.googleId);
-    
   }
-
 
   showBothLogins = () => {
     return (

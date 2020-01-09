@@ -4,9 +4,7 @@ import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
 const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
   allShifts = sortShiftsByDate(allShifts);
-
-  console.log("LET's SEE WHAT WE GOT!", allShifts)
-
+  
   if (allShifts.length === 0) {
 
     return (

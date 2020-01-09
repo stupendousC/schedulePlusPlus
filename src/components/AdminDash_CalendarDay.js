@@ -25,18 +25,18 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
       );
     } else {
       return (
-        <table>
-          <thead className="table-4-col"> 
-            <td>Client</td>
-            <td>Employee</td>
-            <td>Start</td>
-            <td>End</td>
-          </thead>
+        <section>
+          <section className="table-4-col"> 
+            <section>Client</section>
+            <section>Employee</section>
+            <section>Start</section>
+            <section>End</section>
+          </section>
 
-          <tbody>
+          <section>
             {showShifts()}
-          </tbody>
-        </table>
+          </section>
+        </section>
       );
     }
   }
