@@ -1,10 +1,9 @@
 import React from 'react';
-import { convertTimeString, formatDate } from './Helpers';
+import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
-  
-
+  allShifts = sortShiftsByDate(allShifts);
 
   console.log("LET's SEE WHAT WE GOT!", allShifts)
 
@@ -18,8 +17,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
     return(
       <section>
-        Would be nice to show 1. client info 2. chronologically. 3. click on row for more info, like address & sich
-
+<h1>Would be nice to click on row for more info</h1>
         {allShifts.map(shift => {
           return (
             <section key = {shift.id} className="section-4-col">

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CSS/NewShift.css';
 
 
 const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShifts}) => {
@@ -42,15 +41,20 @@ const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShift
         <form className="px-4 py-3">
 
           <section className="form-group">
+            <label>Date</label>
             <input className="form-control" value={daySpotlight} />
           </section>
 
           <section className="form-group">
-            <label for="client">Client</label>
+            <label>Client</label>
             <select className="form-control">
               <option>Client choices</option>
               {allClients.map(client => <option key={client.id} onClick={()=> setClient(client.id)}>{client.name}</option>)}
             </select>
+            <label>Start time</label>
+            <input class="form-control" type="time" value="09:00:00"></input>
+            <label>End time</label>
+            <input class="form-control" type="time" value="17:00:00"></input>
           </section>
 
           <button className="btn btn-primary" onClick={() => {makeNewShift()}}>STAFF IT!</button>

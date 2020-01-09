@@ -3,8 +3,8 @@ import React from 'react';
 const CalendarDay = ({completeShiftsInfo, dateStr}) => {
 
 
-  // console.log("CalendarDay received date=", dateStr);
-  // console.log(completeShiftsInfo);
+  console.log("CalendarDay received date=", dateStr);
+  console.log(completeShiftsInfo);
 
   // completeShiftsInfo = [ [shift1], [shift2], etc ]
     // triplet subarray = [[shiftInfo], [employeeInfo], [clientInfo]] 

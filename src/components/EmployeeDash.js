@@ -4,7 +4,7 @@ import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate } from './Helpers';
+import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -44,7 +44,7 @@ export default class EmployeeDash extends React.Component {
       .then(axios.spread((...responses) => {
         const empInfo = responses[0].data;
         const empShifts = responses[1].data;
-        const empUnavails = responses[2].data;;
+        const empUnavails = responses[2].data;
 
         // meanwhile find out if there's any shifts to autoload for today's calendar
         const today = convertDateString(new Date());
@@ -139,7 +139,7 @@ export default class EmployeeDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={new Date()}/>
+        <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
         <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
@@ -178,7 +178,7 @@ export default class EmployeeDash extends React.Component {
       // emp wants to work -> delete row from unavails table in db
       // find id from this.state.empUnavails
       const unavailObj = this.state.empUnavails.find( unavail => unavail.day_off === this.state.daySpotlight );
-      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`, { employee_id: this.state.empInfo.id })
+      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
       .then( response => {
         // quick update on front end to match db
         // response.data is the latest data from Unavails table in db for this employee
@@ -188,7 +188,7 @@ export default class EmployeeDash extends React.Component {
       
     } else {
       // emp wants day off -> post/add to unavails table in db
-      axios.post((EMP_DASH + `/unavails`), { employee_id: this.state.empInfo.id, day_off: this.state.daySpotlight })
+      axios.post((EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
       .then( response => {
         // quick update on front end to match db
         latestEmpUnavails.push( response.data );
@@ -208,13 +208,13 @@ export default class EmployeeDash extends React.Component {
               <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
             </li>
             <li className="nav-item">
-              <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
+              <button className="nav-link active" onClick={()=>this.setShowCategory('info')}>INFO</button>
             </li>
           </ul>
 
