@@ -1,5 +1,18 @@
 // import axios from 'axios';
 
+export const convertToPST = (timeStr) => {
+  // UTC to PST conversion:
+  // takes a timeStr of 'YYYY-MM-DD' in UTC time and convert it to a timeStr in Pacific Standard Time
+  // PST is ahead of UTC by 8 hours, so this method will return the PST's actual timeStr, if the given arg timeStr falls in that 8 hr gap wacky zone
+  // Date('2020-1-1') returns UTC of 12/30 midnight, BOO!!!
+  // Date('2020-1-1 00:00-0800') returns correct 1/1, YES!!!
+  // obviously I"m assuming the end user lives in PST...
+
+  const newStr = timeStr + " 00:00-0800";
+  const newTime = new Date(newStr);
+  return new Date(newTime);
+}
+
 export const convertDateString = (timeObj) => {
   const year = timeObj.getFullYear();
   let month = timeObj.getMonth() + 1;

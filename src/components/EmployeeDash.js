@@ -4,7 +4,7 @@ import CalendarDay from './EmployeeDash_CalendarDay';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate } from './Helpers';
+import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -139,7 +139,7 @@ export default class EmployeeDash extends React.Component {
   showCalendar = () => {
     return (
       <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={this.state.daySpotlight}/>
+        <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
         <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
