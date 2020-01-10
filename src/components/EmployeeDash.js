@@ -123,7 +123,8 @@ export default class EmployeeDash extends React.Component {
   showAllShifts = () => {
     const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
     const sortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
-    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts}/>);
+    const sortedUnavails = sortShiftsByDate(this.state.empUnavails);
+    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnAvails={sortedUnavails}/>);
   }
 
   ////////////////////// DISPLAY: own unavails //////////////////////

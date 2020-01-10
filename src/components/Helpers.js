@@ -62,6 +62,11 @@ export const sortShiftsByDate = (listOfShifts) => {
   return sorted;
 }
 
+export const dateInThePast = (dateStr) => {
+  const todayStr = convertDateString(new Date());
+  return todayStr < dateStr;
+}
+
 export const sendTexts = (listOfEmployees, shift) => {
   console.log("\nSENDING TEXT TO *WRONG* group", listOfEmployees);
   console.log("FOR correct SHIFT DATE = ", shift.shift_date);
