@@ -24,7 +24,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey="showInfo">
-                  <section>{showWholeShiftCard(shift)}</section>
+                  <section>{showWholeShiftCard(shift, true)}</section>
                 </Accordion.Collapse>
 
               </section>
@@ -35,7 +35,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     );
   }
 
-  const showWholeShiftCard = (shift) => {
+  const showWholeShiftCard = (shift, takeButton=false) => {
     return (
       <section>
         <section className={dateInThePast(shift.shift_date)? ("card-shift blue-bg"):("card-shift gray-bg")} >
@@ -58,21 +58,43 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           { shift.client ? <p>{shift.client.address}</p> : <p></p> }
         </section>
 
+        { takeButton ? showTakeShiftSection(shift) : null}
+
       </section>
     );
+  }
 
+  const showTakeShiftSection = (shift) => {
+    return (
+      <section className="blue-bg">
+          <p>Can I work on {shift.shift_date}?  IDK I gotta check first lol</p>
+          <button onClick={() =>{takeShift(shift)}}>Take the shift</button>
+        </section>
+    );
+  }
+
+  const takeShift = (shift) => {
+    console.log("NEED TO CHECK FIRST TO MAKE SURE IT'S NOT AN UNAVAIL DAY FOR EMPLOYEE!");
+    // send axios call if everything's cool
   }
 
 
   ////////////////// render ////////////////////
   if (!sortedOwnShifts) {
     return (
-      <section>No upcoming shifts</section>
+      <section>
+        <h1>MY SHIFTS</h1>
+        <p>Nothing yet...</p>
+        
+        <h1>AVAILABLE SHIFTS</h1>
+        {showUnstaffedShifts()}
+      </section>
     );
 
   } else {
     return(
       <section>
+        <h1>MY SHIFTS</h1>
         {sortedOwnShifts.map(shift => {
           return (
             <Accordion key={shift.id}>
@@ -94,7 +116,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
             </Accordion>
           )}
         )}
-        <h1>=== UNSTAFFED SHIFTS ===</h1>
+        <h1>AVAILABLE SHIFTS</h1>
         {showUnstaffedShifts()}
       </section>
     );
