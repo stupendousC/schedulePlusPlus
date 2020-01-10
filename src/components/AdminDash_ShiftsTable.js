@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
-import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
+import { convertTimeString, formatDate, sortShiftsByDate, sendTexts } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
@@ -23,7 +23,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
   const getAvailEmps = (shift) => {
 
-    const URL = process.env.REACT_APP_GET_AVAIL_EMPS + `/${shift.id}`;
+    const URL = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT + `/${shift.id}`;
 
     axios.get(URL)
     .then(response => {
@@ -37,7 +37,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
   const showWholeShiftCard = (shift) => {
     return (
       <card>
-        <section className="card-shift">
+        <section className="card-shift blue-bg">
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -89,21 +89,25 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
     const rowsOfEmps = availEmployees.map(emp => {
       return(
-        <section key={emp.id} className="section-2-col">
+        <section key={emp.id} className="card-employee">
           <section>{emp.name}</section>
           <section>{emp.phone}</section>
         </section>
       );
     })
-    return (
-      <section>
-        <section>AVAILABLE EMPLOYEES</section>
-        <button className="btn btn-primary">TEXT ALL</button>
 
+    return (
+      <section className="blue-bg">
+            /// HOLD UP!!!! FIX BUG ON FIND EMPLOYEES BUTTON!!!
+    // CLICKING ON OTHER LINES FOR ACCORDION WILL SHOW THE AVAIL EMPS FOR THE *LAST* BLUE BUTTON CLICKED!
+
+        <button onClick={sendTexts} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
         {rowsOfEmps}
       </section>
     );
   }
+
+
 
   ////////////////// render ////////////////////
   if (allShifts.length === 0) {

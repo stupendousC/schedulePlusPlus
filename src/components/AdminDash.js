@@ -31,6 +31,7 @@ export default class AdminDash extends React.Component {
       // personSpotlight: "",
       daySpotlight: today,
       shiftsOfDay: [],
+      availEmpsOfDay: [],
       show: "calendar"
     }
   }
@@ -138,8 +139,20 @@ export default class AdminDash extends React.Component {
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="weekAgenda">
-            {/* <CalendarDay  /> */}
             <h1>Upcoming feature, stay tuned...</h1>
+          </Accordion.Collapse>
+        </Accordion>
+
+        <Accordion>
+          <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
+            <section>
+              <section>AVAILABLE EMPLOYEES FOR {formatDate(this.state.daySpotlight)}</section>
+            </section>
+          </Accordion.Toggle>
+
+          <Accordion.Collapse eventKey="availEmpList">
+            {/* send API call to backend to get all avail emps for the daySpotlight */}
+            {this.showAvailEmpsInCard()}
           </Accordion.Collapse>
         </Accordion>
 
@@ -150,11 +163,52 @@ export default class AdminDash extends React.Component {
   updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
     const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
+    const listOfAvailEmps = this.getAvailEmpsByDate(dateStr);
 
     this.setState({ 
       daySpotlight: dateStr, 
-      shiftsOfDay: shiftsOfDay 
+      shiftsOfDay: shiftsOfDay ,
+      availEmpsOfDay: listOfAvailEmps
     })
+  }
+
+  getAvailEmpsByDate = (targetDate) => {
+    // send API call to backend
+    const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDate}`;
+    
+    console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
+
+    axios.get(URL_getAllAvailEmpsByDate)
+    .then(response => {
+      console.log("backend sent us... ", response.data);
+      return response.data;
+    })
+    .catch(error => console.log(error.message));
+  }
+
+  showAvailEmpsInCard = () => {
+    console.log("DISPLAY", this.state.availEmpsOfDay);
+    const listOfAvailEmps = this.state.availEmpsOfDay;
+    if (listOfAvailEmps === []) {
+      return (<section>No one is available!</section>);
+    }
+
+    const rowsOfEmps = listOfAvailEmps.map(emp => {
+      return(
+        <section key={emp.id} className="section-2-col">
+          <section>{emp.name}</section>
+          <section>{emp.phone}</section>
+        </section>
+      );
+    })
+    return (
+      <section>
+        <section>AVAILABLE EMPLOYEES</section>
+        <button className="btn btn-primary">TEXT ALL</button>
+
+        {rowsOfEmps}
+      </section>
+    );
   }
 
   ////////////////////// DISPLAY: Shifts  //////////////////////

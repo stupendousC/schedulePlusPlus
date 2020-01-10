@@ -70,10 +70,6 @@
   grid-template-columns: 1fr 2fr;
 }
 
-.card-shift, .card-employee {
+.blue-bg {
   background-color: lightblue;
-}
-
-.card-client {
-
 }

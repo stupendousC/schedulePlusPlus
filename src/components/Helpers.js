@@ -61,3 +61,8 @@ export const sortShiftsByDate = (listOfShifts) => {
   });
   return sorted;
 }
+
+export const sendTexts = () => {
+  console.log("\nDING DING DING text sent!");
+
+}
