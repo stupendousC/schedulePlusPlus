@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
-import { convertTimeString, formatDate, dateInThePast } from './Helpers';
+import { convertTimeString, formatDate, dateInThePast, convertDateString } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails}) => {
 
@@ -64,10 +64,20 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     );
   }
 
+  const unavailDates = () => sortedUnavails.map(unavail => unavail.day_off);
+  
   const showTakeShiftSection = (shift) => {
+    const unavailDatesList = unavailDates();
+    const isEmpAvailThatDay = unavailDatesList.includes(shift.shift_date);
+    // const isEmpAvailThatDay = true;
+// 
+    console.log("unavailDates =", unavailDates);
+    console.log("isEmpAvailThatDay?", isEmpAvailThatDay, "on", shift.shift_date);
+
+
     return (
       <section className="blue-bg">
-          <p>Can I work on {shift.shift_date}?  IDK I gotta check first lol</p>
+  <p>Can I work on {shift.shift_date}?  {isEmpAvailThatDay} ??? </p>
           <button onClick={() =>{takeShift(shift)}}>Take the shift</button>
         </section>
     );

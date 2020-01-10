@@ -12,14 +12,13 @@ import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate, co
 // 1366 x 768
 // 1920x1080   
 
-const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
-
 export default class EmployeeDash extends React.Component {
 
   constructor() {
     super()
     const today = convertDateString(new Date())
     this.state = {
+      EMP_DASH: process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId'),
       empInfo: [],
       empUnavails: [],
       empShifts: [],
@@ -31,10 +30,10 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-  getEmpInfo = () => axios.get(EMP_DASH);
-  getEmpShifts = () => axios.get(EMP_DASH+"/shifts");
-  getEmpUnavails = () => axios.get(EMP_DASH+"/unavails");
-  getUnstaffedShifts = () => axios.get(EMP_DASH+"/unstaffedShifts");
+  getEmpInfo = () => axios.get(this.state.EMP_DASH);
+  getEmpShifts = () => axios.get(this.state.EMP_DASH+"/shifts");
+  getEmpUnavails = () => axios.get(this.state.EMP_DASH+"/unavails");
+  getUnstaffedShifts = () => axios.get(this.state.EMP_DASH+"/unstaffedShifts");
   
   componentDidMount() {
     if (this.props.authenticatedRole !== "EMPLOYEE") {
@@ -185,7 +184,7 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// toggleAvail //////////////////////
   freeToWork = (unavailObj) => {
     console.log("so you want to work after all..., delete unavailObj", unavailObj);
-    axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
+    axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
       .then( response => {
         // quick update on front end to match db
         // response.data is the latest data from Unavails table in db for this employee
@@ -205,7 +204,7 @@ export default class EmployeeDash extends React.Component {
 
     } else {
       // emp wants day off -> post/add to unavails table in db
-      axios.post((EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
+      axios.post((this.state.EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
       .then( response => {
         // quick update on front end to match db
         latestEmpUnavails.push( response.data );
