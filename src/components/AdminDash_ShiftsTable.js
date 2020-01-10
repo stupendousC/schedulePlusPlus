@@ -14,6 +14,9 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     if (shift.employee) {
       return (shift.employee.name);
     } else {
+      // WEIRDNESS!!!!!! is it just for show?  or what?  prob is that the prev clicked button set states for THAT shift, so it can be confusing if u clicked on another row!!!
+      // the button really is just for show, 
+      // clicking on the entire bar (inc the button) will send an API call to backend for the list of avail employees
       return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-primary">Find employees</button>);
     }
   }

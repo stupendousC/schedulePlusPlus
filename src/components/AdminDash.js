@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
@@ -103,11 +104,45 @@ export default class AdminDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-        <h3>A thought... make sub sections or collapsibles right here for 1. newShift, 2. agenda, 3. availabilities</h3>
         {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-        <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
-        <CalendarDay basicShiftsInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
-        {/* <Avails /> */}
+
+        <Accordion>
+            <Accordion.Toggle eventKey="newShift" className="accordian-toggle_button">
+              <section>
+                <section>MAKE A NEW SHIFT</section>
+              </section>
+            </Accordion.Toggle>
+
+            <Accordion.Collapse eventKey="newShift">
+            <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
+            </Accordion.Collapse>
+        </Accordion>
+
+        <Accordion>
+          <Accordion.Toggle eventKey="dayAgenda" className="accordian-toggle_button">
+            <section>
+              <section>AGENDA FOR {formatDate(this.state.daySpotlight)}</section>
+            </section>
+          </Accordion.Toggle>
+
+          <Accordion.Collapse eventKey="dayAgenda">
+            <CalendarDay basicShiftsInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
+          </Accordion.Collapse>
+        </Accordion>
+
+        <Accordion>
+          <Accordion.Toggle eventKey="weekAgenda" className="accordian-toggle_button">
+            <section>
+              <section>AGENDA FOR THIS WEEK</section>
+            </section>
+          </Accordion.Toggle>
+
+          <Accordion.Collapse eventKey="weekAgenda">
+            {/* <CalendarDay  /> */}
+            <h1>Upcoming feature, stay tuned...</h1>
+          </Accordion.Collapse>
+        </Accordion>
+
       </section>
     );
   }
