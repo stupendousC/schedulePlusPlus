@@ -1,11 +1,20 @@
 import React from 'react';
-import { convertTimeString, formatDate, sortShiftsByDate } from './Helpers';
+import axios from 'axios';
+import { convertTimeString, formatDate } from './Helpers';
 
-const EmployeeDash_ShiftsTable = ({allShifts}) => {
+const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts}) => {
 
-  allShifts = sortShiftsByDate(allShifts);
-  
-  if (allShifts.length === 0) {
+  const showUnstaffedShifts = () => {
+    console.log("show sortedUnstaffedShifts", sortedUnstaffedShifts);
+    return(
+      <section>
+        show table of unstaffed shifts here!
+      </section>
+    );
+  }
+
+
+  if (!sortedOwnShifts) {
 
     return (
       <section>No upcoming shifts</section>
@@ -16,7 +25,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     return(
       <section>
 <h1>Would be nice to click on row for more info</h1>
-        {allShifts.map(shift => {
+        {sortedOwnShifts.map(shift => {
           return (
             <section key = {shift.id} className="section-4-col">
               <section>{formatDate(shift.shift_date)}</section>
@@ -26,6 +35,9 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
             </section>
           )}
         )}
+
+        <hr/>
+        {showUnstaffedShifts()}
       </section>
     );
   }    

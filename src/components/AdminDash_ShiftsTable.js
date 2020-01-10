@@ -14,10 +14,10 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     if (shift.employee) {
       return (shift.employee.name);
     } else {
-      // WEIRDNESS!!!!!! is it just for show?  or what?  prob is that the prev clicked button set states for THAT shift, so it can be confusing if u clicked on another row!!!
       // the button really is just for show, 
-      // clicking on the entire bar (inc the button) will send an API call to backend for the list of avail employees
-      return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-primary">Find employees</button>);
+      // clicking on the entire bar (inc the button) is what sends an API call to backend for the list of avail employees
+      // return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-primary">Find employees</button>);
+      return (<button className="btn btn-primary">Find employees</button>);
     }
   }
 
@@ -29,12 +29,11 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     .then(response => {
       console.log("backend returns list of avail emps: ", response.data);
       setAvailEmployees(response.data);
-      // 
     })
     .catch(error => console.log("Error getting availEmps:", error.message));
   }
 
-  const showWholeShiftCard = (shift) => {
+  const showWholeShiftCard = (shift, availEmployees) => {
     return (
       <card>
         <section className="card-shift blue-bg">
@@ -62,7 +61,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
           2. blank fields, if unstaffed & user clicked on accordion but NOT the 'find employees' button
           3. list of available employees for that shift, if 'find employees' button was clicked */}
         
-        { shift.employee ? showEmpInCard(shift) : showAvailEmpsInCard() }
+        { shift.employee ? showEmpInCard(shift) : showAvailEmpsInCard(availEmployees, shift) }
         
       </card>
     );
@@ -84,10 +83,12 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     );
   }
 
-  const showAvailEmpsInCard = () => {
-    console.log("DISPLAY", availEmployees);
+  const showAvailEmpsInCard = (listOfEmps, shift) => {
+    // the availEmployees in state can change after user clicks on a diff row,
+    // that's why the variable here refers to the 'latest' availEmployees when this fcn was invoked
+    console.log("DISPLAY", listOfEmps);
 
-    const rowsOfEmps = availEmployees.map(emp => {
+    const rowsOfEmps = listOfEmps.map(emp => {
       return(
         <section key={emp.id} className="card-employee">
           <section>{emp.name}</section>
@@ -98,16 +99,14 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
     return (
       <section className="blue-bg">
-            /// HOLD UP!!!! FIX BUG ON FIND EMPLOYEES BUTTON!!!
-    // CLICKING ON OTHER LINES FOR ACCORDION WILL SHOW THE AVAIL EMPS FOR THE *LAST* BLUE BUTTON CLICKED!
-
-        <button onClick={sendTexts} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
+      HOLD UP!!!! FIX BUG ON TEXT EMPLOYEES BUTTON!!!
+      CLICKING ON OTHER LINES FOR ACCORDION WILL TEXT THE AVAIL EMPS FOR THE *LAST* BLUE BUTTON CLICKED!
+        {/* sendTexts need to refer to listOfEmps INSTEAD of whatever the latest state of availEmployees so u don't test the wrong set of people */}
+        <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
         {rowsOfEmps}
       </section>
     );
   }
-
-
 
   ////////////////// render ////////////////////
   if (allShifts.length === 0) {
@@ -123,7 +122,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle eventKey="showInfo" className="accordian-toggle_button">
+                <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button">
                   <section className="section-4-col">
                     <section>Info</section>
                     <section>{formatDate(shift.shift_date)}</section>
@@ -133,7 +132,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey="showInfo">
-                  <section>{showWholeShiftCard(shift)}</section>
+                  <section>{showWholeShiftCard(shift, availEmployees)}</section>
                 </Accordion.Collapse>
 
               </section>

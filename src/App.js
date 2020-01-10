@@ -14,14 +14,14 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "ADMIN",       // TEMPORARY
+      authenticatedRole: "",       // TEMPORARY
       googleId: "",
-      username: "",// TEMPORARY
-      databaseId: "OVERRIDE ADMIN"
+      username: "",
+      databaseId: ""// TEMPORARY
     }
-    sessionStorage.setItem('authenticatedRole', 'ADMIN');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', 'OVERRIDE ADMIN');// TEMPORARY
+    sessionStorage.setItem('username', '');    // TEMPORARY
   }
 
   login = (googleId) => {

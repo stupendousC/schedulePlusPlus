@@ -6,7 +6,7 @@ import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {convertDateString, formatDate, convertTimeString, convertToPST} from './Helpers';
+import {convertDateString, formatDate, convertTimeString, convertToPST, sendTexts} from './Helpers';
 
 import Error from './Error';
 
@@ -118,6 +118,19 @@ export default class AdminDash extends React.Component {
             <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
             </Accordion.Collapse>
         </Accordion>
+        
+        <Accordion>
+          <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
+            <section>
+              <section>AVAILABLE EMPLOYEES FOR {formatDate(this.state.daySpotlight)}</section>
+            </section>
+          </Accordion.Toggle>
+
+          <Accordion.Collapse eventKey="availEmpList">
+            {/* send API call to backend to get all avail emps for the daySpotlight */}
+            {this.showAvailEmpsInCard()}
+          </Accordion.Collapse>
+        </Accordion>
 
         <Accordion>
           <Accordion.Toggle eventKey="dayAgenda" className="accordian-toggle_button">
@@ -143,18 +156,7 @@ export default class AdminDash extends React.Component {
           </Accordion.Collapse>
         </Accordion>
 
-        <Accordion>
-          <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
-            <section>
-              <section>AVAILABLE EMPLOYEES FOR {formatDate(this.state.daySpotlight)}</section>
-            </section>
-          </Accordion.Toggle>
 
-          <Accordion.Collapse eventKey="availEmpList">
-            {/* send API call to backend to get all avail emps for the daySpotlight */}
-            {this.showAvailEmpsInCard()}
-          </Accordion.Collapse>
-        </Accordion>
 
       </section>
     );
@@ -204,8 +206,6 @@ export default class AdminDash extends React.Component {
     return (
       <section>
         <section>AVAILABLE EMPLOYEES</section>
-        <button className="btn btn-primary">TEXT ALL</button>
-
         {rowsOfEmps}
       </section>
     );

@@ -25,13 +25,15 @@ export default class EmployeeDash extends React.Component {
       daySpotlight: today,
       shiftsOfDay: [],
       availStatusOfDay: null,
-      show: 'calendar'
+      show: 'calendar',
+      unstaffedShifts: []
     }
   }
 
   getEmpInfo = () => axios.get(EMP_DASH);
   getEmpShifts = () => axios.get(EMP_DASH+"/shifts");
   getEmpUnavails = () => axios.get(EMP_DASH+"/unavails");
+  getUnstaffedShifts = () => axios.get(EMP_DASH+"/unstaffedShifts");
   
   componentDidMount() {
     if (this.props.authenticatedRole !== "EMPLOYEE") {
@@ -40,11 +42,17 @@ export default class EmployeeDash extends React.Component {
     }
 
     // initial loading of data from database
-    axios.all([this.getEmpInfo(), this.getEmpShifts(), this.getEmpUnavails()])
+    axios.all([
+      this.getEmpInfo(), 
+      this.getEmpShifts(), 
+      this.getEmpUnavails(),
+      this.getUnstaffedShifts()
+    ])
       .then(axios.spread((...responses) => {
         const empInfo = responses[0].data;
         const empShifts = responses[1].data;
         const empUnavails = responses[2].data;
+        const unstaffedShifts = responses[3].data;
 
         // meanwhile find out if there's any shifts to autoload for today's calendar
         const today = convertDateString(new Date());
@@ -57,7 +65,8 @@ export default class EmployeeDash extends React.Component {
           empShifts: empShifts,
           empUnavails: empUnavails,
           shiftsOfDay: shiftsToday,
-          availStatusOfDay: canWorkBool
+          availStatusOfDay: canWorkBool,
+          unstaffedShifts: unstaffedShifts
         });
         }))
         .catch(errors => console.log(errors));
@@ -112,8 +121,9 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// DISPLAY: own shifts //////////////////////
 
   showAllShifts = () => {
-    const sortedByDate = sortShiftsByDate(this.state.empShifts);
-    return (<ShiftsTable allShifts={sortedByDate}/>);
+    const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
+    const sortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
+    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts}/>);
   }
 
   ////////////////////// DISPLAY: own unavails //////////////////////

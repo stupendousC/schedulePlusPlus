@@ -7,12 +7,6 @@ import GoogleLogin from 'react-google-login';
 import {Link} from 'react-router-dom';
 
 class LoginBanner extends React.Component {
-  constructor() {
-    super()
-    this.state = {
-      loggedInPerson: ""    // TODO: sub in Admin/Employee obj
-    }
-  }
   
   ////////////////////// LOGIN //////////////////////
   responseGoogle = (response) => {

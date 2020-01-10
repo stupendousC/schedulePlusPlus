@@ -62,7 +62,13 @@ export const sortShiftsByDate = (listOfShifts) => {
   return sorted;
 }
 
-export const sendTexts = () => {
-  console.log("\nDING DING DING text sent!");
+export const sendTexts = (listOfEmployees, shift) => {
+  console.log("\nSENDING TEXT TO *WRONG* group", listOfEmployees);
+  console.log("FOR correct SHIFT DATE = ", shift.shift_date);
+  console.log("it's always the same friggin' group! whichever is last clicked on is it!")
+
+
+
+
 
 }
