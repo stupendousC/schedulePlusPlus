@@ -14,7 +14,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     if (shift.employee) {
       return (shift.employee.name);
     } else {
-      return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-success">Find employees</button>);
+      return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-primary">Find employees</button>);
     }
   }
 
@@ -29,10 +29,9 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
       // 
     })
     .catch(error => console.log("Error getting availEmps:", error.message));
-    //
   }
 
-  const showShiftInfoCard = (shift) => {
+  const showWholeShiftCard = (shift) => {
     return (
       <card>
         <section className="card-shift">
@@ -95,8 +94,9 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     })
     return (
       <section>
-        <button>TEXT ALL</button>
-        
+        <section>AVAILABLE EMPLOYEES</section>
+        <button className="btn btn-primary">TEXT ALL</button>
+
         {rowsOfEmps}
       </section>
     );
@@ -126,7 +126,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey="showInfo">
-                  <section>{showShiftInfoCard(shift)}</section>
+                  <section>{showWholeShiftCard(shift)}</section>
                 </Accordion.Collapse>
 
               </section>
