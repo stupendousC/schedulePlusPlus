@@ -16,12 +16,13 @@ class App extends React.Component {
     this.state = {
       authenticatedRole: "EMPLOYEE",       // TEMPORARY
       googleId: "",
-      username: "",
-      databaseId: "OVERRIDE EMP"// TEMPORARY
+      username: "OVERRIDE EMP",// TEMPORARY
+      databaseId: ""
     }
     sessionStorage.setItem('authenticatedRole', 'EMPLOYEE');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
     sessionStorage.setItem('username', 'OVERRIDE EMP');    // TEMPORARY
+    sessionStorage.setItem('databaseId', '');
   }
 
   login = (googleId) => {
