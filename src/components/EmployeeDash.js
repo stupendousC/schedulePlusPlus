@@ -123,14 +123,14 @@ export default class EmployeeDash extends React.Component {
   showAllShifts = () => {
     const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
     const sortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
-    const sortedUnavails = sortShiftsByDate(this.state.empUnavails);
-    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnAvails={sortedUnavails}/>);
+    const sortedUnavails = sortUnavailsByDate(this.state.empUnavails);
+    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnavails={sortedUnavails} freeToWorkCallback={this.freeToWork} takeShiftCallback={this.takeShift}/>);
   }
 
   ////////////////////// DISPLAY: own unavails //////////////////////
   showAllUnavails = () => {
     const empUnavails = this.state.empUnavails;
-    const sortedByDate = sortUnavailsByDate(empUnavails)
+    const sortedUnavails = sortUnavailsByDate(empUnavails);
 
     if (empUnavails.length === 0) {
       return (
@@ -139,7 +139,7 @@ export default class EmployeeDash extends React.Component {
     } else {
       return(
       <section>
-        <UnavailDays sortedUnavails={sortedByDate} freeToWorkCallback={this.freeToWork}/>
+        <UnavailDays sortedUnavails={sortedUnavails} freeToWorkCallback={this.freeToWork}/>
       </section>
     );
     }
@@ -181,7 +181,7 @@ export default class EmployeeDash extends React.Component {
     return true;
   }
 
-  ////////////////////// toggleAvail //////////////////////
+  ////////////////////// Callback fcns //////////////////////
   freeToWork = (unavailObj) => {
     console.log("so you want to work after all..., delete unavailObj", unavailObj);
     axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
@@ -212,6 +212,18 @@ export default class EmployeeDash extends React.Component {
       } )   
       .catch(error => console.log("ERROR adding to db: ", error.message));
     }
+  }
+
+
+  takeShift = (shift) => {
+    // send axios call if everything's cool
+    console.log("\nSEND API FOR", shift);
+    
+    const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
+
+    axios.put(URL_endpoint)
+    .then(response => this.setState({empShifts: response.data}))
+    .catch(error => console.log(error.message));
   }
 
   ////////////////////// render //////////////////////
