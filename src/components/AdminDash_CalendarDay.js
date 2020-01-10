@@ -1,8 +1,8 @@
 import React from 'react';
 
 const CalendarDay = ({basicShiftsInfo, dateStr}) => {
-
-  console.log("CalendarDay showing", dateStr, "\nbasicShiftsInfo = ", basicShiftsInfo);
+  // const [findEmployeesClicked, setFindEmployeesClicked] = useState(false);
+  // console.log("CalendarDay showing", dateStr, "\nbasicShiftsInfo = ", basicShiftsInfo);
 
   const showShifts = () => {
     return ( basicShiftsInfo.map (shift => {

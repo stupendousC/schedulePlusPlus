@@ -14,19 +14,18 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "ADMIN",       // TEMPORARY
+      authenticatedRole: "EMPLOYEE",       // TEMPORARY
       googleId: "",
-      username: "",// TEMPORARY
-      databaseId: "OVERRIDE ADMIN"
+      username: "",
+      databaseId: "OVERRIDE EMP"// TEMPORARY
     }
-    sessionStorage.setItem('authenticatedRole', 'ADMIN');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', 'EMPLOYEE');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', 'OVERRIDE ADMIN');// TEMPORARY
+    sessionStorage.setItem('username', 'OVERRIDE EMP');    // TEMPORARY
   }
 
   login = (googleId) => {
     const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
-    // const endpoint = process.env.REACT_APP_LOGIN + "/?googleId=" + googleId;
 
     axios.get(endpoint)
       .then(response => {
