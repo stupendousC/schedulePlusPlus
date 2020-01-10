@@ -181,7 +181,7 @@ export default class EmployeeDash extends React.Component {
     return true;
   }
 
-  ////////////////////// Callback fcns //////////////////////
+  ////////////////////// Callback fcns & related helpers //////////////////////
   freeToWork = (unavailObj) => {
     console.log("so you want to work after all..., delete unavailObj", unavailObj);
     axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
@@ -216,15 +216,26 @@ export default class EmployeeDash extends React.Component {
 
 
   takeShift = (shift) => {
-    // send axios call if everything's cool
     console.log("\nSEND API FOR", shift);
     
     const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
 
     axios.put(URL_endpoint)
-    .then(response => this.setState({empShifts: response.data}))
+    .then(response => {
+      // api sending back current list of emp's shifts
+      this.setState({ empShifts: response.data })
+      // need to update state unstaffedShifts[] as well, b/c now we took one out
+      this.updateLatestUnstaffedShifts();
+    })
     .catch(error => console.log(error.message));
   }
+
+  updateLatestUnstaffedShifts = () => { 
+    axios.get(this.state.EMP_DASH+"/unstaffedShifts")
+    .then( response => this.setState({ unstaffedShifts: response.data}))
+    .catch(error => console.log(error.message));
+  }
+  
 
   ////////////////////// render //////////////////////
   render() {
