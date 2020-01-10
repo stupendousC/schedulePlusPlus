@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
+import UnavailDays from './EmployeeDash_UnavailDays';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
@@ -139,12 +140,12 @@ export default class EmployeeDash extends React.Component {
     } else {
       return(
       <section>
-        It'd be nice to sort these, and to hide all the ones in the past, can click on them if u really want to
-        {sortedByDate.map(unavail => {return <li key = {unavail.id}>{formatDate(unavail.day_off)}</li>})}
+        <UnavailDays sortedUnavails={sortedByDate} freeToWorkCallback={this.freeToWork}/>
       </section>
     );
     }
   }
+  
   
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
@@ -182,6 +183,17 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// toggleAvail //////////////////////
+  freeToWork = (unavailObj) => {
+    console.log("so you want to work after all..., delete unavailObj", unavailObj);
+    axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
+      .then( response => {
+        // quick update on front end to match db
+        // response.data is the latest data from Unavails table in db for this employee
+        this.setState({ empUnavails: response.data, availStatusOfDay: true });
+      })  
+      .catch(error => console.log("ERROR deleting from db: ", error.message));
+  }
+
   toggleAvail = (availBoolean) => {
     let latestEmpUnavails = [...this.state.empUnavails];
 
@@ -189,14 +201,8 @@ export default class EmployeeDash extends React.Component {
       // emp wants to work -> delete row from unavails table in db
       // find id from this.state.empUnavails
       const unavailObj = this.state.empUnavails.find( unavail => unavail.day_off === this.state.daySpotlight );
-      axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
-      .then( response => {
-        // quick update on front end to match db
-        // response.data is the latest data from Unavails table in db for this employee
-        this.setState({ empUnavails: response.data, availStatusOfDay: true });
-      })  
-      .catch(error => console.log("ERROR deleting from db: ", error.message));
-      
+      this.freeToWork(unavailObj);
+
     } else {
       // emp wants day off -> post/add to unavails table in db
       axios.post((EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
