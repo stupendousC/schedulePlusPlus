@@ -23,6 +23,7 @@ export default class EmployeeDash extends React.Component {
       empUnavails: [],
       empShifts: [],
       daySpotlight: today,
+      shiftsToday: [],
       shiftsOfDay: [],
       availStatusOfDay: null,
       show: 'calendar',
@@ -64,6 +65,7 @@ export default class EmployeeDash extends React.Component {
           empInfo: empInfo,
           empShifts: empShifts,
           empUnavails: empUnavails,
+          shiftsToday: shiftsToday,
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool,
           unstaffedShifts: unstaffedShifts
