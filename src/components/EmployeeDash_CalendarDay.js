@@ -1,40 +1,23 @@
 import React from 'react';
-import { convertDateString, convertTimeString, formatDate, dateInThePast } from './Helpers';
+import { convertDateString, convertTimeString, formatDate } from './Helpers';
 import Accordion from 'react-bootstrap/Accordion';
 
 
-const CalendarDay = ({shiftToday, basicShiftInfo, dateStr, availStatus, toggleAvailCallback}) => {
-  const today = formatDate(new Date());
+const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
 
-  const showShifts = () => {
-    return ( basicShiftInfo.map (shift => {
-      return (
-        <section key={shift.id} className="section-4-col"> 
-          <section>{formatDate(shift.shift_date)}</section>
-          <section>{shift.client.name}</section>
-          <section>{convertTimeString(shift.start_time)}</section>
-          <section>{convertTimeString(shift.end_time)}</section>
-        </section>
-        );
+  const showShifts = (shiftsInArray) => {
+    // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[]  
+    return ( shiftsInArray.map (shift => {
+      return (showWholeShiftCard(shift));
     }));
   }
-
-  const showToday = () => {
-    if (shiftToday === []) {
-      return( showWholeShiftCard(shiftToday) );
-    } else {
-      return( <h3>Nothing for today</h3>);
-    }
-    
-  }
-
 
   const showWholeShiftCard = (shift) => {
     return (
       <section>
         <section className="card-shift blue-bg" >
           <p>DATE</p>
-          <p>{shift.shift_date}</p>
+          <p>{(shift.shift_date)}</p>
           <p>START</p>
           <p>{(shift.start_time)}</p>
           <p>END</p>
@@ -56,41 +39,29 @@ const CalendarDay = ({shiftToday, basicShiftInfo, dateStr, availStatus, toggleAv
     );
   }
 
-
-
   const showAgendaOrOptions = () => {
-    // console.log("\nCalendarDay received: ", basicShiftInfo, " availStatus = ", availStatus, "on", dateStr);
 
     const today = convertDateString(new Date());
     const inThePast = dateStr < today;
 
-    if (basicShiftInfo.length > 0) {
+    if (shiftsOfDaySpotlight.length > 0) {
       return (
         <section>
-
           { inThePast ? (<h5>Shift completed!</h5>) : null }
-
-          <section className="section-4-col"> 
-            <section>Date</section>
-            <section>Client</section>
-            <section>Start</section>
-            <section>End</section>
-          </section>
-
-          <section>
-            {showShifts()}
-          </section>
-
+          {showShifts(shiftsOfDaySpotlight)}
         </section>
       );
-    } else if (basicShiftInfo.length === 0 && availStatus === true) {
+    } else if (inThePast) {
+      return (<section>Nothing that day</section>);
+    } else if (shiftsOfDaySpotlight.length === 0 && availStatus === true) {
       return (
         <section>
           <h3>No shifts scheduled</h3>
           <button onClick={() => {toggleAvailCallback(false)}} className="btn btn-danger">Take the day off</button>
         </section>
       );
-    } else if (basicShiftInfo.length === 0 && availStatus === false) {
+
+    } else if (shiftsOfDaySpotlight.length === 0 && availStatus === false) {
       return (
         <section>
           <h3>You have the day off</h3>
@@ -100,6 +71,7 @@ const CalendarDay = ({shiftToday, basicShiftInfo, dateStr, availStatus, toggleAv
     } 
   }
 
+  ////////////////////////////// render //////////////////////////////
   return(
 
     <section> 
@@ -108,13 +80,13 @@ const CalendarDay = ({shiftToday, basicShiftInfo, dateStr, availStatus, toggleAv
           <Accordion.Toggle eventKey="showToday" className="accordian-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
-              <section>TODAY {today}</section>
+              <section>TODAY: {formatDate(today)}</section>
               <section>▼</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showToday">
-            <section>{showToday()}</section>
+            <section>{showShifts(shiftsToday)}</section>
           </Accordion.Collapse>
 
         </section>
@@ -125,7 +97,7 @@ const CalendarDay = ({shiftToday, basicShiftInfo, dateStr, availStatus, toggleAv
           <Accordion.Toggle eventKey="showCalendarClick" className="accordian-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
-              <section>AGENDA for {formatDate(dateStr)}</section>
+              <section>DAY SPOTLIGHT: {formatDate(dateStr)}</section>
               <section>▼</section>
             </section>
           </Accordion.Toggle>

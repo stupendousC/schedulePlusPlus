@@ -65,6 +65,7 @@ export default class EmployeeDash extends React.Component {
           empInfo: empInfo,
           empShifts: empShifts,
           empUnavails: empUnavails,
+          today: today,
           shiftsToday: shiftsToday,
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool,
@@ -169,7 +170,7 @@ export default class EmployeeDash extends React.Component {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-        <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
+        <CalendarDay toggleAvailCallback={this.toggleAvail} today={this.state.today} shiftsToday={this.state.shiftsToday} shiftsOfDaySpotlight={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
   }
@@ -257,6 +258,7 @@ export default class EmployeeDash extends React.Component {
 
   ////////////////////// render //////////////////////
   render() {
+
       return (
         <section>
 
