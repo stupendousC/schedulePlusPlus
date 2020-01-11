@@ -5,7 +5,7 @@ import UnavailDays from './EmployeeDash_UnavailDays';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
+import { convertDateString, formatDate, getWeekday, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640

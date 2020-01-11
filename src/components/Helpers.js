@@ -24,6 +24,30 @@ export const convertDateString = (timeObj) => {
   return `${year}-${month}-${day}`;
 }
 
+export const getWeekday = (timeStr_or_timeObj) => {
+  // takes in either a timeStr like "2020-02-28" or a Date() object,
+  // returns an abbrev'd weekday string
+
+  let timeObj;
+  if (typeof(timeStr_or_timeObj) === "string") {
+    console.log("tis a string!");
+    timeObj = convertToPST(timeStr_or_timeObj);
+  } else {
+    timeObj = timeStr_or_timeObj;
+  }
+  
+  let weekdayArray = new Array(7);
+  weekdayArray[0] = "Sun";
+  weekdayArray[1] = "Mon";
+  weekdayArray[2] = "Tues";
+  weekdayArray[3] = "Wed";
+  weekdayArray[4] = "Thurs";
+  weekdayArray[5] = "Fri";
+  weekdayArray[6] = "Sat";
+
+  return weekdayArray[timeObj.getDay()];
+}
+
 export const convertTimeString = (timeStr) => {
   // takes "HH:MM:SS" and turns it into "HH:MM AM/PM"
   let hours = parseInt(timeStr.slice(0,2));
