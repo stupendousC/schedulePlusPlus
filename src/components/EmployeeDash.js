@@ -5,14 +5,12 @@ import UnavailDays from './EmployeeDash_UnavailDays';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
+import { convertDateString, formatDate, getWeekday, dateInThePast, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
 // 1366 x 768
 // 1920x1080   
-
-const EMP_DASH = process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId');
 
 export default class EmployeeDash extends React.Component {
 
@@ -20,10 +18,12 @@ export default class EmployeeDash extends React.Component {
     super()
     const today = convertDateString(new Date())
     this.state = {
+      EMP_DASH: process.env.REACT_APP_EMP_DASH+"/"+sessionStorage.getItem('databaseId'),
       empInfo: [],
       empUnavails: [],
       empShifts: [],
       daySpotlight: today,
+      shiftsToday: [],
       shiftsOfDay: [],
       availStatusOfDay: null,
       show: 'calendar',
@@ -31,10 +31,10 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-  getEmpInfo = () => axios.get(EMP_DASH);
-  getEmpShifts = () => axios.get(EMP_DASH+"/shifts");
-  getEmpUnavails = () => axios.get(EMP_DASH+"/unavails");
-  getUnstaffedShifts = () => axios.get(EMP_DASH+"/unstaffedShifts");
+  getEmpInfo = () => axios.get(this.state.EMP_DASH);
+  getEmpShifts = () => axios.get(this.state.EMP_DASH+"/shifts");
+  getEmpUnavails = () => axios.get(this.state.EMP_DASH+"/unavails");
+  getUnstaffedShifts = () => axios.get(this.state.EMP_DASH+"/unstaffedShifts");
   
   componentDidMount() {
     if (this.props.authenticatedRole !== "EMPLOYEE") {
@@ -65,6 +65,8 @@ export default class EmployeeDash extends React.Component {
           empInfo: empInfo,
           empShifts: empShifts,
           empUnavails: empUnavails,
+          today: today,
+          shiftsToday: shiftsToday,
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool,
           unstaffedShifts: unstaffedShifts
@@ -90,7 +92,7 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-  ////////////////////// DISPLAY: own info //////////////////////
+  ////////////////////// DISPLAY: own info tab //////////////////////
   showAllInfo = () => {
     const info = this.state.empInfo;
     
@@ -119,19 +121,35 @@ export default class EmployeeDash extends React.Component {
     e.preventDefault();
   }
 
-  ////////////////////// DISPLAY: own shifts //////////////////////
+  ////////////////////// DISPLAY: shifts tab //////////////////////
 
   showAllShifts = () => {
     const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
-    const sortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
-    const sortedUnavails = sortShiftsByDate(this.state.empUnavails);
-    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnAvails={sortedUnavails}/>);
+    const sortedUnavails = sortUnavailsByDate(this.state.empUnavails);
+    const allSortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
+    
+    let sortedUnstaffedShifts = allSortedUnstaffedShifts.filter( unstaffed => {
+      // Emp does NOT need to see...  1. unstaffed shifts that are in the past
+      const today = convertDateString(new Date());
+      if (unstaffed.shift_date < today) return false;
+
+      // 2. unstaffed shifts that coincide with their own booked days
+      for (const ownShift of sortedOwnShifts) {
+        if (unstaffed.shift_date === ownShift.shift_date) return false;
+        if (unstaffed.shift_date < ownShift.shift_date) break;
+      }
+
+      // if this unstaffed shift hasn't been disqualified by now, then employee can see it
+      return true;
+    })
+
+    return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnavails={sortedUnavails} freeToWorkCallback={this.freeToWork} takeShiftCallback={this.takeShift}/>);
   }
 
-  ////////////////////// DISPLAY: own unavails //////////////////////
+  ////////////////////// DISPLAY: own unavails tab //////////////////////
   showAllUnavails = () => {
     const empUnavails = this.state.empUnavails;
-    const sortedByDate = sortUnavailsByDate(empUnavails)
+    const sortedUnavails = sortUnavailsByDate(empUnavails);
 
     if (empUnavails.length === 0) {
       return (
@@ -140,19 +158,19 @@ export default class EmployeeDash extends React.Component {
     } else {
       return(
       <section>
-        <UnavailDays sortedUnavails={sortedByDate} freeToWorkCallback={this.freeToWork}/>
+        <UnavailDays sortedUnavails={sortedUnavails} freeToWorkCallback={this.freeToWork}/>
       </section>
     );
     }
   }
   
   
-  ////////////////////// DISPLAY: calendar  //////////////////////
+  ////////////////////// DISPLAY: calendar tab //////////////////////
   showCalendar = () => {
     return (
       <section>
         <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-        <CalendarDay toggleAvailCallback={this.toggleAvail} basicShiftInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
+        <CalendarDay toggleAvailCallback={this.toggleAvail} today={this.state.today} shiftsToday={this.state.shiftsToday} shiftsOfDaySpotlight={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
       </section>
     );
   }
@@ -182,10 +200,10 @@ export default class EmployeeDash extends React.Component {
     return true;
   }
 
-  ////////////////////// toggleAvail //////////////////////
+  ////////////////////// Callback fcns & related helpers //////////////////////
   freeToWork = (unavailObj) => {
     console.log("so you want to work after all..., delete unavailObj", unavailObj);
-    axios.delete(EMP_DASH + `/unavails/${unavailObj.id}`)
+    axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
       .then( response => {
         // quick update on front end to match db
         // response.data is the latest data from Unavails table in db for this employee
@@ -205,7 +223,7 @@ export default class EmployeeDash extends React.Component {
 
     } else {
       // emp wants day off -> post/add to unavails table in db
-      axios.post((EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
+      axios.post((this.state.EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
       .then( response => {
         // quick update on front end to match db
         latestEmpUnavails.push( response.data );
@@ -215,8 +233,32 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
+
+  takeShift = (shift) => {
+    console.log("\nSEND API FOR", shift);
+    
+    const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
+
+    axios.put(URL_endpoint)
+    .then(response => {
+      // api sending back current list of emp's shifts
+      this.setState({ empShifts: response.data })
+      // need to update state unstaffedShifts[] as well, b/c now we took one out
+      this.updateLatestUnstaffedShifts();
+    })
+    .catch(error => console.log(error.message));
+  }
+
+  updateLatestUnstaffedShifts = () => { 
+    axios.get(this.state.EMP_DASH+"/unstaffedShifts")
+    .then( response => this.setState({ unstaffedShifts: response.data}))
+    .catch(error => console.log(error.message));
+  }
+  
+
   ////////////////////// render //////////////////////
   render() {
+
       return (
         <section>
 

@@ -14,14 +14,15 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "EMPLOYEE",       // TEMPORARY
+      authenticatedRole: "",       // TEMPORARY
       googleId: "",
-      username: "",
-      databaseId: "OVERRIDE EMP"// TEMPORARY
+      username: "",// TEMPORARY
+      databaseId: ""
     }
-    sessionStorage.setItem('authenticatedRole', 'EMPLOYEE');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', 'OVERRIDE EMP');    // TEMPORARY
+    sessionStorage.setItem('username', '');    // TEMPORARY
+    sessionStorage.setItem('databaseId', '');
   }
 
   login = (googleId) => {
@@ -78,8 +79,8 @@ class App extends React.Component {
           <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
-            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
-            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId}/>} />
+            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
+            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
           </Switch>
       </Router>
   );

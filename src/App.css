@@ -55,6 +55,12 @@
   background-color: yellow;
 }
 
+.section-3-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background-color: lightyellow;
+}
+
 .section-2-col {
   display: grid;
   grid-template-columns: 1fr 1fr;

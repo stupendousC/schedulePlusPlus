@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
-import { convertTimeString, formatDate, dateInThePast } from './Helpers';
+import { convertTimeString, formatDate, dateInThePast, getWeekday } from './Helpers';
 
-const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails}) => {
+const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails, takeShiftCallback, freeToWorkCallback}) => {
 
   const showUnstaffedShifts = () => {
     console.log("show sortedUnstaffedShifts", sortedUnstaffedShifts);
@@ -16,10 +16,10 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
               <section>
                 <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
                   <section className="section-4-col">
+                    <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
+                    <section>{getWeekday(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
-                    <section>{convertTimeString(shift.start_time)}</section>
-                    <section>{convertTimeString(shift.end_time)}</section>
                   </section>
                 </Accordion.Toggle>
 
@@ -64,20 +64,62 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     );
   }
 
+  const isEmpBookedElsewhere = (possibleDate) => {
+    for (const shift of sortedOwnShifts) {
+      if (shift.shift_date > possibleDate) {
+        return false;
+      } else if (shift.shift_date === possibleDate) {
+        return true;
+      }
+    }  
+  } 
+
+  const isEmpOffThatDay = (possibleDate) => {
+    for (const unavail of sortedUnavails) {
+      if (unavail.day_off > possibleDate) {
+        return false;
+      } else if (unavail.day_off === possibleDate) {
+        return true;
+      }
+    }  
+  } 
+
   const showTakeShiftSection = (shift) => {
-    return (
-      <section className="blue-bg">
-          <p>Can I work on {shift.shift_date}?  IDK I gotta check first lol</p>
-          <button onClick={() =>{takeShift(shift)}}>Take the shift</button>
-        </section>
-    );
+    const bookedElsewhere = isEmpBookedElsewhere(shift.shift_date);
+    const offThatDay = isEmpOffThatDay(shift.shift_date);
+    const cannotWork = bookedElsewhere || offThatDay;
+
+    if (cannotWork) {
+      if (bookedElsewhere) {
+        return (
+          <section className="gray-bg">
+            <p>You are already working elsewhere that day!</p>
+            </section>
+        );
+      } else if (offThatDay) {
+        return (
+          <section className="gray-bg">
+            <p>You have the day off but you can change your mind!</p>
+            {/* Clicking on this button will result in re-rendering this section as 'eligible for shift', user should see blue-bg w/ blue button b/c reeval'd cannot=false */}
+            <button onClick={() =>{removeUnavail(shift)}} className="btn btn-success">Take the shift</button>
+            </section>
+        );
+      }
+      
+    } else {
+      return (
+        <section className="blue-bg">
+          <p>You are eligible for this shift!</p>
+          <button onClick={() =>{takeShiftCallback(shift)}} className="btn btn-primary">Take the shift</button>
+          </section>
+      );
+    }
   }
 
-  const takeShift = (shift) => {
-    console.log("NEED TO CHECK FIRST TO MAKE SURE IT'S NOT AN UNAVAIL DAY FOR EMPLOYEE!");
-    // send axios call if everything's cool
+  const removeUnavail = (shift) => {
+    const unavailObj = sortedUnavails.find(unavail => unavail.day_off === shift.shift_date );
+    freeToWorkCallback(unavailObj);
   }
-
 
   ////////////////// render ////////////////////
   if (!sortedOwnShifts) {
@@ -101,10 +143,10 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
               <section>
                 <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
                   <section className="section-4-col">
+                    <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
+                    <section>{getWeekday(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
-                    <section>{convertTimeString(shift.start_time)}</section>
-                    <section>{convertTimeString(shift.end_time)}</section>
                   </section>
                 </Accordion.Toggle>
 
