@@ -164,7 +164,6 @@ export default class EmployeeDash extends React.Component {
     }
   }
   
-  
   ////////////////////// DISPLAY: calendar tab //////////////////////
   showCalendar = () => {
     return (
@@ -233,7 +232,6 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-
   takeShift = (shift) => {
     console.log("\nSEND API FOR", shift);
     
@@ -255,7 +253,6 @@ export default class EmployeeDash extends React.Component {
     .catch(error => console.log(error.message));
   }
   
-
   ////////////////////// render //////////////////////
   render() {
 

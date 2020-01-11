@@ -16,7 +16,6 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     } else {
       // the button really is just for show, 
       // clicking on the entire bar (inc the button) is what sends an API call to backend for the list of avail employees
-      // return (<button onClick={()=>getAvailEmps(shift)} className="btn btn-primary">Find employees</button>);
       return (<button className="btn btn-primary">Find employees</button>);
     }
   }
@@ -33,7 +32,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     .catch(error => console.log("Error getting availEmps:", error.message));
   }
 
-  const showWholeShiftCard = (shift, availEmployees) => {
+  const showWholeShiftCard = (shift) => {
     return (
       <card>
         <section className="card-shift blue-bg">
@@ -61,7 +60,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
           2. blank fields, if unstaffed & user clicked on accordion but NOT the 'find employees' button
           3. list of available employees for that shift, if 'find employees' button was clicked */}
         
-        { shift.employee ? showEmpInCard(shift) : showAvailEmpsInCard(availEmployees, shift) }
+        { shift.employee ? showEmpInCard(shift) : showAvailEmpsInCard(shift) }
         
       </card>
     );
@@ -70,7 +69,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
   const showEmpInCard = (shift) => {
     return (
-      <section className="card-employee">
+      <section className="card-employee blue-bg">
           <p>EMPLOYEE</p>
           { shift.employee ? <p>{shift.employee.name}</p> : <p></p> }
           <p>PHONE</p>
@@ -83,27 +82,27 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     );
   }
 
-  const showAvailEmpsInCard = (listOfEmps, shift) => {
+  const showAvailEmpsInCard = (shift) => {
     // the availEmployees in state can change after user clicks on a diff row,
     // that's why the variable here refers to the 'latest' availEmployees when this fcn was invoked
-    console.log("DISPLAY", listOfEmps);
+    // console.log("DISPLAY", listOfEmps);
 
-    const rowsOfEmps = listOfEmps.map(emp => {
-      return(
-        <section key={emp.id} className="card-employee">
-          <section>{emp.name}</section>
-          <section>{emp.phone}</section>
-        </section>
-      );
-    })
+    // const rowsOfEmps = listOfEmps.map(emp => {
+    //   return(
+    //     <section key={emp.id} className="card-employee">
+    //       <section>{emp.name}</section>
+    //       <section>{emp.phone}</section>
+    //     </section>
+    //   );
+    // })
 
     return (
       <section className="blue-bg">
       HOLD UP!!!! FIX BUG ON TEXT EMPLOYEES BUTTON!!!
       CLICKING ON OTHER LINES FOR ACCORDION WILL TEXT THE AVAIL EMPS FOR THE *LAST* BLUE BUTTON CLICKED!
         {/* sendTexts need to refer to listOfEmps INSTEAD of whatever the latest state of availEmployees so u don't test the wrong set of people */}
-        <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
-        {rowsOfEmps}
+        {/* <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
+        {rowsOfEmps} */}
       </section>
     );
   }
@@ -124,7 +123,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
               <section>
                 <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button">
                   <section className="section-4-col">
-                    <section>Info</section>
+                    <section>{shift.id}</section>
                     <section>{formatDate(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
                     <section>{showEmpNameOrButton(shift)}</section>

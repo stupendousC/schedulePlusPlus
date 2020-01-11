@@ -80,7 +80,7 @@ export const sortUnavailsByDate = (listOfUnavails) => {
 
 export const sortShiftsByDate = (listOfShifts) => {
   const sorted = listOfShifts.sort((a,b) => {
-    return (b.shift_date < a.shift_date ? 1:-1);
+    return (b.shift_date <= a.shift_date ? 1:-1);
   });
   return sorted;
 }
