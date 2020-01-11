@@ -30,7 +30,6 @@ export const getWeekday = (timeStr_or_timeObj) => {
 
   let timeObj;
   if (typeof(timeStr_or_timeObj) === "string") {
-    console.log("tis a string!");
     timeObj = convertToPST(timeStr_or_timeObj);
   } else {
     timeObj = timeStr_or_timeObj;

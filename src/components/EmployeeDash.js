@@ -5,7 +5,7 @@ import UnavailDays from './EmployeeDash_UnavailDays';
 import Error from './Error';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, formatDate, getWeekday, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
+import { convertDateString, formatDate, getWeekday, dateInThePast, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -89,7 +89,7 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-  ////////////////////// DISPLAY: own info //////////////////////
+  ////////////////////// DISPLAY: own info tab //////////////////////
   showAllInfo = () => {
     const info = this.state.empInfo;
     
@@ -118,16 +118,32 @@ export default class EmployeeDash extends React.Component {
     e.preventDefault();
   }
 
-  ////////////////////// DISPLAY: own shifts //////////////////////
+  ////////////////////// DISPLAY: shifts tab //////////////////////
 
   showAllShifts = () => {
     const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
-    const sortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
     const sortedUnavails = sortUnavailsByDate(this.state.empUnavails);
+    const allSortedUnstaffedShifts = sortShiftsByDate(this.state.unstaffedShifts);
+    
+    let sortedUnstaffedShifts = allSortedUnstaffedShifts.filter( unstaffed => {
+      // Emp does NOT need to see...  1. unstaffed shifts that are in the past
+      const today = convertDateString(new Date());
+      if (unstaffed.shift_date < today) return false;
+
+      // 2. unstaffed shifts that coincide with their own booked days
+      for (const ownShift of sortedOwnShifts) {
+        if (unstaffed.shift_date === ownShift.shift_date) return false;
+        if (unstaffed.shift_date < ownShift.shift_date) break;
+      }
+
+      // if this unstaffed shift hasn't been disqualified by now, then employee can see it
+      return true;
+    })
+
     return (<ShiftsTable sortedOwnShifts={sortedOwnShifts} sortedUnstaffedShifts={sortedUnstaffedShifts} sortedUnavails={sortedUnavails} freeToWorkCallback={this.freeToWork} takeShiftCallback={this.takeShift}/>);
   }
 
-  ////////////////////// DISPLAY: own unavails //////////////////////
+  ////////////////////// DISPLAY: own unavails tab //////////////////////
   showAllUnavails = () => {
     const empUnavails = this.state.empUnavails;
     const sortedUnavails = sortUnavailsByDate(empUnavails);
@@ -146,7 +162,7 @@ export default class EmployeeDash extends React.Component {
   }
   
   
-  ////////////////////// DISPLAY: calendar  //////////////////////
+  ////////////////////// DISPLAY: calendar tab //////////////////////
   showCalendar = () => {
     return (
       <section>
