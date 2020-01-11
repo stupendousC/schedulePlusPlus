@@ -16,9 +16,9 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
               <section>
                 <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
                   <section className="section-4-col">
-                    <section>Click!</section>
+                    <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
-                    <section>{formatDate(shift.shift_date)}</section>
+                    <section>{getWeekday(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
                   </section>
                 </Accordion.Toggle>
@@ -143,7 +143,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
               <section>
                 <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
                   <section className="section-4-col">
-                    <section>Click!</section>
+                    <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
                     <section>{getWeekday(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
