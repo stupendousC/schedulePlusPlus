@@ -29,9 +29,6 @@ export default class AdminDash extends React.Component {
       allShifts: [],
       allUnavails: [],
       
-      // daySpotlight: today,
-      // shiftsOfDay: [],
-      // availEmpsOfDay: [],
       show: "calendar"
     }
   }
@@ -68,24 +65,12 @@ export default class AdminDash extends React.Component {
       // sort allShifts by date
       const allShiftsSorted = sortShiftsByDate(allShifts);
 
-      // meanwhile find out if there's any shifts to autoload for today's calendar
-      // const today = convertDateString(new Date());
-      // let shiftsToday;
-      // for (const shift of allShiftsSorted) {
-      //   if (shift.date === today ) { 
-      //     shiftsToday.push(shift); 
-      //   } else if (shift.date > today) {
-      //     break;
-      //   }
-      // }
-
       this.setState({
         allEmployees: allEmployees,
         allClients: allClients,
         allAdmins: allAdmins,
         allShifts: allShiftsSorted,
-        allUnavails: allUnavails,
-        // shiftsOfDay: shiftsToday
+        allUnavails: allUnavails
       });
     }))
     .catch( errors => console.log(errors));

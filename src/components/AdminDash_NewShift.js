@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 
-const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShifts}) => {
+const NewShift = ({daySpotlight, allClients}) => {
 
   const makeNewShift = (e) => {
     e.preventDefault();
@@ -11,14 +11,6 @@ const NewShift = ({daySpotlight, allClients, allUnavails, allEmployees, allShift
     console.log("client =", chosenClient);
   }
 
-  // const getAvailEmployees = () => {
-
-  //   axios.get(process.env.ALL_SHIFTS + "/" + daySpotlight)
-  //   .then(response => {
-  //     console.log(response.data);
-  //   })
-  //   .catch(error => console.log("ERROR", error.message));
-  // }
 
   const [chosenClient, setClient] = useState(null);
 

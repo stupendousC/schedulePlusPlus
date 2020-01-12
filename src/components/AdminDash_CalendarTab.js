@@ -93,17 +93,17 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
       <Calendar onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
       {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
 
-      {/* <Accordion>
+      <Accordion>
           <Accordion.Toggle eventKey="newShift" className="accordian-toggle_button">
             <section>
-              <section>▼MAKE A NEW SHIFT</section>
+              <section>▼ MAKE A NEW SHIFT</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} allShifts={allShifts}/> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} /> 
           </Accordion.Collapse>
-      </Accordion> */}
+      </Accordion>
       
       <Accordion>
         <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
