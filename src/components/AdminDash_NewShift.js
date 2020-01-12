@@ -3,7 +3,7 @@ import axios from 'axios';
 import { formatDate, dateInThePast } from './Helpers';
 
 
-const NewShift = ({daySpotlight, allClients}) => {
+const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
   // need for sending POST request to backend
   const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 
@@ -54,10 +54,13 @@ const NewShift = ({daySpotlight, allClients}) => {
       "client_id": clientId
     }
 
-    axios.post(ALL_SHIFTS+`/${clientId}`, jsonForAPI )
+    axios.post(ALL_SHIFTS, jsonForAPI )
     .then(response => {
       console.log(response.data);
-        // should probably add to curr allShifts via callback
+      
+      // send callback back up to <CalendarTab> which will pass up to <AdminDash> for new API call
+      // which gets latest allShifts from backend db, and re-render everything
+      updateAllShiftsCallback();
       })
     .catch(error => console.log(error.message));
   }

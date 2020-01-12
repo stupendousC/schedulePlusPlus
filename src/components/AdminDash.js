@@ -120,7 +120,10 @@ export default class AdminDash extends React.Component {
   updateAllShifts = () => {
     console.log("AdminDash received your request to updateAllShifts w/ backend");
     axios.get(ALL_SHIFTS)
-    .then( response => this.setState({ allShifts: response.data }))
+    .then( response => {
+      const sortedShifts = sortShiftsByDate(response.data);
+      this.setState({ allShifts: sortedShifts });
+    })
     .catch(error => console.log(error.message));
   }
 
