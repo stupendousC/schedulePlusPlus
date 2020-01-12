@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 import { convertTimeString, formatDate, dateInThePast, getWeekday } from './Helpers';
 

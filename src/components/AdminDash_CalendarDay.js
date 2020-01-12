@@ -7,7 +7,7 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   const showShifts = () => {
     return ( basicShiftsInfo.map (shift => {
       return (
-        <section key={shift.id} className="table-4-col"> 
+        <section key={shift.id} className="section-4-col"> 
           <section>{shift.shift_date}</section>
           <section>{shift.client.name}</section>
           <section>{shift.start_time}</section>
@@ -26,7 +26,7 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
     } else {
       return (
         <section>
-          <section className="table-4-col"> 
+          <section className="section-4-col"> 
             <section>Client</section>
             <section>Employee</section>
             <section>Start</section>
