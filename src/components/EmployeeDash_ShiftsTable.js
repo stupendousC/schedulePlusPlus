@@ -6,15 +6,29 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
 
   ////////////////// prelim work ////////////////////
   // divide the sortedOwnShifts into active shifts (current & future) and past shifts
-  console.log("doing this!");
+  
+  let ownActiveShifts = [];
+  let ownPastShifts = [];
+  
+  while (sortedOwnShifts[0]) {
+    if (dateInThePast(sortedOwnShifts[0].shift_date)) {
+      ownPastShifts.push(sortedOwnShifts.shift());
+    } else {
+      ownActiveShifts = sortedOwnShifts;
+      break;
+    }
+  }
+
+  console.log("ownActiveShifts =", ownActiveShifts);
+  console.log("ownPastShifts =", ownPastShifts);
 
   ////////////////// fcns ////////////////////
-  const showOwnActiveShifts = () => {
-    return sortedOwnShifts.map(shift => {
+  const showOwnShifts = (listOfShifts, customClassName) => {
+    return listOfShifts.map(shift => {
       return (
         <Accordion key={shift.id}>
           <section>
-            <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
+            <Accordion.Toggle eventKey="showInfo" className={`accordian-toggle_button ${customClassName}`}>
               <section className="section-4-col">
                 <section>▼</section>
                 <section>{formatDate(shift.shift_date)}</section>
@@ -33,8 +47,12 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     )
   }
 
+  const showOwnActiveShifts = () => {
+    return showOwnShifts(ownActiveShifts, "blue-bg");
+  }
+
   const showOwnPastShifts = () => {
-    return (<section>showing past shifts</section>)
+    return showOwnShifts(ownPastShifts, "gray-bg");
   }
 
   const showUnstaffedShifts = () => {
