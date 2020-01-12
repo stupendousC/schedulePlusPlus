@@ -132,10 +132,7 @@ class ShiftsTable extends React.Component {
           </section>
         );
       }
-
     }
-
-    
   }
 
   rowsOfEmps = (empList) => {
@@ -180,11 +177,7 @@ class ShiftsTable extends React.Component {
 
                 </section>
               </Accordion>
-
             )}
-
-              
-              
           )}
         </section>
       );

@@ -91,10 +91,8 @@ export const dateInThePast = (dateStr) => {
 }
 
 export const sendTexts = (listOfEmployees, shift) => {
-  console.log("\nSENDING TEXT TO group", listOfEmployees);
-  console.log("FOR SHIFT DATE = ", shift.shift_date);
-  console.log("it's always the same friggin' group! whichever is last clicked on is it!")
-
+  console.log("\nFOR SHIFT DATE = ", shift.shift_date, "SENDING TEXT TO group", listOfEmployees);
+  console.log("show an alert so they know it's done!")
 
 
 
