@@ -16,9 +16,16 @@ const NewShift = ({daySpotlight, allClients}) => {
   const [endTime, setEndTime] = useState(defaultEndTime);
   const [formValid, setFormValid] = useState(false);
 
-  // is the date in the past?
-  if (dateInThePast(daySpotlight)) { setFormValid(false) }
-
+  const checkAndSetFormValidTF = () => {
+    if (dateInThePast(daySpotlight) || !clientId || !clientObj ) {
+      console.log(dateInThePast(), "<- datein the past");
+      console.log(clientId, "<- clientId");
+      console.log(clientObj, "<- client obj");
+      setFormValid(false);
+    } else {
+      setFormValid(true);
+    }
+  }
 
   const onClientChange = (e) => {
     if (e.target.value === "-- Select --") {
@@ -26,10 +33,20 @@ const NewShift = ({daySpotlight, allClients}) => {
       setFormValid(false);
     } else {
       // find client object that matches the ID
-      const clientObj = allClients.find( client => client.id === e.target.id);
+      const chosenId = parseInt(e.target.value);
+      const clientObj = allClients.find( client => {
+        console.log(parseInt(client.id), "VS", chosenId);
+        return (parseInt(client.id) === chosenId);
+      });
+
+      console.log(`FOUND? clientId = ${chosenId}, clientObj.name=${clientObj.name}`);
+
       setClientObj(clientObj);
-      setClientId(e.target.id);
-      setFormValid(true);
+      setClientId(chosenId);
+
+      console.log(`SET: clientId = ${chosenId}, clientObj.name=${clientObj.name}`);
+
+      checkAndSetFormValidTF();
     }
   }
 
@@ -54,20 +71,28 @@ const NewShift = ({daySpotlight, allClients}) => {
       "client_id": clientId
     }
 
-    axios.post(ALL_SHIFTS+`/${clientId}`, jsonForAPI )
-    .then(response => {
-      console.log(response.data);
-        // should probably add to curr allShifts via callback
-      })
-    .catch(error => console.log(error.message));
+    // axios.post(ALL_SHIFTS+`/${clientId}`, jsonForAPI )
+    // .then(response => {
+    //   console.log(response.data);
+    //     // should probably add to curr allShifts via callback
+    //   })
+    // .catch(error => console.log(error.message));
   }
   
+  const showDateHeader = () => {
+    if (dateInThePast(daySpotlight)) {
+      return (<h1>In the past: {formatDate(daySpotlight)}</h1>);
+    } else {
+      return (<h1>{formatDate(daySpotlight)}</h1>);
+    } 
+  }
 
   //////////////////// render ////////////////////
+  
   return(
     <section className="newShift-component"> 
       
-  { dateInThePast(daySpotlight)? (<h1>In the past: {formatDate(daySpotlight)}</h1>) : (<h1>{formatDate(daySpotlight)}</h1>)}
+      {showDateHeader()}
 
         <form onSubmit={onFormSubmit} className="px-4 py-3">
 
