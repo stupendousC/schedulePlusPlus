@@ -97,7 +97,7 @@ export default class AdminDash extends React.Component {
 
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
-    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails}/>
+    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails} updateAllShiftsCallback={this.updateAllShifts}/>
   }
 
   ////////////////////// DISPLAY: Shifts  //////////////////////
@@ -114,6 +114,14 @@ export default class AdminDash extends React.Component {
     // this is a callback function for <PeopleTable> to send back updated peopleList
     // so we can .setState here to allow re-rendering of visuals
     this.setState({ [setStateKey]: updatedPeopleList });
+  }
+  
+  ////////////////////// Callback fcns  //////////////////////
+  updateAllShifts = () => {
+    console.log("AdminDash received your request to updateAllShifts w/ backend");
+    axios.get(ALL_SHIFTS)
+    .then( response => this.setState({ allShifts: response.data }))
+    .catch(error => console.log(error.message));
   }
 
   ////////////////////// render //////////////////////
