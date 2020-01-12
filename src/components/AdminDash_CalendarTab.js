@@ -1,28 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
+
 import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
 
-import { convertToPST, formatDate } from './Helpers';
+import { convertToPST, formatDate, convertDateString } from './Helpers';
 
 
-const CalendarTab = ({allShifts, allClients, daySpotlight, shiftsOfDay, availEmpsOfDay, updateDaySpotlightCallback}) => {
+const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
+  const today = convertDateString(new Date());
+  const [daySpotlight, setDaySpotlight] = useState(today);
+  const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
+  const [availEmpsOfDay, setAvailEmpsOfDay] = useState("LOADING");
 
-  console.log("\n\n\nCalendarTab props: daySpotlight = ", daySpotlight, "\nshiftsOfDay = ", shiftsOfDay, "\navailEmpsOfDay = ", availEmpsOfDay);
-  if (shiftsOfDay === "LOADING" || availEmpsOfDay === "LOADING") {
-    updateDaySpotlightCallback(new Date());
-    return (<section>LOADING</section>)
+  // console.log("\n\n\nCalendarTab props: allShifts = ", allShifts, "\nallEmployees = ", allEmployees, "\nallUnavails = ", allUnavails);
+  
+  
+  
+  const updateStateForCalendarDay = (e) => {
+    const dateStr = convertDateString(e);
+    console.log("daySpotlight = ", dateStr);
+    
+    getAndSetShiftsOfDay(dateStr);
+    getAndSetAvailEmpsByDate(dateStr);
+    setDaySpotlight(dateStr);
+  }
+
+  const getAndSetShiftsOfDay = (targetDateStr) => {
+    let shiftsOfDay;
+    for (const shift of allShifts) {
+      if (shift.date === targetDateStr ) { 
+        shiftsOfDay.push(shift); 
+      } else if (shift.date > targetDateStr) {
+        break;
+      }
+    }
+    setShiftsOfDay(shiftsOfDay);
+  }
+
+  const getAndSetAvailEmpsByDate = (targetDateStr) => {
+    const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDateStr}`;
+    
+    console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
+
+    axios.get(URL_getAllAvailEmpsByDate)
+    .then(response => {
+      console.log("backend sent us... ", response.data);
+      setAvailEmpsOfDay(response.data);
+    })
+    .catch(error => console.log(error.message));
   }
 
   const showAvailEmpsInCard = () => {
-    console.log("DISPLAY", availEmpsOfDay);
-    const listOfAvailEmps = availEmpsOfDay;
-    if (listOfAvailEmps === []) {
-      return (<section>No one is available!</section>);
-    }
+    console.log("availEmpsOfDay = ", availEmpsOfDay);
 
-    const rowsOfEmps = listOfAvailEmps.map(emp => {
+    if (availEmpsOfDay === "LOADING") {
+      return (<section>Loading...</section>)
+    } else if (availEmpsOfDay === []) {
+      return (<section>No one is available!</section>);
+    } else {
+      return (
+      <section>
+        {showRowsOfEmps()}
+      </section>
+    );
+    }
+  }
+
+  const showRowsOfEmps = () => availEmpsOfDay.map(emp => {
       return(
         <section key={emp.id} className="section-2-col">
           <section>{emp.name}</section>
@@ -30,25 +77,28 @@ const CalendarTab = ({allShifts, allClients, daySpotlight, shiftsOfDay, availEmp
         </section>
       );
     })
-    return (
-      <section>
-        <section>AVAILABLE EMPLOYEES</section>
-        {rowsOfEmps}
-      </section>
-    );
-}
-  
+
+  //////////////////// prep initial state ////////////////////
+  if (shiftsOfDay === "LOADING" || availEmpsOfDay === "LOADING") {
+    if (shiftsOfDay === "LOADING") {
+      getAndSetShiftsOfDay(daySpotlight);
+    } else {
+      getAndSetAvailEmpsByDate(daySpotlight);
+    }
+    return (<section>LOADING</section>);
+  }
   
   //////////////////// render ////////////////////
     return(
+      
       <section>
-      <Calendar onChange={updateDaySpotlightCallback} value={convertToPST(daySpotlight)}/>
+      <Calendar onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
       {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
 
       {/* <Accordion>
           <Accordion.Toggle eventKey="newShift" className="accordian-toggle_button">
             <section>
-              <section>MAKE A NEW SHIFT</section>
+              <section>▼MAKE A NEW SHIFT</section>
             </section>
           </Accordion.Toggle>
 
@@ -60,7 +110,7 @@ const CalendarTab = ({allShifts, allClients, daySpotlight, shiftsOfDay, availEmp
       <Accordion>
         <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
           <section>
-            <section>AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
+            <section>▼ {availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
           </section>
         </Accordion.Toggle>
 
@@ -73,7 +123,7 @@ const CalendarTab = ({allShifts, allClients, daySpotlight, shiftsOfDay, availEmp
       <Accordion>
         <Accordion.Toggle eventKey="dayAgenda" className="accordian-toggle_button">
           <section>
-            <section>AGENDA FOR {formatDate(daySpotlight)}</section>
+            <section>▼AGENDA FOR {formatDate(daySpotlight)}</section>
           </section>
         </Accordion.Toggle>
 
@@ -85,7 +135,7 @@ const CalendarTab = ({allShifts, allClients, daySpotlight, shiftsOfDay, availEmp
       {/* <Accordion>
         <Accordion.Toggle eventKey="weekAgenda" className="accordian-toggle_button">
           <section>
-            <section>AGENDA FOR THIS WEEK</section>
+            <section>▼AGENDA FOR THIS WEEK</section>
           </section>
         </Accordion.Toggle>
 

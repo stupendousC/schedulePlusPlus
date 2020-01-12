@@ -2,6 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
+import CalendarTab from './AdminDash_CalendarTab';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
 import ShiftsTable from './AdminDash_ShiftsTable';
@@ -20,7 +21,7 @@ export default class AdminDash extends React.Component {
 
   constructor() {
     super()
-    const today = convertDateString(new Date())
+    // const today = convertDateString(new Date())
     this.state = {
       allClients: [],
       allAdmins: [],
@@ -28,9 +29,9 @@ export default class AdminDash extends React.Component {
       allShifts: [],
       allUnavails: [],
       
-      daySpotlight: today,
-      shiftsOfDay: [],
-      availEmpsOfDay: [],
+      // daySpotlight: today,
+      // shiftsOfDay: [],
+      // availEmpsOfDay: [],
       show: "calendar"
     }
   }
@@ -68,15 +69,15 @@ export default class AdminDash extends React.Component {
       const allShiftsSorted = sortShiftsByDate(allShifts);
 
       // meanwhile find out if there's any shifts to autoload for today's calendar
-      const today = convertDateString(new Date());
-      let shiftsToday;
-      for (const shift of allShiftsSorted) {
-        if (shift.date === today ) { 
-          shiftsToday.push(shift); 
-        } else if (shift.date > today) {
-          break;
-        }
-      }
+      // const today = convertDateString(new Date());
+      // let shiftsToday;
+      // for (const shift of allShiftsSorted) {
+      //   if (shift.date === today ) { 
+      //     shiftsToday.push(shift); 
+      //   } else if (shift.date > today) {
+      //     break;
+      //   }
+      // }
 
       this.setState({
         allEmployees: allEmployees,
@@ -84,7 +85,7 @@ export default class AdminDash extends React.Component {
         allAdmins: allAdmins,
         allShifts: allShiftsSorted,
         allUnavails: allUnavails,
-        shiftsOfDay: shiftsToday
+        // shiftsOfDay: shiftsToday
       });
     }))
     .catch( errors => console.log(errors));
@@ -111,113 +112,7 @@ export default class AdminDash extends React.Component {
 
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
-    return (
-      <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-        {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
-
-        <Accordion>
-            <Accordion.Toggle eventKey="newShift" className="accordian-toggle_button">
-              <section>
-                <section>MAKE A NEW SHIFT</section>
-              </section>
-            </Accordion.Toggle>
-
-            <Accordion.Collapse eventKey="newShift">
-            <NewShift daySpotlight={this.state.daySpotlight} allClients={this.state.allClients} allUnavails={this.state.allUnavails} allEmployees={this.state.allEmployees} allShifts={this.state.allShifts}/> 
-            </Accordion.Collapse>
-        </Accordion>
-        
-        <Accordion>
-          <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
-            <section>
-              <section>AVAILABLE EMPLOYEES FOR {formatDate(this.state.daySpotlight)}</section>
-            </section>
-          </Accordion.Toggle>
-
-          <Accordion.Collapse eventKey="availEmpList">
-            {/* send API call to backend to get all avail emps for the daySpotlight */}
-            {this.showAvailEmpsInCard()}
-          </Accordion.Collapse>
-        </Accordion>
-
-        <Accordion>
-          <Accordion.Toggle eventKey="dayAgenda" className="accordian-toggle_button">
-            <section>
-              <section>AGENDA FOR {formatDate(this.state.daySpotlight)}</section>
-            </section>
-          </Accordion.Toggle>
-
-          <Accordion.Collapse eventKey="dayAgenda">
-            <CalendarDay basicShiftsInfo={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} />
-          </Accordion.Collapse>
-        </Accordion>
-
-        <Accordion>
-          <Accordion.Toggle eventKey="weekAgenda" className="accordian-toggle_button">
-            <section>
-              <section>AGENDA FOR THIS WEEK</section>
-            </section>
-          </Accordion.Toggle>
-
-          <Accordion.Collapse eventKey="weekAgenda">
-            <h1>Upcoming feature, stay tuned...</h1>
-          </Accordion.Collapse>
-        </Accordion>
-
-
-
-      </section>
-    );
-  }
-
-  updateStateForCalendarDay = (e) => {
-    const dateStr = convertDateString(e);
-    const shiftsOfDay = this.state.allShifts.filter( shift => shift.shift_date === dateStr);
-    const listOfAvailEmps = this.getAvailEmpsByDate(dateStr);
-
-    this.setState({ 
-      daySpotlight: dateStr, 
-      shiftsOfDay: shiftsOfDay ,
-      availEmpsOfDay: listOfAvailEmps
-    })
-  }
-
-  getAvailEmpsByDate = (targetDate) => {
-    // send API call to backend
-    const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDate}`;
-    
-    console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
-
-    axios.get(URL_getAllAvailEmpsByDate)
-    .then(response => {
-      console.log("backend sent us... ", response.data);
-      return response.data;
-    })
-    .catch(error => console.log(error.message));
-  }
-
-  showAvailEmpsInCard = () => {
-    console.log("DISPLAY", this.state.availEmpsOfDay);
-    const listOfAvailEmps = this.state.availEmpsOfDay;
-    if (listOfAvailEmps === []) {
-      return (<section>No one is available!</section>);
-    }
-
-    const rowsOfEmps = listOfAvailEmps.map(emp => {
-      return(
-        <section key={emp.id} className="section-2-col">
-          <section>{emp.name}</section>
-          <section>{emp.phone}</section>
-        </section>
-      );
-    })
-    return (
-      <section>
-        <section>AVAILABLE EMPLOYEES</section>
-        {rowsOfEmps}
-      </section>
-    );
+    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails}/>
   }
 
   ////////////////////// DISPLAY: Shifts  //////////////////////
