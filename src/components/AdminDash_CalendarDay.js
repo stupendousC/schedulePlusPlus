@@ -1,4 +1,5 @@
 import React from 'react';
+import {formatDate} from './Helpers';
 
 const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   // const [findEmployeesClicked, setFindEmployeesClicked] = useState(false);
@@ -7,11 +8,10 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   const showShifts = () => {
     return ( basicShiftsInfo.map (shift => {
       return (
-        <section key={shift.id} className="section-4-col"> 
+        <section key={shift.id} className="section-3-col"> 
           <section>{shift.shift_date}</section>
           <section>{shift.client.name}</section>
-          <section>{shift.start_time}</section>
-          <section>{shift.end_time}</section>
+          <section>{shift.employee ? shift.employee.name:""}</section>
         </section>
         );
     }));
@@ -19,18 +19,17 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
 
 
   const showTableOrNothing = () => {
-    if (!basicShiftsInfo) {
+    if (!basicShiftsInfo || basicShiftsInfo === [] || basicShiftsInfo.length === 0) {
       return (
         <h3>No shifts scheduled</h3>
       );
     } else {
       return (
         <section>
-          <section className="section-4-col"> 
+          <section className="section-3-col"> 
+            <section>Date</section>
             <section>Client</section>
             <section>Employee</section>
-            <section>Start</section>
-            <section>End</section>
           </section>
 
           <section>
@@ -43,7 +42,6 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
 
   return(
     <section>
-      <h1>All Shifts For {dateStr}</h1>
       {showTableOrNothing()}
     </section>
   );

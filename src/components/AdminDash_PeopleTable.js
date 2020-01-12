@@ -10,10 +10,10 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
     return ( peopleList.map((person, i) => {
       return (
         <section key={i}>
-          <section className="table-4-col">
+          <section className="peopleTable">
             <section>{person.name}</section>
             <section><button onClick={() => read(i, peopleList)} className="btn btn-primary">Info</button></section>
-            <section><button onClick={() => update(i, peopleList)} className="btn btn-secondary">Update</button></section>
+            <section><button onClick={() => update(i, peopleList)} className="btn btn-warning">Update</button></section>
             <section><button onClick={() => deactivate(person, URL_endpoint)} className="btn btn-danger">Deactivate</button></section>
           </section>
           <section>
