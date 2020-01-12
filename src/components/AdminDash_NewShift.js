@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { formatDate } from './Helpers';
+import { formatDate, dateInThePast } from './Helpers';
 
 
 const NewShift = ({daySpotlight, allClients}) => {
@@ -14,18 +14,22 @@ const NewShift = ({daySpotlight, allClients}) => {
   const defaultEndTime = "17:00:00";
   const [startTime, setStartTime] = useState(defaultStartTime);
   const [endTime, setEndTime] = useState(defaultEndTime);
-  const [missingInfo, setMissingInfo] = useState(true);
+  const [formValid, setFormValid] = useState(false);
+
+  // is the date in the past?
+  if (dateInThePast(daySpotlight)) { setFormValid(false) }
+
 
   const onClientChange = (e) => {
     if (e.target.value === "-- Select --") {
       setClientId(null);
-      setMissingInfo(true);
+      setFormValid(false);
     } else {
       // find client object that matches the ID
       const clientObj = allClients.find( client => client.id === e.target.id);
       setClientObj(clientObj);
       setClientId(e.target.id);
-      setMissingInfo(false);
+      setFormValid(true);
     }
   }
 
@@ -62,7 +66,8 @@ const NewShift = ({daySpotlight, allClients}) => {
   //////////////////// render ////////////////////
   return(
     <section className="newShift-component"> 
-      <h1>{formatDate(daySpotlight)}</h1>
+      
+  { dateInThePast(daySpotlight)? (<h1>In the past: {formatDate(daySpotlight)}</h1>) : (<h1>{formatDate(daySpotlight)}</h1>)}
 
         <form onSubmit={onFormSubmit} className="px-4 py-3">
 
@@ -89,7 +94,7 @@ const NewShift = ({daySpotlight, allClients}) => {
           
           </section>
 
-          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={missingInfo}/>
+          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={!formValid}/>
         </form>
 
     </section>

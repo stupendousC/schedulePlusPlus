@@ -87,7 +87,9 @@ export const sortShiftsByDate = (listOfShifts) => {
 
 export const dateInThePast = (dateStr) => {
   const todayStr = convertDateString(new Date());
-  return todayStr < dateStr;
+
+  console.log("COMPARING", todayStr, "VS", dateStr, "=", todayStr > dateStr);
+  return todayStr > dateStr;
 }
 
 export const sendTexts = (listOfEmployees, shift) => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import {formatDate} from './Helpers';
 
 const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   // const [findEmployeesClicked, setFindEmployeesClicked] = useState(false);
