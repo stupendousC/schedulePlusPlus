@@ -19,16 +19,13 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     }
   }
 
-  console.log("ownActiveShifts =", ownActiveShifts);
-  console.log("ownPastShifts =", ownPastShifts);
-
   ////////////////// fcns ////////////////////
   const showOwnShifts = (listOfShifts, customClassName) => {
     return listOfShifts.map(shift => {
       return (
         <Accordion key={shift.id}>
           <section>
-            <Accordion.Toggle eventKey="showInfo" className={`accordian-toggle_button ${customClassName}`}>
+            <Accordion.Toggle eventKey="showInfo" className={`accordion-toggle_button ${customClassName}`}>
               <section className="section-4-col">
                 <section>▼</section>
                 <section>{formatDate(shift.shift_date)}</section>
@@ -64,7 +61,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
+                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordion-toggle_button gray-bg"):("accordion-toggle_button blue-bg")}>
                   <section className="section-4-col">
                     <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>

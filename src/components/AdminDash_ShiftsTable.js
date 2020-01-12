@@ -161,8 +161,8 @@ class ShiftsTable extends React.Component {
             return (
               <Accordion key={shift.id}>
                 <section>
-                  <Accordion.Toggle eventKey="showInfo" className="accordian-toggle_button">
-                  {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button"> */}
+                  <Accordion.Toggle eventKey="showInfo" className="accordion-toggle_button">
+                  {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordion-toggle_button"> */}
                     <section className="section-4-col">
                       <section>▼ #{shift.id}</section>
                       <section>{formatDate(shift.shift_date)}</section>

@@ -77,7 +77,7 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
     <section> 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showToday" className="accordian-toggle_button blue-bg" >
+          <Accordion.Toggle eventKey="showToday" className="accordion-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
               <section>TODAY: {formatDate(today)}</section>
@@ -94,7 +94,7 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showCalendarClick" className="accordian-toggle_button blue-bg" >
+          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
               <section>DAY SPOTLIGHT: {formatDate(dateStr)}</section>
