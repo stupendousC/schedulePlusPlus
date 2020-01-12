@@ -9,8 +9,9 @@ class ShiftsTable extends React.Component {
     super()
     // props allShifts comes pre-sorted by date
     this.state = {
-      stillLoading: true,
-      availEmployeesByShiftId: {}
+      availEmployeesByShiftId: "LOADING"
+      // javascript weirdness abounds if I were to set initial state to null
+      // safer to set it to "LOADING" or a real hashmap of { shift_id: [arrayOfAvailEmps] }
     }
   }
   
@@ -36,8 +37,7 @@ class ShiftsTable extends React.Component {
 
       // setState
       this.setState({
-        availEmployeesByShiftId: availEmployeesByShiftId,
-        stillLoading: false
+        availEmployeesByShiftId: availEmployeesByShiftId
       });
       // console.log("this.state.availEmployeesByShiftId =", availEmployeesByShiftId);
     }))
@@ -103,71 +103,51 @@ class ShiftsTable extends React.Component {
 
   // showWholeShiftCard() calls this if ... B. shift is unstaffed
   showAvailEmpsInCard = (shift) => {
+    let stillLoading = true;
+    if (this.state.availEmployeesByShiftId !== "LOADING") { stillLoading = false; }
     
-    const availEmpList = this.state.availEmployeesByShiftId[shift.id];
-    const stillLoading = this.state.stillLoading;
+    if (stillLoading ) {
+      return (
+        <section className="card-employee blue-bg">Loading...</section>
+      );
 
-    // console.log("shift id", shift.id, "corresponds to ", availEmpList);
-    
-    if (stillLoading) {
-      return (
-        <section>Loading...</section>
-      );
-    } else if (availEmpList === [] && !stillLoading) {
-      return (
-        // DO SOEMTHING SUPER SPECIAL FOR THIS EMERGENCY!!!
-        <section>NO EMPLOYEES AVAILABLE!</section>
-      );
     } else {
+      const availEmpList = this.state.availEmployeesByShiftId[shift.id];
+      // console.log("shift id", shift.id, "corresponds to ", availEmpList);
       
-      const empList = Array.from(availEmpList);
-      console.log("need to iterate over this shit!", empList);
-      return (
-        empList.map( emp => {
-          return(
-            <section key={emp.id}>
-              <section>{emp.name}</section>
-              <section>{emp.phone}</section>
-            </section>
-          );
-        }) 
-      );
-      
+      if (!availEmpList) {
+        return (
+          // DO SOEMTHING SUPER SPECIAL FOR THIS EMERGENCY!!!  
+          <section className="card-employee red-bg">NO EMPLOYEES AVAILABLE!</section>
+        );
 
-      //   return(
-      //       <section key={emp.id} className="card-employee">
-      //         <section>{emp.name}</section>
-      //         <section>{emp.phone}</section>
-      //       </section>
-      //     );
-      // }
+      } else {
+        const empList = Array.from(availEmpList);
+        const numEmps = empList.length;
+
+        return (
+          <section className="blue-bg">
+          <button onClick={()=>{sendTexts(empList, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
+          {this.rowsOfEmps(empList)}
+          </section>
+        );
+      }
+
     }
 
     
-  //   const listOfEmps = this.state.availEmployeesByShiftId[shift.id];
-  //   console.log("\nGONNA SHOW...", listOfEmps);
-  //   // const numEmps = Object.keys(listOfEmps).length;
-  //   const numEmps = "XXX";
-
-  //   // const rowsOfEmps = listOfEmps.map(emp => {
-  //   //   // return(
-  //   //   //   <section key={emp.id} className="card-employee">
-  //   //   //     <section>{emp.name}</section>
-  //   //   //     <section>{emp.phone}</section>
-  //   //   //   </section>
-  //   //   // );
-  //   // })
-
-
-  //   return (
-  //     <section className="blue-bg">
-  // <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
-  //       {this.state.availEmployeesByShiftId === {}? "nothing yet":rowsOfEmps()}
-  //     </section>
-  //   );
   }
 
-  
+  rowsOfEmps = (empList) => {
+      return empList.map( (emp, i) => {
+        return(
+          <section key={emp.id} className="card-employee blue-bg">
+            <section>{emp.name}</section>
+            <section>{emp.phone}</section>
+          </section>
+        );
+      }) 
+    }
 
   ////////////////// render ////////////////////
   render() {
@@ -175,7 +155,8 @@ class ShiftsTable extends React.Component {
       return (
         <section>No upcoming shifts</section>
       );
-
+    } else if (this.state.stillLoading) {
+      return (<section>Loading...</section>);
     } else {
       return(
         <section>
@@ -186,7 +167,7 @@ class ShiftsTable extends React.Component {
                   <Accordion.Toggle eventKey="showInfo" className="accordian-toggle_button">
                   {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button"> */}
                     <section className="section-4-col">
-                      <section>#{shift.id}</section>
+                      <section>▼ #{shift.id}</section>
                       <section>{formatDate(shift.shift_date)}</section>
                       <section>{shift.client.name}</section>
                       <section>{this.showEmpNameOrButton(shift)}</section>
