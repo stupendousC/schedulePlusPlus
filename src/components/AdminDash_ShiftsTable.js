@@ -1,15 +1,43 @@
-import React, { useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
 import { convertTimeString, formatDate, sortShiftsByDate, sendTexts } from './Helpers';
 
-const EmployeeDash_ShiftsTable = ({allShifts}) => {
+const ShiftsTable = ({allShifts}) => {
+  
+  ////////////////////////// prelim work //////////////////////////
+  const assembleAvailEmployeesByShiftId = () => {
+    // assemble list of availEmployees for all the unstaffed shifts
+    let availEmployeesByShiftId = {};
 
-  const [availEmployees, setAvailEmployees] = useState([]);
+    const allUnstaffedShifts = allShifts.filter (shift => !shift.employee );
+    const axiosGetFcns = allUnstaffedShifts.map( unstaffedShift => {
+      const URL = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT + `/${unstaffedShift.id}`;
+      return axios.get(URL);
+    })
 
-  allShifts = sortShiftsByDate(allShifts);
+    axios.all(axiosGetFcns)
+    .then(axios.spread((...responses) => {
+      console.log("backend sent:", responses);
 
+      // match up responses to allUnstaffedShifts
+      for ( let i = 0; i < allUnstaffedShifts.length; i++) {
+        const shiftId = allUnstaffedShifts[i].id;
+        availEmployeesByShiftId[shiftId] = responses[i].data;
+      }
+
+      console.log("now availEmployeesByShiftId =", availEmployeesByShiftId);
+    }))
+    .catch( errors => console.log(errors));
+
+    return availEmployeesByShiftId;
+  }
+  
+  const availEmployeesByShiftId = assembleAvailEmployeesByShiftId();
+  const allShiftsSorted = sortShiftsByDate(allShifts);
+
+  ////////////////////////// display //////////////////////////
   const showEmpNameOrButton = (shift) => {
     if (shift.employee) {
       return (shift.employee.name);
@@ -20,21 +48,9 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     }
   }
 
-  const getAvailEmps = (shift) => {
-
-    const URL = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT + `/${shift.id}`;
-
-    axios.get(URL)
-    .then(response => {
-      console.log("backend returns list of avail emps: ", response.data);
-      setAvailEmployees(response.data);
-    })
-    .catch(error => console.log("Error getting availEmps:", error.message));
-  }
-
   const showWholeShiftCard = (shift) => {
     return (
-      <card>
+      <section>
         <section className="card-shift blue-bg">
           <p>DATE</p>
           <p>{shift.shift_date}</p>
@@ -55,18 +71,14 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
           { shift.client ? <p>{shift.client.address}</p> : <p></p> }
         </section>
 
-        {/* employee info section shows any of the 3 options:
-          1. actual employee info, if staffed
-          2. blank fields, if unstaffed & user clicked on accordion but NOT the 'find employees' button
-          3. list of available employees for that shift, if 'find employees' button was clicked */}
-        
+        {/* employee info section shows either: A. actual employee info if staffed. B. list of available employees for that shift */}
         { shift.employee ? showEmpInCard(shift) : showAvailEmpsInCard(shift) }
-        
-      </card>
-    );
 
+      </section>
+    );
   }
 
+  // showWholeShiftCard() calls this if ... A. shift is staffed
   const showEmpInCard = (shift) => {
     return (
       <section className="card-employee blue-bg">
@@ -82,10 +94,13 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     );
   }
 
+  // showWholeShiftCard() calls this if ... B. shift is unstaffed
   const showAvailEmpsInCard = (shift) => {
-    // the availEmployees in state can change after user clicks on a diff row,
-    // that's why the variable here refers to the 'latest' availEmployees when this fcn was invoked
-    // console.log("DISPLAY", listOfEmps);
+    
+    const listOfEmps = availEmployeesByShiftId[shift.id];
+    console.log("\nGONNA SHOW...", listOfEmps);
+    // const numEmps = Object.keys(listOfEmps).length;
+    const numEmps = 100;
 
     // const rowsOfEmps = listOfEmps.map(emp => {
     //   return(
@@ -98,14 +113,13 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
 
     return (
       <section className="blue-bg">
-      HOLD UP!!!! FIX BUG ON TEXT EMPLOYEES BUTTON!!!
-      CLICKING ON OTHER LINES FOR ACCORDION WILL TEXT THE AVAIL EMPS FOR THE *LAST* BLUE BUTTON CLICKED!
-        {/* sendTexts need to refer to listOfEmps INSTEAD of whatever the latest state of availEmployees so u don't test the wrong set of people */}
-        {/* <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL AVAILABLE EMPLOYEES</button>
-        {rowsOfEmps} */}
+  <button onClick={()=>{sendTexts(listOfEmps, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
+        {/* {rowsOfEmps} */}
       </section>
     );
   }
+
+  
 
   ////////////////// render ////////////////////
   if (allShifts.length === 0) {
@@ -117,13 +131,14 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
     return(
       <section>
 
-        {allShifts.map(shift => {
+        {allShiftsSorted.map(shift => {
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button">
+                <Accordion.Toggle eventKey="showInfo" className="accordian-toggle_button">
+                {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button"> */}
                   <section className="section-4-col">
-                    <section>{shift.id}</section>
+                    <section>#{shift.id}</section>
                     <section>{formatDate(shift.shift_date)}</section>
                     <section>{shift.client.name}</section>
                     <section>{showEmpNameOrButton(shift)}</section>
@@ -131,7 +146,7 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
                 </Accordion.Toggle>
 
                 <Accordion.Collapse eventKey="showInfo">
-                  <section>{showWholeShiftCard(shift, availEmployees)}</section>
+                  <section>{showWholeShiftCard(shift)}</section>
                 </Accordion.Collapse>
 
               </section>
@@ -147,5 +162,23 @@ const EmployeeDash_ShiftsTable = ({allShifts}) => {
   }    
 }
 
-export default EmployeeDash_ShiftsTable;
+export default ShiftsTable;
 
+
+
+
+
+
+  
+  
+  //// GETTING REPLACED BY PRELIM DATA GRAB
+  // const getAvailEmps = (shift) => {
+  //   // const URL = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT + `/${shift.id}`;
+
+  //   // axios.get(URL)
+  //   // .then(response => {
+  //   //   availEmployeesByShiftId[shift.id] = response.data;
+  //   //   console.log("Now availEmployeesByShiftId =", availEmployeesByShiftId);
+  //   // })
+  //   // .catch(error => console.log("Error getting availEmps:", error.message));
+  // }
