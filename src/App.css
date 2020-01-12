@@ -38,7 +38,13 @@
 }
 
 .homepage-logo {
-  height: 10vh;
+  width: 40%;
+  height: 40%;
+}
+
+.giant-in-middle {
+  width: 90%;
+  height: 90%;
 }
 
 .navbar {
@@ -89,6 +95,21 @@
 
 .red-bg {
   background-color: red;
+}
+
+.img-90 {
+  width: 90%;
+  height: 90%;
+}
+
+.img-40 {
+  width: 40%;
+  height: 40%;
+}
+
+.img-5 {
+  width: 5%;
+  height: 5%;
 }
 
 

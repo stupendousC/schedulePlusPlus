@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import bannerLogo from './SPPbanner.png';
+import bannerLogo from './images/SPPbanner.png';
 import GoogleLogin from 'react-google-login';
 
 import {Link} from 'react-router-dom';

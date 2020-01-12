@@ -9,7 +9,7 @@ import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
 import {sendTexts, sortShiftsByDate} from './Helpers';
 
-import Error from './Error';
+import LoginError from './LoginError';
 
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
@@ -151,7 +151,7 @@ export default class AdminDash extends React.Component {
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first TO SEE ADMIN dashboard"/>}  
+          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <LoginError message="Please log in to see ADMIN dashboard"/>}  
 
         </section>
         

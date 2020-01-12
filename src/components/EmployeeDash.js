@@ -2,7 +2,7 @@ import React from 'react';
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import UnavailDays from './EmployeeDash_UnavailDays';
-import Error from './Error';
+import LoginError from './LoginError';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
 import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
@@ -274,7 +274,7 @@ export default class EmployeeDash extends React.Component {
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "EMPLOYEE" ? this.showChosenCategory() : <Error message="You need to log in first to see EMPLOYEE dashboard"/>}  
+          {this.props.authenticatedRole === "EMPLOYEE" ? this.showChosenCategory() : <LoginError message="Please log in to see EMPLOYEE dashboard"/>}  
 
         </section>
       );
