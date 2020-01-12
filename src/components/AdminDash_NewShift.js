@@ -1,70 +1,87 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { formatDate } from './Helpers';
 
 
 const NewShift = ({daySpotlight, allClients}) => {
 
-  const makeNewShift = (e) => {
-    e.preventDefault();
+  const [client, setClient] = useState(null);
+  const defaultStartTime = "09:00:00";
+  const defaultEndTime = "17:00:00";
+  const [startTime, setStartTime] = useState(defaultStartTime);
+  const [endTime, setEndTime] = useState(defaultEndTime);
+  const [missingInfo, setMissingInfo] = useState(true);
 
-    console.log("\nmakign new shift!", e);
-    console.log("client =", chosenClient);
+  const onClientChange = (e) => {
+    if (e.target.value === "-- Select --") {
+      setClient(null);
+      setMissingInfo(true);
+    } else {
+      setClient(e.target.value);
+      setMissingInfo(false);
+    }
   }
 
-
-  const [chosenClient, setClient] = useState(null);
-
-  const onInputChange = (event) => {
-    const updatedState = {};
-
-    const field = event.target.name;
-    const value = event.target.value;
-
-    updatedState[field] = value;
-    this.setState(updatedState);
+  const onTimeChange = (e) => {
+    if (e.target.id === "startTime") { 
+      setStartTime(e.target.value) 
+    } else if (e.target.id === "endTime") {
+      setEndTime(e.target.value);
+    }
   }
 
+  const onFormSubmit = (event) => {
+    event.preventDefault();
+    // unless times are entered, we'll use defaultStartTime and defaultEndTime as specified
 
-  const showForm = () => {
-    return (
-      <section>
-        <h1>MAKE A NEW SHIFT</h1>
+    // must have selected a client
+    if (!client) {
+      console.log("NEED A CLIENT!");
+    } else {
+      console.log("let's send an API!");
 
-        <form className="px-4 py-3">
+    }
 
-          <section className="form-group">
-            <label>Date</label>
-            <input className="form-control" value={daySpotlight} />
-          </section>
-
-          <section className="form-group">
-            <label>Client</label>
-            <select className="form-control">
-              <option>Client choices</option>
-              {allClients.map(client => <option key={client.id} onClick={()=> setClient(client.id)}>{client.name}</option>)}
-            </select>
-            <label>Start time</label>
-            <input className="form-control" type="time" defaultValue="09:00:00"></input>
-            <label>End time</label>
-            <input className="form-control" type="time" defaultValue="17:00:00"></input>
-          </section>
-
-          <button className="btn btn-primary" onClick={() => {makeNewShift()}}>STAFF IT!</button>
-        </form>
-      </section>
-    );
   }
 
+  
+
+
+  //////////////////// render ////////////////////
   return(
     <section className="newShift-component"> 
+      <h1>{formatDate(daySpotlight)}</h1>
 
-      {showForm()}
-      
-      <li>make new unmanned shift for shifts table</li>
-      <li>get list of people who are not excluded from unavails table</li>
-      <li>send twilio texts</li>
+        <form onSubmit={onFormSubmit} className="px-4 py-3">
+
+          {/* <section className="form-group">
+            <label>Date</label>
+            <input className="form-control" value={daySpotlight} />
+          </section> */}
+
+          <section className="form-group">
+
+            <label>Client</label>
+            <select className="form-control" onChange={onClientChange}>
+              <option>-- Select --</option>
+              {allClients.map(client => <option key={client.id}>{client.name}</option>)}
+            </select>
+
+            <label>Start time</label>
+            <input id="startTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultStartTime}></input>
+            
+            <label>End time</label>
+            <input id="endTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultEndTime}></input>
+          
+          </section>
+
+          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={missingInfo}/>
+        </form>
+
     </section>
   );
 }
 
 export default NewShift;
+
+
