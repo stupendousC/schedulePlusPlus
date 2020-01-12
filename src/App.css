@@ -38,7 +38,13 @@
 }
 
 .homepage-logo {
-  height: 10vh;
+  width: 40%;
+  height: 40%;
+}
+
+.giant-in-middle {
+  width: 90%;
+  height: 90%;
 }
 
 .navbar {
@@ -49,10 +55,14 @@
   background-color: pink;
 }
 
+.peopleTable {
+  display:grid;
+  grid-template-columns: 3fr 1fr 1.5fr 1fr;
+}
+
 .section-4-col {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  background-color: yellow;
 }
 
 .section-3-col {
@@ -64,7 +74,6 @@
 .section-2-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  background-color: yellow;
 }
 
 .accordian-toggle_button {
@@ -86,4 +95,46 @@
 
 .red-bg {
   background-color: red;
+}
+
+.img-90 {
+  width: 90%;
+  height: 90%;
+}
+
+.img-40 {
+  width: 40%;
+  height: 40%;
+}
+
+.img-5 {
+  width: 5%;
+  height: 5%;
+}
+
+
+/* IDEA from https://stackoverflow.com/questions/33309198/non-clickable-object-that-looks-like-button-in-bootstrap-3/33309555 */
+/* I had to do a fake button b/c a button within a button will get warnings */
+.fake-btn {
+  
+  background-color: #28a745;
+  border-color: 28a745;
+  border: 1px solid lightgrey;
+  cursor: default;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: 400;
+  border: 1px solid transparent;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: .25rem;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+
+}
+.fake-btn:active {
+  -moz-box-shadow:    inset 0 0 0px white;
+  -webkit-box-shadow: inset 0 0 0px white;
+  box-shadow:         inset 0 0 0px white;
 }

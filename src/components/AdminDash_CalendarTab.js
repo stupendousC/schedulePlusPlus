@@ -9,7 +9,7 @@ import NewShift from './AdminDash_NewShift';
 import { convertToPST, formatDate, convertDateString } from './Helpers';
 
 
-const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
+const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback}) => {
   const today = convertDateString(new Date());
   const [daySpotlight, setDaySpotlight] = useState(today);
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
@@ -101,7 +101,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} /> 
           </Accordion.Collapse>
       </Accordion>
       

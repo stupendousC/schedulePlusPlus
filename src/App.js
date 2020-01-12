@@ -3,6 +3,7 @@ import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginBanner from './LoginBanner';
+import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
 
@@ -76,12 +77,16 @@ class App extends React.Component {
       <Router>
           <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
           
+          
+
           <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
             <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
           </Switch>
+
+          <Footer />
       </Router>
   );
   }

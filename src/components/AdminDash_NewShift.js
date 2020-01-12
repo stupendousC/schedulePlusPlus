@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { formatDate } from './Helpers';
+import { formatDate, dateInThePast } from './Helpers';
 
 
-const NewShift = ({daySpotlight, allClients}) => {
-  // need these 2 for sending POST request to backend
+const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
+  // need for sending POST request to backend
   const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
-  const [clientObj, setClientObj] = useState(null);
 
   // these are for <form> use
   const [clientId, setClientId] = useState(null);
@@ -14,18 +13,20 @@ const NewShift = ({daySpotlight, allClients}) => {
   const defaultEndTime = "17:00:00";
   const [startTime, setStartTime] = useState(defaultStartTime);
   const [endTime, setEndTime] = useState(defaultEndTime);
-  const [missingInfo, setMissingInfo] = useState(true);
+
+  const isFormValid = () => {
+    if (dateInThePast(daySpotlight) || !clientId ) {
+      return (false);
+    } else {
+      return (true);
+    }
+  }
 
   const onClientChange = (e) => {
     if (e.target.value === "-- Select --") {
       setClientId(null);
-      setMissingInfo(true);
     } else {
-      // find client object that matches the ID
-      const clientObj = allClients.find( client => client.id === e.target.id);
-      setClientObj(clientObj);
-      setClientId(e.target.id);
-      setMissingInfo(false);
+      setClientId(parseInt(e.target.value));
     }
   }
 
@@ -39,30 +40,49 @@ const NewShift = ({daySpotlight, allClients}) => {
 
   const onFormSubmit = (event) => {
     event.preventDefault();
-    
-    console.log("let's send an API!");
+
+    // maybe find clientObj so backend doesn't have to?
+    const clientObj = allClients.find( client => {
+      return (client.id === clientId);
+    });
 
     const jsonForAPI = {
       "shift_date": daySpotlight,
       "start_time": startTime,
       "end_time": endTime,
-      "client": clientObj,
+      "client": clientObj,  
       "client_id": clientId
     }
 
-    axios.post(ALL_SHIFTS+`/${clientId}`, jsonForAPI )
+    axios.post(ALL_SHIFTS, jsonForAPI )
     .then(response => {
       console.log(response.data);
-        // should probably add to curr allShifts via callback
+      
+      // send callback back up to <CalendarTab> which will pass up to <AdminDash> for new API call
+      // which gets latest allShifts from backend db, and re-render everything
+      updateAllShiftsCallback();
       })
     .catch(error => console.log(error.message));
   }
   
+  const showDateHeader = () => {
+    if (dateInThePast(daySpotlight)) {
+      return (
+        <section className="gray-bg">
+          <h1>{formatDate(daySpotlight)}</h1>
+          <h3>In the past...</h3>
+        </section>
+      );
+    } else {
+      return (<h1>{formatDate(daySpotlight)}</h1>);
+    } 
+  }
 
-  //////////////////// render ////////////////////
+  //////////////////// render ///////////////////
+
   return(
     <section className="newShift-component"> 
-      <h1>{formatDate(daySpotlight)}</h1>
+      {showDateHeader()}
 
         <form onSubmit={onFormSubmit} className="px-4 py-3">
 
@@ -77,7 +97,7 @@ const NewShift = ({daySpotlight, allClients}) => {
 
             <label>Client</label>
             <select className="form-control" onChange={onClientChange}>
-              <option>-- Select --</option>
+              <option defaultValue>-- Select --</option>
               {allClients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
             </select>
 
@@ -89,7 +109,7 @@ const NewShift = ({daySpotlight, allClients}) => {
           
           </section>
 
-          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={missingInfo}/>
+          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={!isFormValid()}/>
         </form>
 
     </section>

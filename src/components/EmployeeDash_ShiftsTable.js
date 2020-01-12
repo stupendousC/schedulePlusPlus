@@ -13,7 +13,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
+                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
                   <section className="section-4-col">
                     <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
@@ -37,7 +37,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   const showWholeShiftCard = (shift, takeButton=false) => {
     return (
       <section>
-        <section className={dateInThePast(shift.shift_date)? ("card-shift blue-bg"):("card-shift gray-bg")} >
+        <section className={dateInThePast(shift.shift_date)? ("card-shift gray-bg"):("card-shift blue-bg")} >
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -140,7 +140,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button blue-bg"):("accordian-toggle_button gray-bg")}>
+                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
                   <section className="section-4-col">
                     <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>

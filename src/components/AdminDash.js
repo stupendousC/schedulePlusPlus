@@ -7,9 +7,9 @@ import CalendarTab from './AdminDash_CalendarTab';
 // import NewShift from './AdminDash_NewShift';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {convertDateString, formatDate, convertTimeString, convertToPST, sendTexts, sortShiftsByDate} from './Helpers';
+import {sendTexts, sortShiftsByDate} from './Helpers';
 
-import Error from './Error';
+import LoginError from './LoginError';
 
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
@@ -97,7 +97,7 @@ export default class AdminDash extends React.Component {
 
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
-    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails}/>
+    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails} updateAllShiftsCallback={this.updateAllShifts}/>
   }
 
   ////////////////////// DISPLAY: Shifts  //////////////////////
@@ -114,6 +114,17 @@ export default class AdminDash extends React.Component {
     // this is a callback function for <PeopleTable> to send back updated peopleList
     // so we can .setState here to allow re-rendering of visuals
     this.setState({ [setStateKey]: updatedPeopleList });
+  }
+  
+  ////////////////////// Callback fcns  //////////////////////
+  updateAllShifts = () => {
+    console.log("AdminDash received your request to updateAllShifts w/ backend");
+    axios.get(ALL_SHIFTS)
+    .then( response => {
+      const sortedShifts = sortShiftsByDate(response.data);
+      this.setState({ allShifts: sortedShifts });
+    })
+    .catch(error => console.log(error.message));
   }
 
   ////////////////////// render //////////////////////
@@ -140,7 +151,7 @@ export default class AdminDash extends React.Component {
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <Error message="You need to log in first TO SEE ADMIN dashboard"/>}  
+          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <LoginError message="Please log in to see ADMIN dashboard"/>}  
 
         </section>
         

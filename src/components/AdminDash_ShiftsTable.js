@@ -51,7 +51,7 @@ class ShiftsTable extends React.Component {
     } else {
       // the button really is just for show, 
       // clicking on the entire bar (inc the button) is what sends an API call to backend for the list of avail employees
-      return (<button className="btn btn-primary">Find employees</button>);
+      return (<section className="fake-btn">Find employees</section>);
     }
   }
 

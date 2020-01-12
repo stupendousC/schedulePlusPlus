@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import bannerLogo from './SPPbanner.png';
+import bannerLogo from './images/SPPbanner.png';
 import GoogleLogin from 'react-google-login';
 
 import {Link} from 'react-router-dom';
@@ -36,7 +36,7 @@ class LoginBanner extends React.Component {
       return (
         <section>
           Hello {sessionStorage.getItem("username")}
-          <button className="btn btn-warning"><Link to="/adminDash">ADMIN Dashboard</Link></button>
+          <button className="btn btn-success"><Link to="/adminDash">ADMIN Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
@@ -44,7 +44,7 @@ class LoginBanner extends React.Component {
       return (
         <section>
           Hello {sessionStorage.getItem("username")}
-          <button className="btn btn-warning"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
+          <button className="btn btn-success"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
