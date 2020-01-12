@@ -15,13 +15,11 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
   const [availEmpsOfDay, setAvailEmpsOfDay] = useState("LOADING");
 
-  // console.log("\n\n\nCalendarTab props: allShifts = ", allShifts, "\nallEmployees = ", allEmployees, "\nallUnavails = ", allUnavails);
-  
-  
+  // console.log("\n\n\nCalendarTab props: allShifts = ", allShifts, "\nallEmployees = ", allEmployees, "\nallUnavails = ", allUnavails, "\nallClients = ", allClients);
   
   const updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
-    console.log("daySpotlight = ", dateStr);
+    console.log("\n\nsetting: daySpotlight = ", dateStr);
     
     getAndSetShiftsOfDay(dateStr);
     getAndSetAvailEmpsByDate(dateStr);
@@ -29,32 +27,33 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
   }
 
   const getAndSetShiftsOfDay = (targetDateStr) => {
-    let shiftsOfDay;
+    let shiftsOfDay = [];
     for (const shift of allShifts) {
-      if (shift.date === targetDateStr ) { 
+      if (shift.shift_date === targetDateStr ) { 
         shiftsOfDay.push(shift); 
-      } else if (shift.date > targetDateStr) {
+      } else if (shift.shift_date > targetDateStr) {
         break;
       }
     }
+    console.log(targetDateStr, "setting shiftsOfDay =", shiftsOfDay);
     setShiftsOfDay(shiftsOfDay);
   }
 
   const getAndSetAvailEmpsByDate = (targetDateStr) => {
     const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDateStr}`;
     
-    console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
+    // console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
 
     axios.get(URL_getAllAvailEmpsByDate)
     .then(response => {
-      console.log("backend sent us... ", response.data);
+      // console.log("backend sent us... ", response.data);
       setAvailEmpsOfDay(response.data);
     })
     .catch(error => console.log(error.message));
   }
 
   const showAvailEmpsInCard = () => {
-    console.log("availEmpsOfDay = ", availEmpsOfDay);
+    // console.log("availEmpsOfDay = ", availEmpsOfDay);
 
     if (availEmpsOfDay === "LOADING") {
       return (<section>Loading...</section>)
@@ -79,12 +78,11 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
     })
 
   //////////////////// prep initial state ////////////////////
-  if (shiftsOfDay === "LOADING" || availEmpsOfDay === "LOADING") {
-    if (shiftsOfDay === "LOADING") {
-      getAndSetShiftsOfDay(daySpotlight);
-    } else {
-      getAndSetAvailEmpsByDate(daySpotlight);
-    }
+  if (shiftsOfDay === "LOADING") { getAndSetShiftsOfDay(daySpotlight) }
+
+  if (availEmpsOfDay === "LOADING") { getAndSetAvailEmpsByDate(daySpotlight) }
+
+  if (shiftsOfDay === "LOADING" && availEmpsOfDay === "LOADING") {
     return (<section>LOADING</section>);
   }
   
@@ -110,7 +108,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails}) => {
       <Accordion>
         <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
           <section>
-            <section>▼ {availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
+            <section>▼ {availEmpsOfDay === "LOADING" ? "Loading":availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
           </section>
         </Accordion.Toggle>
 
