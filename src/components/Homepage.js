@@ -1,6 +1,6 @@
 import React from 'react';
 import redCrossFlag from '../images/redCrossFlag.svg';
-import logo from '../images/SPPicon.png';
+// import logo from '../images/SPPicon.png';
 
 export default function Homepage() {
 

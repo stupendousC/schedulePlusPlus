@@ -14,7 +14,7 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
 
   const showWholeShiftCard = (shift) => {
     return (
-      <section>
+      <section key={shift.id}>
         <section className="card-shift blue-bg" >
           <p>DATE</p>
           <p>{(shift.shift_date)}</p>

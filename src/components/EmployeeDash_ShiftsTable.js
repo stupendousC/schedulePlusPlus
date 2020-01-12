@@ -4,6 +4,39 @@ import { convertTimeString, formatDate, dateInThePast, getWeekday } from './Help
 
 const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails, takeShiftCallback, freeToWorkCallback}) => {
 
+  ////////////////// prelim work ////////////////////
+  // divide the sortedOwnShifts into active shifts (current & future) and past shifts
+  console.log("doing this!");
+
+  ////////////////// fcns ////////////////////
+  const showOwnActiveShifts = () => {
+    return sortedOwnShifts.map(shift => {
+      return (
+        <Accordion key={shift.id}>
+          <section>
+            <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
+              <section className="section-4-col">
+                <section>▼</section>
+                <section>{formatDate(shift.shift_date)}</section>
+                <section>{getWeekday(shift.shift_date)}</section>
+                <section>{shift.client.name}</section>
+              </section>
+            </Accordion.Toggle>
+
+            <Accordion.Collapse eventKey="showInfo">
+              <section>{showWholeShiftCard(shift)}</section>
+            </Accordion.Collapse>
+
+          </section>
+        </Accordion>
+      )}
+    )
+  }
+
+  const showOwnPastShifts = () => {
+    return (<section>showing past shifts</section>)
+  }
+
   const showUnstaffedShifts = () => {
     console.log("show sortedUnstaffedShifts", sortedUnstaffedShifts);
     
@@ -136,29 +169,11 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     return(
       <section>
         <h1>MY SHIFTS</h1>
-        {sortedOwnShifts.map(shift => {
-          return (
-            <Accordion key={shift.id}>
-              <section>
-                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordian-toggle_button gray-bg"):("accordian-toggle_button blue-bg")}>
-                  <section className="section-4-col">
-                    <section>▼</section>
-                    <section>{formatDate(shift.shift_date)}</section>
-                    <section>{getWeekday(shift.shift_date)}</section>
-                    <section>{shift.client.name}</section>
-                  </section>
-                </Accordion.Toggle>
-
-                <Accordion.Collapse eventKey="showInfo">
-                  <section>{showWholeShiftCard(shift)}</section>
-                </Accordion.Collapse>
-
-              </section>
-            </Accordion>
-          )}
-        )}
+        {showOwnActiveShifts()}
         <h1>AVAILABLE SHIFTS</h1>
         {showUnstaffedShifts()}
+        <h1>PAST SHIFTS</h1>
+        {showOwnPastShifts()}
       </section>
     );
   }    
