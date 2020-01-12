@@ -4,8 +4,12 @@ import { formatDate } from './Helpers';
 
 
 const NewShift = ({daySpotlight, allClients}) => {
+  // need these 2 for sending POST request to backend
+  const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
+  const [clientObj, setClientObj] = useState(null);
 
-  const [client, setClient] = useState(null);
+  // these are for <form> use
+  const [clientId, setClientId] = useState(null);
   const defaultStartTime = "09:00:00";
   const defaultEndTime = "17:00:00";
   const [startTime, setStartTime] = useState(defaultStartTime);
@@ -14,10 +18,13 @@ const NewShift = ({daySpotlight, allClients}) => {
 
   const onClientChange = (e) => {
     if (e.target.value === "-- Select --") {
-      setClient(null);
+      setClientId(null);
       setMissingInfo(true);
     } else {
-      setClient(e.target.value);
+      // find client object that matches the ID
+      const clientObj = allClients.find( client => client.id === e.target.id);
+      setClientObj(clientObj);
+      setClientId(e.target.id);
       setMissingInfo(false);
     }
   }
@@ -32,20 +39,25 @@ const NewShift = ({daySpotlight, allClients}) => {
 
   const onFormSubmit = (event) => {
     event.preventDefault();
-    // unless times are entered, we'll use defaultStartTime and defaultEndTime as specified
+    
+    console.log("let's send an API!");
 
-    // must have selected a client
-    if (!client) {
-      console.log("NEED A CLIENT!");
-    } else {
-      console.log("let's send an API!");
-
+    const jsonForAPI = {
+      "shift_date": daySpotlight,
+      "start_time": startTime,
+      "end_time": endTime,
+      "client": clientObj,
+      "client_id": clientId
     }
 
+    axios.post(ALL_SHIFTS+`/${clientId}`, jsonForAPI )
+    .then(response => {
+      console.log(response.data);
+        // should probably add to curr allShifts via callback
+      })
+    .catch(error => console.log(error.message));
   }
-
   
-
 
   //////////////////// render ////////////////////
   return(
@@ -54,7 +66,9 @@ const NewShift = ({daySpotlight, allClients}) => {
 
         <form onSubmit={onFormSubmit} className="px-4 py-3">
 
-          {/* <section className="form-group">
+          {/* Decided to disable this for now, looks prettier when user clicks on the calendar
+          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
+          <section className="form-group">
             <label>Date</label>
             <input className="form-control" value={daySpotlight} />
           </section> */}
@@ -64,7 +78,7 @@ const NewShift = ({daySpotlight, allClients}) => {
             <label>Client</label>
             <select className="form-control" onChange={onClientChange}>
               <option>-- Select --</option>
-              {allClients.map(client => <option key={client.id}>{client.name}</option>)}
+              {allClients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
             </select>
 
             <label>Start time</label>
