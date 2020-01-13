@@ -6,19 +6,19 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
 
   ////////////////// prelim work ////////////////////
   // divide the sortedOwnShifts into active shifts (current & future) and past shifts
-  
   let ownActiveShifts = [];
   let ownPastShifts = [];
+  let cloneAllOwnShifts = [...sortedOwnShifts];
   
-  while (sortedOwnShifts[0]) {
-    if (dateInThePast(sortedOwnShifts[0].shift_date)) {
-      ownPastShifts.push(sortedOwnShifts.shift());
+  while (cloneAllOwnShifts[0]) {
+    if (dateInThePast(cloneAllOwnShifts[0].shift_date)) {
+      ownPastShifts.push(cloneAllOwnShifts.shift());
     } else {
-      ownActiveShifts = sortedOwnShifts;
+      ownActiveShifts = [...cloneAllOwnShifts];
       break;
     }
   }
-
+  
   ////////////////// fcns ////////////////////
   const showOwnShifts = (listOfShifts, customClassName) => {
     return listOfShifts.map(shift => {
@@ -53,8 +53,6 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   }
 
   const showUnstaffedShifts = () => {
-    console.log("show sortedUnstaffedShifts", sortedUnstaffedShifts);
-    
     return(
       <section>
         {sortedUnstaffedShifts.map(shift => {

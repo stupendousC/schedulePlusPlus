@@ -54,7 +54,7 @@ export default class EmployeeDash extends React.Component {
         const empShifts = responses[1].data;
         const empUnavails = responses[2].data;
         const unstaffedShifts = responses[3].data;
-
+        
         // meanwhile find out if there's any shifts to autoload for today's calendar
         const today = convertDateString(new Date());
         const shiftsToday = empShifts.filter( shift => shift.shift_date === today );
