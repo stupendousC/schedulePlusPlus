@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import bannerLogo from './images/SPPbanner.png';
+import bannerLogo from './images/SPPbanner2.png';
 import GoogleLogin from 'react-google-login';
 
 import {Link} from 'react-router-dom';
@@ -16,10 +16,10 @@ class LoginBanner extends React.Component {
 
   showBothLogins = () => {
     return (
-      <section className="giant-in-middle">
+      <section className="btn btn-google">
         <GoogleLogin
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-          buttonText="LOGIN"
+          buttonText="LOGIN WITH GOOGLE"
           onSuccess={this.responseGoogle}
           onFailure={this.responseGoogle}
           cookiePolicy={'single_host_origin'}
@@ -70,8 +70,8 @@ class LoginBanner extends React.Component {
   render() {
 
     return(
-      <section>
-        <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" /></Link>
+      <section className="loginBanner-section">
+        <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>
         {this.props.authenticatedRole? this.showDashWithLogout():this.showBothLogins()}
       </section>
     );

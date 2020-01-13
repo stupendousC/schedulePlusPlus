@@ -37,24 +37,39 @@
   }
 }
 
-.homepage-logo {
-  width: 40%;
-  height: 40%;
+/* ============================ */
+/* ===== MY CUSTOM STYLES ===== */
+/* ============================ */
+
+
+/* ===== PAGE/COMPONENT-SPECIFIC SECTIONS ===== */
+
+.loginBanner-section {
+  margin: 1rem;
 }
 
-.giant-in-middle {
-  width: 90%;
-  height: 90%;
+.homepage-section {
+  margin: 2rem 1rem;
 }
 
-.navbar {
-  background-color: pink;
+.footer {
+  text-align: center;
+  margin: 1rem;
+  background-color: lightyellow;
 }
 
 .newShift-component {
   background-color: pink;
 }
 
+
+.navbar {
+  background-color: pink;
+}
+
+
+
+/* ===== TABLE STYLES ===== */
 .peopleTable {
   display:grid;
   grid-template-columns: 3fr 1fr 1.5fr 1fr;
@@ -84,6 +99,8 @@
   grid-template-columns: 1fr 2fr;
 }
 
+
+/* ===== BACKGROUND COLORS ===== */
 .blue-bg {
   background-color: lightblue;
 }
@@ -96,6 +113,7 @@
   background-color: red;
 }
 
+/* ===== IMAGE SIZES ===== */
 .img-90 {
   width: 90%;
   height: 90%;
@@ -111,11 +129,15 @@
   height: 5%;
 }
 
-.footer {
-  margin-top: 5rem;
-  background-color: lightyellow;
+/* ===== BUTTONS & LOGOS ===== */
+.homepage-logo {
+  width: 40%;
+  height: 40%;
 }
 
+.btn-google {
+  width: 90%;
+}
 
 /* IDEA from https://stackoverflow.com/questions/33309198/non-clickable-object-that-looks-like-button-in-bootstrap-3/33309555 */
 /* I had to do a fake button b/c a button within a button will get warnings */
