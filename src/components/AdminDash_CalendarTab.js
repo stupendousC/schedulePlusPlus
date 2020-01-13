@@ -77,6 +77,14 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       );
     })
 
+  const textEmployees = (newShift) => {
+    console.log("CalendarTab will text emps for", newShift);
+
+
+
+     // const jsonForText = { "phoneNumber": "", "message": message };
+  }
+
   //////////////////// prep initial state ////////////////////
   if (shiftsOfDay === "LOADING") { getAndSetShiftsOfDay(daySpotlight) }
 
@@ -101,7 +109,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={textEmployees} /> 
           </Accordion.Collapse>
       </Accordion>
       

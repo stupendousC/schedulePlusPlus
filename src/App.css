@@ -124,7 +124,7 @@
 }
 
 /* ===== IMAGE SIZES ===== */
-.img-90 {
+.img-90, .homepage-logo {
   width: 90%;
   height: 90%;
 }
@@ -139,11 +139,7 @@
   height: 5%;
 }
 
-/* ===== BUTTONS & LOGOS ===== */
-.homepage-logo {
-  width: 40%;
-  height: 40%;
-}
+/* ===== BUTTONS ===== */
 
 .btn-google {
   width: 90%;

@@ -5,7 +5,7 @@ export default function Homepage() {
 
   return (
     <section className="homepage-section">
-      <img src={twoPeople} alt="2 people" className="img-90"/>
+      <img src={twoPeople} alt="2 people" className="homepage-logo"/>
     </section>
   );
 }

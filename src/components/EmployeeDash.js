@@ -122,7 +122,6 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: shifts tab //////////////////////
-
   showAllShifts = () => {
     const sortedOwnShifts = sortShiftsByDate(this.state.empShifts);
     const sortedUnavails = sortUnavailsByDate(this.state.empUnavails);
