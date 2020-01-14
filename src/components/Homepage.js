@@ -1,15 +1,11 @@
 import React from 'react';
-// import redCrossFlag from '../images/redCrossFlag.svg';
-// import logo from '../images/SPPicon.png';
+import twoPeople from '../images/twopeople.svg';
 
 export default function Homepage() {
 
   return (
-    <section>
-      <h1>WELCOME TO SCHEDULE++</h1>
-      <h3>A super awesome app, solves all your problems!</h3>
-      {/* <img src={redCrossFlag} alt="redCrossFlag" className="homepage-logo"/>
-      <img src={redCrossFlag} alt="redCrossFlag" className="homepage-logo"/> */}
+    <section className="homepage-section text-centered">
+      <img src={twoPeople} alt="2 people" className="homepage-logo"/>
     </section>
   );
 }

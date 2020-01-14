@@ -90,11 +90,72 @@ export const dateInThePast = (dateStr) => {
   return todayStr > dateStr;
 }
 
-export const sendTexts = (listOfEmployees, shift) => {
-  console.log("\nFOR SHIFT DATE = ", shift.shift_date, "SENDING TEXT TO group", listOfEmployees);
-  console.log("show an alert so they know it's done!")
+export const isPhoneValid = (phoneStr) => {
+  // returns True if phoneStr fits any of these acceptable formats for Twilio texting: 
+    // "4251112222"       // Length = 10
+    // "14251112222"      // Length = 11
+    // "425-111-2222"     // Length = 12
+    // "(425)111-2222"    // Length = 13
+    // "1-425-111-2222"   // Length = 14
+  // else returns False
 
+  if (!phoneStr) return false;
+  if (phoneStr.length < 10 || phoneStr.length > 14) return false;
 
+  if (phoneStr.length === 10 || phoneStr.length === 11) return canStringBeInteger(phoneStr);
+  
+  if (phoneStr.length === 12) {
+    // check the non-numerical parts
+    if ((phoneStr[3] !== "-") || (phoneStr[7] !== "-")) return false;
 
+    // check the number parts
+    const areaCode = phoneStr.slice(0,3);
+    const phone3 = phoneStr.slice(4,7);
+    const phone4 = phoneStr.slice(8,12);
+    const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
+    return areNumberPartsOK;
+  }
 
+  if (phoneStr.length === 13) {
+    // check the non-numerical parts
+    if (phoneStr[0] !== "(") return false;
+    if (phoneStr[4] !== ")") return false;
+    if (phoneStr[8] !== "-") return false;
+
+    // check the number parts
+    const areaCode = phoneStr.slice(1,4);
+    const phone3 = phoneStr.slice(5,9);
+    const phone4 = phoneStr.slice(9,13);
+    const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
+    return areNumberPartsOK;
+  }
+
+  if (phoneStr.length === 14) {
+    // check the non-numerical parts
+    if ((phoneStr[1] !== "-") || (phoneStr[5] !== "-") || (phoneStr[9] !== "-")) return false;
+
+    // check the number parts
+    const firstDigit = phoneStr[0];
+    const areaCode = phoneStr.slice(2,5);
+    const phone3 = phoneStr.slice(6,9);
+    const phone4 = phoneStr.slice(10,14);
+    const areNumberPartsOK = areStringsInListAllIntegers([firstDigit, areaCode, phone3, phone4]);
+    return areNumberPartsOK;
+  }
+}
+
+// for use by isPhoneValid()
+const canStringBeInteger = (str) => {
+  const asInt = parseInt(str);
+  const backToStr = asInt.toString();
+  return((str === backToStr) ? true:false);
+}
+
+// for use by isPhoneValid()
+const areStringsInListAllIntegers = (list_of_strings) => {
+  for (const str of list_of_strings) {
+    if (!canStringBeInteger(str)) return false
+  }
+  // if nobody in the list fails, then they all pass
+  return true;
 }

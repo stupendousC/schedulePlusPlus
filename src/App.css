@@ -37,24 +37,47 @@
   }
 }
 
-.homepage-logo {
-  width: 40%;
-  height: 40%;
+/* ============================ */
+/* ===== MY CUSTOM STYLES ===== */
+/* ============================ */
+
+.text-centered {
+  text-align: center;
 }
 
-.giant-in-middle {
-  width: 90%;
-  height: 90%;
+.fine-print {
+  font-size: 0.75rem;
+  list-style: none;
 }
 
-.navbar {
-  background-color: pink;
+/* ===== PAGE/COMPONENT-SPECIFIC SECTIONS ===== */
+
+.loginBanner-section {
+  margin: 1rem;
+}
+
+.homepage-section {
+  margin: 2rem 1rem;
+}
+
+.footer {
+  text-align: center;
+  margin: 1rem;
+  background-color: lightyellow;
 }
 
 .newShift-component {
   background-color: pink;
 }
 
+
+.navbar {
+  background-color: pink;
+}
+
+
+
+/* ===== TABLE STYLES ===== */
 .peopleTable {
   display:grid;
   grid-template-columns: 3fr 1fr 1.5fr 1fr;
@@ -68,7 +91,6 @@
 .section-3-col {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  background-color: lightyellow;
 }
 
 .section-2-col {
@@ -76,7 +98,7 @@
   grid-template-columns: 1fr 1fr;
 }
 
-.accordian-toggle_button {
+.accordion-toggle_button {
   width: 100%;
 }
 
@@ -85,6 +107,15 @@
   grid-template-columns: 1fr 2fr;
 }
 
+.employee-dash-unavails-table {
+  margin: 1rem;
+  text-align: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+
+/* ===== BACKGROUND COLORS ===== */
 .blue-bg {
   background-color: lightblue;
 }
@@ -97,7 +128,8 @@
   background-color: red;
 }
 
-.img-90 {
+/* ===== IMAGE SIZES ===== */
+.img-90, .homepage-logo {
   width: 90%;
   height: 90%;
 }
@@ -112,6 +144,23 @@
   height: 5%;
 }
 
+/* ===== BUTTONS ===== */
+
+.btn-google {
+  width: 90%;
+  margin-top: 1rem;
+}
+
+.dashboard-buttons_container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard-buttons {
+  color: white;
+  font-weight: bold;
+}
 
 /* IDEA from https://stackoverflow.com/questions/33309198/non-clickable-object-that-looks-like-button-in-bootstrap-3/33309555 */
 /* I had to do a fake button b/c a button within a button will get warnings */

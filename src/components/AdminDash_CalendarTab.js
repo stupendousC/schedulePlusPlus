@@ -9,7 +9,7 @@ import NewShift from './AdminDash_NewShift';
 import { convertToPST, formatDate, convertDateString } from './Helpers';
 
 
-const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback}) => {
+const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback, textEmployeesCallback}) => {
   const today = convertDateString(new Date());
   const [daySpotlight, setDaySpotlight] = useState(today);
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
@@ -77,6 +77,12 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       );
     })
 
+  //////////////////// callback fcns ////////////////////
+  const prepForTextEmployeesCallback = (newShift) => {
+    // <NewShift> is sending this back, which we'll need to add the availEmpsOfDay into the args before sending back up to AdminDash
+    textEmployeesCallback(newShift, availEmpsOfDay);
+  }
+
   //////////////////// prep initial state ////////////////////
   if (shiftsOfDay === "LOADING") { getAndSetShiftsOfDay(daySpotlight) }
 
@@ -94,19 +100,19 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
 
       <Accordion>
-          <Accordion.Toggle eventKey="newShift" className="accordian-toggle_button">
+          <Accordion.Toggle eventKey="newShift" className="accordion-toggle_button">
             <section>
               <section>▼ MAKE A NEW SHIFT</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} /> 
           </Accordion.Collapse>
       </Accordion>
       
       <Accordion>
-        <Accordion.Toggle eventKey="availEmpList" className="accordian-toggle_button">
+        <Accordion.Toggle eventKey="availEmpList" className="accordion-toggle_button">
           <section>
             <section>▼ {availEmpsOfDay === "LOADING" ? "Loading":availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
           </section>
@@ -119,7 +125,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       </Accordion>
 
       <Accordion>
-        <Accordion.Toggle eventKey="dayAgenda" className="accordian-toggle_button">
+        <Accordion.Toggle eventKey="dayAgenda" className="accordion-toggle_button">
           <section>
             <section>▼AGENDA FOR {formatDate(daySpotlight)}</section>
           </section>
@@ -131,7 +137,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       </Accordion>
 
       {/* <Accordion>
-        <Accordion.Toggle eventKey="weekAgenda" className="accordian-toggle_button">
+        <Accordion.Toggle eventKey="weekAgenda" className="accordion-toggle_button">
           <section>
             <section>▼AGENDA FOR THIS WEEK</section>
           </section>

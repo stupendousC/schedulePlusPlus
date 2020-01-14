@@ -3,7 +3,7 @@ import axios from 'axios';
 import { formatDate, dateInThePast } from './Helpers';
 
 
-const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
+const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmployeesCallback}) => {
   // need for sending POST request to backend
   const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 
@@ -15,11 +15,28 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
   const [endTime, setEndTime] = useState(defaultEndTime);
 
   const isFormValid = () => {
-    if (dateInThePast(daySpotlight) || !clientId ) {
+    if (dateInThePast(daySpotlight) || !clientId || (endTime < startTime)) {
       return (false);
     } else {
       return (true);
     }
+  }
+
+  const genErrorMsgs = () => {
+      // evaluate all form inputs and save invalid reasons in errorMsgs
+      let errorMsgs = [];
+
+      if (dateInThePast(daySpotlight)) {
+        errorMsgs.push("Date cannot be in the past");
+      }
+      if (!clientId) {
+        errorMsgs.push("Please select a client before submitting form");
+      }
+      if (endTime < startTime) {
+        errorMsgs.push("Start time must be before end time");
+      }
+
+      return errorMsgs;
   }
 
   const onClientChange = (e) => {
@@ -38,15 +55,17 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
     }
   }
 
-  const onFormSubmit = (event) => {
-    event.preventDefault();
+  const onFormSubmit = (e) => {
+    e.preventDefault();
 
-    // maybe find clientObj so backend doesn't have to?
+    console.log("Which button did u click on?", e.target.value);
+
+    // find clientObj so backend doesn't have to
     const clientObj = allClients.find( client => {
       return (client.id === clientId);
     });
 
-    const jsonForAPI = {
+    const jsonForNewShiftAPI = {
       "shift_date": daySpotlight,
       "start_time": startTime,
       "end_time": endTime,
@@ -54,28 +73,45 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
       "client_id": clientId
     }
 
-    axios.post(ALL_SHIFTS, jsonForAPI )
+    let newShift = null;
+
+    // send new shift to backend, to add to db
+      // employees also can see the new shift when they login to their own dashboard
+    axios.post(ALL_SHIFTS, jsonForNewShiftAPI )
     .then(response => {
-      console.log(response.data);
+      newShift = response.data;
+      console.log("newShift =", newShift);
       
       // send callback back up to <CalendarTab> which will pass up to <AdminDash> for new API call
       // which gets latest allShifts from backend db, and re-render everything
       updateAllShiftsCallback();
+
+      // send text to temployees who have non-null phone numbers
+      textEmployeesCallback(newShift);
       })
     .catch(error => console.log(error.message));
   }
   
   const showDateHeader = () => {
     if (dateInThePast(daySpotlight)) {
-      return (
-        <section className="gray-bg">
-          <h1>{formatDate(daySpotlight)}</h1>
-          <h3>In the past...</h3>
-        </section>
-      );
+      return (<h1 className="gray-bg text-centered">{formatDate(daySpotlight)}</h1>);
     } else {
-      return (<h1>{formatDate(daySpotlight)}</h1>);
+      return (<h1 className="text-centered">{formatDate(daySpotlight)}</h1>);
     } 
+  }
+
+  const showErrorMsgs = () => {
+    const errorMsgs = genErrorMsgs();
+      const rowsOfMsgs = errorMsgs.map( (msg,i) => {
+        return (
+          <li key={i}>{msg}</li>
+        );
+      });
+
+      return (
+        <ul>{rowsOfMsgs}</ul>
+      );
+    
   }
 
   //////////////////// render ///////////////////
@@ -83,7 +119,7 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
   return(
     <section className="newShift-component"> 
       {showDateHeader()}
-
+      
         <form onSubmit={onFormSubmit} className="px-4 py-3">
 
           {/* Decided to disable this for now, looks prettier when user clicks on the calendar
@@ -108,8 +144,11 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback}) => {
             <input id="endTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultEndTime}></input>
           
           </section>
-
-          <input type="submit" className="btn btn-primary" value="STAFF IT" disabled={!isFormValid()}/>
+          
+          {isFormValid() ? null: showErrorMsgs()}
+          <input type="submit" className="btn btn-primary" value="MAKE NEW SHIFT & NOTIFY ALL THOSE AVAILABLE" disabled={!isFormValid()}/>
+          <li className="fine-print">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
+          <li className="fine-print">Texts will also be sent to all those available, with valid phone numbers in their record</li>
         </form>
 
     </section>

@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
-import { convertTimeString, formatDate, sendTexts } from './Helpers';
+import { convertTimeString, formatDate } from './Helpers';
 
 class ShiftsTable extends React.Component {
   constructor() {
@@ -127,7 +127,7 @@ class ShiftsTable extends React.Component {
 
         return (
           <section className="blue-bg">
-          <button onClick={()=>{sendTexts(empList, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
+          <button onClick={()=>{this.props.textEmployeesCallback(empList, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
           {this.rowsOfEmps(empList)}
           </section>
         );
@@ -161,8 +161,8 @@ class ShiftsTable extends React.Component {
             return (
               <Accordion key={shift.id}>
                 <section>
-                  <Accordion.Toggle eventKey="showInfo" className="accordian-toggle_button">
-                  {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordian-toggle_button"> */}
+                  <Accordion.Toggle eventKey="showInfo" className="accordion-toggle_button">
+                  {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordion-toggle_button"> */}
                     <section className="section-4-col">
                       <section>▼ #{shift.id}</section>
                       <section>{formatDate(shift.shift_date)}</section>
