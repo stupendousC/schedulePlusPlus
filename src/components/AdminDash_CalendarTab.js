@@ -9,7 +9,7 @@ import NewShift from './AdminDash_NewShift';
 import { convertToPST, formatDate, convertDateString } from './Helpers';
 
 
-const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback}) => {
+const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback, textEmployeesCallback}) => {
   const today = convertDateString(new Date());
   const [daySpotlight, setDaySpotlight] = useState(today);
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
@@ -77,13 +77,13 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       );
     })
 
-  const textEmployees = (newShift) => {
-    console.log("CalendarTab will text emps for", newShift);
-
-
-
-     // const jsonForText = { "phoneNumber": "", "message": message };
+  //////////////////// callback fcns ////////////////////
+  const prepForTextEmployeesCallback = (newShift) => {
+    // <NewShift> is sending this back, which we'll need to add the availEmpsOfDay into the args before sending back up to AdminDash
+    textEmployeesCallback(newShift, availEmpsOfDay);
   }
+
+  
 
   //////////////////// prep initial state ////////////////////
   if (shiftsOfDay === "LOADING") { getAndSetShiftsOfDay(daySpotlight) }
@@ -109,7 +109,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={textEmployees} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} /> 
           </Accordion.Collapse>
       </Accordion>
       

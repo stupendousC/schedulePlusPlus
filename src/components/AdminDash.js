@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {sendTexts, sortShiftsByDate} from './Helpers';
+import {sortShiftsByDate} from './Helpers';
 
 import LoginError from './LoginError';
 
@@ -93,12 +93,18 @@ export default class AdminDash extends React.Component {
 
   ////////////////////// DISPLAY: calendar  //////////////////////
   showCalendar = () => {
-    return <CalendarTab allClients={this.state.allClients} allShifts={this.state.allShifts} allEmployees={this.state.allEmployees} allUnavails={this.state.allUnavails} updateAllShiftsCallback={this.updateAllShifts}/>
+    return <CalendarTab 
+      allClients={this.state.allClients} 
+      allShifts={this.state.allShifts} 
+      allEmployees={this.state.allEmployees} 
+      allUnavails={this.state.allUnavails} 
+      updateAllShiftsCallback={this.updateAllShifts}
+      textEmployeesCallback={this.textEmployees}/>
   }
 
   ////////////////////// DISPLAY: Shifts  //////////////////////
   showAllShifts = () => {
-    return <ShiftsTable allShifts={this.state.allShifts}/>
+    return <ShiftsTable allShifts={this.state.allShifts} textEmployeesCallback={this.textEmployees}/>
   }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
@@ -120,6 +126,37 @@ export default class AdminDash extends React.Component {
       this.setState({ allShifts: sortedShifts });
     })
     .catch(error => console.log(error.message));
+  }
+
+  /// REPLACED WITH TEXTEMPLOYEES() INSTEAD!
+  // sendTexts = (listOfEmployees, shift) => {
+  //   console.log("\nFOR SHIFT DATE = ", shift.shift_date, "SENDING TEXT TO group", listOfEmployees);
+  //   console.log("show an alert so they know it's done!")
+  // }
+
+  textEmployees = (shiftObj, availEmpsOfDay) => {
+    console.log("AdminDash will text emps for", shiftObj);
+    console.log("\navailEmpsOfDay =", availEmpsOfDay);
+
+    // of the availEmpsOfDay, we can only text those with a valid phone number
+    const textableEmployees = availEmpsOfDay.filter( emp => emp.phone );
+    // VALIDATION HERE FROM HELPER! 
+    console.log("Out of those people, we can text...", textableEmployees);
+
+    
+
+
+    axios.all([
+      this.getAllEmpsDB(),
+      this.getAllClientsDB()])
+    .then(axios.spread((...responses) => {
+      const allEmployees = responses[0].data;
+      const allClients = responses[1].data;
+
+    }))
+    .catch( errors => console.log(errors));
+
+     // const jsonForText = { "phoneNumber": "", "message": message };
   }
 
   ////////////////////// render //////////////////////

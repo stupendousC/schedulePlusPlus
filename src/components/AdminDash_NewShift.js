@@ -30,12 +30,12 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
         errorMsgs.push("Date cannot be in the past");
       }
       if (!clientId) {
-        errorMsgs.push("You must select a client");
+        errorMsgs.push("Please select a client before submitting form");
       }
       if (endTime < startTime) {
         errorMsgs.push("Start time must be before end time");
       }
-      
+
       return errorMsgs;
   }
 
@@ -80,7 +80,7 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
     axios.post(ALL_SHIFTS, jsonForNewShiftAPI )
     .then(response => {
       newShift = response.data;
-      console.log(newShift);
+      console.log("newShift =", newShift);
       
       // send callback back up to <CalendarTab> which will pass up to <AdminDash> for new API call
       // which gets latest allShifts from backend db, and re-render everything
@@ -94,13 +94,9 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
   
   const showDateHeader = () => {
     if (dateInThePast(daySpotlight)) {
-      return (
-        <section className="gray-bg">
-          <h1>{formatDate(daySpotlight)}</h1>
-        </section>
-      );
+      return (<h1 className="gray-bg text-centered">{formatDate(daySpotlight)}</h1>);
     } else {
-      return (<h1>{formatDate(daySpotlight)}</h1>);
+      return (<h1 className="text-centered">{formatDate(daySpotlight)}</h1>);
     } 
   }
 
@@ -108,16 +104,12 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
     const errorMsgs = genErrorMsgs();
       const rowsOfMsgs = errorMsgs.map( (msg,i) => {
         return (
-          <li key={i}>
-            {msg}
-          </li>
+          <li key={i}>{msg}</li>
         );
       });
 
       return (
-        <ul>
-          {rowsOfMsgs}
-        </ul>
+        <ul>{rowsOfMsgs}</ul>
       );
     
   }
