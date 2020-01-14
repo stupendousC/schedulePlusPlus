@@ -148,8 +148,19 @@
 
 .btn-google {
   width: 90%;
+  margin-top: 1rem;
 }
 
+.dashboard-buttons_container {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.dashboard-buttons {
+  color: white;
+  font-weight: bold;
+}
 
 /* IDEA from https://stackoverflow.com/questions/33309198/non-clickable-object-that-looks-like-button-in-bootstrap-3/33309555 */
 /* I had to do a fake button b/c a button within a button will get warnings */

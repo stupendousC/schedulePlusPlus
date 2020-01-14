@@ -36,23 +36,23 @@ class LoginBanner extends React.Component {
 
     if (authenticatedRole === "ADMIN") {
       return (
-        <section>
-          <button className="btn btn-success"><Link to="/adminDash">{name}'s Dashboard</Link></button>
-          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+        <section className="dashboard-buttons_container">
+          <button className="btn btn-success dashboard-buttons"><Link to="/adminDash">{name}'s Dashboard</Link></button>
+          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
-        <section>
-          <button className="btn btn-success"><Link to="/employeeDash">{name}'s Dashboard</Link></button>
-          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+        <section className="dashboard-buttons_container">
+          <button className="btn btn-success dashboard-buttons"><Link to="/employeeDash">{name}'s Dashboard</Link></button>
+          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else {
       return (
-        <section>
-          <button className="btn btn-warning">First time logging in?  Click to activate account with UUID (upcoming feature)</button>
-          <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+        <section className="dashboard-buttons_container">
+          <button className="btn btn-warning dashboard-buttons">First time logging in?  Click to activate account with UUID (upcoming feature)</button>
+          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     }
@@ -70,7 +70,7 @@ class LoginBanner extends React.Component {
   render() {
 
     return(
-      <section className="loginBanner-section">
+      <section className="loginBanner-section text-centered">
         <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>
         {this.props.authenticatedRole? this.showDashWithLogout():this.showBothLogins()}
       </section>
