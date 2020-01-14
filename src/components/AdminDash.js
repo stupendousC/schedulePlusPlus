@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {sortShiftsByDate} from './Helpers';
+import {sortShiftsByDate, isPhoneValid} from './Helpers';
 
 import LoginError from './LoginError';
 
@@ -134,6 +134,11 @@ export default class AdminDash extends React.Component {
   //   console.log("show an alert so they know it's done!")
   // }
 
+
+
+
+
+  
   textEmployees = (shiftObj, availEmpsOfDay) => {
     console.log("AdminDash will text emps for", shiftObj);
     console.log("\navailEmpsOfDay =", availEmpsOfDay);

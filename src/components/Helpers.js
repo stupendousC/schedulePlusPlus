@@ -143,16 +143,16 @@ export const isPhoneValid = (phoneStr) => {
 }
 
 // for use by isPhoneValid()
-const canStringBePosInteger = (str) => {
+const canStringBeInteger = (str) => {
   const asInt = parseInt(str);
   const backToStr = asInt.toString();
   return((str === backToStr) ? true:false);
 }
 
 // for use by isPhoneValid()
-const areStringsInListAllIntegers = (...list_of_strings) => {=
+const areStringsInListAllIntegers = (...list_of_strings) => {
   for (const str of list_of_strings) {
-    if (!canStringBePosInteger(str)) return false
+    if (!canStringBeInteger(str)) return false
   }
   // if nobody in the list fails, then they all pass
   return true;
