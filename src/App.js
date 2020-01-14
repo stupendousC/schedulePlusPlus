@@ -54,15 +54,7 @@ class App extends React.Component {
           databaseId: databaseId      
         })
 
-        // CAN WE REDIRECT HERE TO REL DASHBOARD???!!!
-        if (authenticatedRoleDB === "ADMIN") {
-          console.log("AUTO REDIRECT TO admin dash plz!");
-          // <Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={authenticatedRoleDB} username={usernameDB} googleId={googleId} databaseId={databaseId}/>} />;
-        } else if (authenticatedRoleDB === "EMPLOYEE") {
-          console.log("AUTO REDIRECT TO employee dash plz!");
-          // <Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={authenticatedRoleDB} username={usernameDB} googleId={googleId} databaseId={databaseId}/>} />;
-
-        }
+        
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
   }
@@ -87,16 +79,24 @@ class App extends React.Component {
     return (
       
       <Router>
-          <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
-          
-          
-
+        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
+        
+        {role === "ADMIN" ? (<Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
+        {role === "EMPLOYEE" ? (<Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
+  
           <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
-            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
-            <Route path="/employeeDash/:id/text/:shiftId" component={LinkTextedToEmployee} />
+            <Route path="/employeeDash" exact component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
+            
+            
+            {/* this route is problematic b/c login redirects will never let u see this page... i dont' want to give up either one! */}
+            {/* <Route path="/employeeDash/:id/text/:shiftId"  component={LinkTextedToEmployee} /> */}
+            
+            {/* WHAT IF... I use a UUID instead? that way you don't have to log in? just say yes or no*/}
+            <Route path="/text/:uuid"  component={LinkTextedToEmployee} />
+
           </Switch>
 
           <Footer />
