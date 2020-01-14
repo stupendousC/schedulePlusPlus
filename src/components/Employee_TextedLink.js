@@ -21,6 +21,7 @@ export default function LinkTextedToEmployee({match}) {
       // send API call to get the shift info, then display it here
       // once they click on accept or decline button, send info back to API
       // what if they decline?  gonna have to rejigger that too... it'd be useful to know if there's a hard NO from everyone
+      // but i dont want them to decline, I want to keep bugging them until someone takes the shift
       return (
         <section className="homepage-section text-centered">
       This should be the texted link to the employee<br/><br/>

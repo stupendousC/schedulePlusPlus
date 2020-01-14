@@ -10,7 +10,7 @@ import EmployeeDash from './components/EmployeeDash';
 import LinkTextedToEmployee from './components/Employee_TextedLink';
 
 import {} from './components/Helpers';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Homepage from './components/Homepage';
 
 class App extends React.Component {
@@ -52,12 +52,19 @@ class App extends React.Component {
           googleId: googleId,
           username: usernameDB,
           databaseId: databaseId      
-      })
+        })
+
+        // CAN WE REDIRECT HERE TO REL DASHBOARD???!!!
+        if (authenticatedRoleDB === "ADMIN") {
+          console.log("AUTO REDIRECT TO admin dash plz!");
+          // <Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={authenticatedRoleDB} username={usernameDB} googleId={googleId} databaseId={databaseId}/>} />;
+        } else if (authenticatedRoleDB === "EMPLOYEE") {
+          console.log("AUTO REDIRECT TO employee dash plz!");
+          // <Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={authenticatedRoleDB} username={usernameDB} googleId={googleId} databaseId={databaseId}/>} />;
+
+        }
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
-
-
-    // CAN WE REDIRECT HERE TO REL DASHBOARD???!!!
   }
 
   logout = () => {
@@ -88,8 +95,8 @@ class App extends React.Component {
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
-            <Route path="/employeeDash/:id/text/:shiftId" component={LinkTextedToEmployee} />
             <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
+            <Route path="/employeeDash/:id/text/:shiftId" component={LinkTextedToEmployee} />
           </Switch>
 
           <Footer />
