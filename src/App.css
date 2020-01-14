@@ -45,6 +45,11 @@
   text-align: center;
 }
 
+.fine-print {
+  font-size: 0.75rem;
+  list-style: none;
+}
+
 /* ===== PAGE/COMPONENT-SPECIFIC SECTIONS ===== */
 
 .loginBanner-section {

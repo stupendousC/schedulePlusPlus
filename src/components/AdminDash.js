@@ -144,17 +144,31 @@ export default class AdminDash extends React.Component {
     console.log("\navailEmpsOfDay =", availEmpsOfDay);
     console.log("Out of those people, we can text...", textableEmployees);
 
-    const messageToEmp = (employee, shift) => {
-      return(
+    // const messageToEmp = (employee, shift) => {
+    //   return(
+    //     `Hello ${employee.name}.  A shift is available to you on ${formatDate(shift.shift_date)} with 
+    //     ${shift.client.name} from ${shift.start_time} to ${shift.end_time}.  Please either respond 
+    //     to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+    //     Thank you from the office of Schedule Plus Plus!`
+    //   );
+    // }
+
+    const jsonForTextAPI = (employee, shift) => {
+      const personalizedMsg = (
         `Hello ${employee.name}.  A shift is available to you on ${formatDate(shift.shift_date)} with 
         ${shift.client.name} from ${shift.start_time} to ${shift.end_time}.  Please either respond 
         to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
         Thank you from the office of Schedule Plus Plus!`
+        );
+
+      return(
+        { "phoneNumber": employee.phone,
+          "message": personalizedMsg }
       );
     }
 
     for (const employee of textableEmployees) {
-      axios.post(SEND_TEXT)
+      axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj))
       .then( response => console.log("back end says:", response.data))
       .catch(error => console.log(error.message));
     }
