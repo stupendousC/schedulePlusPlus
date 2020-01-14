@@ -1,0 +1,29 @@
+{
+  "files": {
+    "main.css": "/schedulePlusPlus/static/css/main.bb5d9cd1.chunk.css",
+    "main.js": "/schedulePlusPlus/static/js/main.407f71b3.chunk.js",
+    "main.js.map": "/schedulePlusPlus/static/js/main.407f71b3.chunk.js.map",
+    "runtime-main.js": "/schedulePlusPlus/static/js/runtime-main.6ce9aa9e.js",
+    "runtime-main.js.map": "/schedulePlusPlus/static/js/runtime-main.6ce9aa9e.js.map",
+    "static/css/2.2a798a21.chunk.css": "/schedulePlusPlus/static/css/2.2a798a21.chunk.css",
+    "static/js/2.723b1fcf.chunk.js": "/schedulePlusPlus/static/js/2.723b1fcf.chunk.js",
+    "static/js/2.723b1fcf.chunk.js.map": "/schedulePlusPlus/static/js/2.723b1fcf.chunk.js.map",
+    "index.html": "/schedulePlusPlus/index.html",
+    "precache-manifest.a71ad5d52b8f1ee54281ee07bc561390.js": "/schedulePlusPlus/precache-manifest.a71ad5d52b8f1ee54281ee07bc561390.js",
+    "service-worker.js": "/schedulePlusPlus/service-worker.js",
+    "static/css/2.2a798a21.chunk.css.map": "/schedulePlusPlus/static/css/2.2a798a21.chunk.css.map",
+    "static/css/main.bb5d9cd1.chunk.css.map": "/schedulePlusPlus/static/css/main.bb5d9cd1.chunk.css.map",
+    "static/js/2.723b1fcf.chunk.js.LICENSE": "/schedulePlusPlus/static/js/2.723b1fcf.chunk.js.LICENSE",
+    "static/media/SPPbanner2.png": "/schedulePlusPlus/static/media/SPPbanner2.596567f0.png",
+    "static/media/blackLock.svg": "/schedulePlusPlus/static/media/blackLock.4b4a29b8.svg",
+    "static/media/redCrossFlag.svg": "/schedulePlusPlus/static/media/redCrossFlag.e167e2a7.svg",
+    "static/media/twopeople.svg": "/schedulePlusPlus/static/media/twopeople.65b701d4.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.6ce9aa9e.js",
+    "static/css/2.2a798a21.chunk.css",
+    "static/js/2.723b1fcf.chunk.js",
+    "static/css/main.bb5d9cd1.chunk.css",
+    "static/js/main.407f71b3.chunk.js"
+  ]
+}
