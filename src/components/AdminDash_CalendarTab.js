@@ -35,7 +35,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
         break;
       }
     }
-    console.log(targetDateStr, "setting shiftsOfDay =", shiftsOfDay);
+    
     setShiftsOfDay(shiftsOfDay);
   }
 

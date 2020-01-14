@@ -58,12 +58,9 @@ class LoginBanner extends React.Component {
     }
   }
 
-
-  
   ////////////////////// LOGOUT //////////////////////
   logout = () => {
     console.log("TODO: ALERT, you've successfully logged out");
-    console.log("ALSO AUTO-REDIRECT BACK TO HOMEPAGE!!");
     this.props.logoutCB();
   }
 
