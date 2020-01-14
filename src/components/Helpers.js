@@ -98,9 +98,11 @@ export const isPhoneValid = (phoneStr) => {
     // "(425)111-2222"    // Length = 13
     // "1-425-111-2222"   // Length = 14
   // else returns False
-  if (phoneStr.length < 10 || phoneStr.length > 14) return false
 
-  if (phoneStr.length === 10 || phoneStr.length === 11) return canStringBeInteger(phoneStr) 
+  if (!phoneStr) return false;
+  if (phoneStr.length < 10 || phoneStr.length > 14) return false;
+
+  if (phoneStr.length === 10 || phoneStr.length === 11) return canStringBeInteger(phoneStr);
   
   if (phoneStr.length === 12) {
     // check the non-numerical parts
@@ -137,7 +139,7 @@ export const isPhoneValid = (phoneStr) => {
     const areaCode = phoneStr.slice(2,5);
     const phone3 = phoneStr.slice(6,9);
     const phone4 = phoneStr.slice(10,14);
-    const areNumberPartsOK = areStringsInListAllIntegers(firstDigit, areaCode, phone3, phone4);
+    const areNumberPartsOK = areStringsInListAllIntegers([firstDigit, areaCode, phone3, phone4]);
     return areNumberPartsOK;
   }
 }
@@ -150,8 +152,10 @@ const canStringBeInteger = (str) => {
 }
 
 // for use by isPhoneValid()
-const areStringsInListAllIntegers = (...list_of_strings) => {
+const areStringsInListAllIntegers = (list_of_strings) => {
+  console.log("array = ", list_of_strings);
   for (const str of list_of_strings) {
+    console.log("looking at", str);
     if (!canStringBeInteger(str)) return false
   }
   // if nobody in the list fails, then they all pass

@@ -144,8 +144,10 @@ export default class AdminDash extends React.Component {
     console.log("\navailEmpsOfDay =", availEmpsOfDay);
 
     // of the availEmpsOfDay, we can only text those with a valid phone number
-    const textableEmployees = availEmpsOfDay.filter( emp => emp.phone );
-    // VALIDATION HERE FROM HELPER! 
+    const textableEmployees = availEmpsOfDay.filter( emp => {
+      console.log("looking at emp", emp.name, emp.phone);
+      console.log(isPhoneValid(emp.phone));
+    });
     console.log("Out of those people, we can text...", textableEmployees);
 
     
