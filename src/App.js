@@ -7,6 +7,8 @@ import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
 
+import LinkTextedToEmployee from './components/Employee_TextedLink';
+
 import {} from './components/Helpers';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import Homepage from './components/Homepage';
@@ -53,6 +55,9 @@ class App extends React.Component {
       })
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
+
+
+    // CAN WE REDIRECT HERE TO REL DASHBOARD???!!!
   }
 
   logout = () => {
@@ -83,7 +88,7 @@ class App extends React.Component {
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
-            {/* <Route path="/employeeDash/text" component={} /> */}
+            <Route path="/employeeDash/:id/text/:shiftId" component={LinkTextedToEmployee} />
             <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
           </Switch>
 
