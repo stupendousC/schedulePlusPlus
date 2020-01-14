@@ -146,7 +146,9 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
           </section>
           
           {isFormValid() ? null: showErrorMsgs()}
-          <input type="submit" className="btn btn-primary" value="MAKE NEW SHIFT & TEXT ALL AVAILABLE EMPLOYEES" disabled={!isFormValid()}/>
+          <input type="submit" className="btn btn-primary" value="MAKE NEW SHIFT & NOTIFY ALL THOSE AVAILABLE" disabled={!isFormValid()}/>
+          <li className="fine-print">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
+          <li className="fine-print">Texts will also be sent to all those available, with valid phone numbers in their record</li>
         </form>
 
     </section>

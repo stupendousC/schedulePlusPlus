@@ -153,9 +153,7 @@ const canStringBeInteger = (str) => {
 
 // for use by isPhoneValid()
 const areStringsInListAllIntegers = (list_of_strings) => {
-  console.log("array = ", list_of_strings);
   for (const str of list_of_strings) {
-    console.log("looking at", str);
     if (!canStringBeInteger(str)) return false
   }
   // if nobody in the list fails, then they all pass

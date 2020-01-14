@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {sortShiftsByDate, isPhoneValid} from './Helpers';
+import {sortShiftsByDate, isPhoneValid, formatDate} from './Helpers';
 
 import LoginError from './LoginError';
 
@@ -12,6 +12,7 @@ const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
 const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 const ALL_UNAVAILS = process.env.REACT_APP_ALL_EMPS;
+const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
 
 export default class AdminDash extends React.Component {
 
@@ -128,42 +129,51 @@ export default class AdminDash extends React.Component {
     .catch(error => console.log(error.message));
   }
 
-  /// REPLACED WITH TEXTEMPLOYEES() INSTEAD!
-  // sendTexts = (listOfEmployees, shift) => {
-  //   console.log("\nFOR SHIFT DATE = ", shift.shift_date, "SENDING TEXT TO group", listOfEmployees);
-  //   console.log("show an alert so they know it's done!")
-  // }
-
-
-
-
-
-  
   textEmployees = (shiftObj, availEmpsOfDay) => {
-    console.log("AdminDash will text emps for", shiftObj);
-    console.log("\navailEmpsOfDay =", availEmpsOfDay);
+    // shiftObj may be a newly made shift, or existing one that's just not staffed yet
+    // availEmpsOfDay is a list of people who are 1. NOT already booked that day, and 2. NOT on in Unavails database
+      // if an employee wants that shift, they can still see it from their dashboard where they'll be told they wanted the day off
+      // and they can change their minds and accept the shift anyway.  They just won't get a text here, nobody wants a text on their day off.
 
     // of the availEmpsOfDay, we can only text those with a valid phone number
     const textableEmployees = availEmpsOfDay.filter( emp => {
-      console.log("looking at emp", emp.name, emp.phone);
-      console.log(isPhoneValid(emp.phone));
-    });
+      return isPhoneValid(emp.phone);
+    });    
+    
+    console.log("AdminDash will text emps for", shiftObj);
+    console.log("\navailEmpsOfDay =", availEmpsOfDay);
     console.log("Out of those people, we can text...", textableEmployees);
 
-    
+    const messageToEmp = (employee, shift) => {
+      return(
+        `Hello ${employee.name}.  A shift is available to you on ${formatDate(shift.shift_date)} with 
+        ${shift.client.name} from ${shift.start_time} to ${shift.end_time}.  Please either respond 
+        to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+        Thank you from the office of Schedule Plus Plus!`
+      );
+    }
+
+    for (const employee of textableEmployees) {
+      axios.post(SEND_TEXT)
+      .then( response => console.log("back end says:", response.data))
+      .catch(error => console.log(error.message));
+    }
 
 
-    axios.all([
-      this.getAllEmpsDB(),
-      this.getAllClientsDB()])
-    .then(axios.spread((...responses) => {
-      const allEmployees = responses[0].data;
-      const allClients = responses[1].data;
+    // const allAxiosPostReqs = textableEmployees.map( employee => {
+    //   return (
+    //     () => axios.post(SEND_TEXT, 
+    //     { "phoneNumber": employee.phone, "message": messageToEmp(employee, shiftObj) })
+    //   );
+    // })
 
-    }))
-    .catch( errors => console.log(errors));
-
-     // const jsonForText = { "phoneNumber": "", "message": message };
+    // axios.all([allAxiosPostReqs])
+    // .then(axios.spread((...responses) => {
+    //   for ( const eachText of responses ) {
+    //     console.log("back end says", eachText.data);
+    //   }
+    // }))
+    // .catch( errors => console.log(errors));
   }
 
   ////////////////////// render //////////////////////

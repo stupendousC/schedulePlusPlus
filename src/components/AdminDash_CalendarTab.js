@@ -83,8 +83,6 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     textEmployeesCallback(newShift, availEmpsOfDay);
   }
 
-  
-
   //////////////////// prep initial state ////////////////////
   if (shiftsOfDay === "LOADING") { getAndSetShiftsOfDay(daySpotlight) }
 
