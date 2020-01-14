@@ -12,6 +12,8 @@ const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
 const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 const ALL_UNAVAILS = process.env.REACT_APP_ALL_EMPS;
+// const ALL_UNAVAILS = process.env.REACT_APP_ALL_UNAVAILS;
+
 const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
 
 export default class AdminDash extends React.Component {
