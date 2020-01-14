@@ -170,10 +170,10 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   if (!sortedOwnShifts) {
     return (
       <section>
-        <h1>MY SHIFTS</h1>
+        <h1 className="text-centered">MY SHIFTS</h1>
         <p>Nothing yet...</p>
         
-        <h1>AVAILABLE SHIFTS</h1>
+        <h1 className="text-centered">AVAILABLE SHIFTS</h1>
         {showUnstaffedShifts()}
       </section>
     );
@@ -181,11 +181,11 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   } else {
     return(
       <section>
-        <h1>MY SHIFTS</h1>
+        <h1 className="text-centered">MY SHIFTS</h1>
         {showOwnActiveShifts()}
-        <h1>AVAILABLE SHIFTS</h1>
+        <h1 className="text-centered">AVAILABLE SHIFTS</h1>
         {showUnstaffedShifts()}
-        <h1>PAST SHIFTS</h1>
+        <h1 className="text-centered">PAST SHIFTS</h1>
         {showOwnPastShifts()}
       </section>
     );

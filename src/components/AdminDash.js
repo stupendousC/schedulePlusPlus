@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {sortShiftsByDate, isPhoneValid, formatDate} from './Helpers';
+import {sortShiftsByDate, isPhoneValid, formatDate, convertTimeString} from './Helpers';
 
 import LoginError from './LoginError';
 
@@ -135,30 +135,29 @@ export default class AdminDash extends React.Component {
       // if an employee wants that shift, they can still see it from their dashboard where they'll be told they wanted the day off
       // and they can change their minds and accept the shift anyway.  They just won't get a text here, nobody wants a text on their day off.
 
-    // of the availEmpsOfDay, we can only text those with a valid phone number
+    // of the availEmpsOfDay, we can only text those with a valid AND verified phone number
+    // verify phone number via Twilio console https://www.twilio.com/console/phone-numbers/verified, employee will need to give me the code they received!
     const textableEmployees = availEmpsOfDay.filter( emp => {
       return isPhoneValid(emp.phone);
     });    
     
-    console.log("AdminDash will text emps for", shiftObj);
-    console.log("\navailEmpsOfDay =", availEmpsOfDay);
-    console.log("Out of those people, we can text...", textableEmployees);
-
-    // const messageToEmp = (employee, shift) => {
-    //   return(
-    //     `Hello ${employee.name}.  A shift is available to you on ${formatDate(shift.shift_date)} with 
-    //     ${shift.client.name} from ${shift.start_time} to ${shift.end_time}.  Please either respond 
-    //     to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
-    //     Thank you from the office of Schedule Plus Plus!`
-    //   );
-    // }
+    console.log("Out of those available, we can text...", textableEmployees);
 
     const jsonForTextAPI = (employee, shift) => {
-      const personalizedMsg = (
-        `Hello ${employee.name}.  A shift is available to you on ${formatDate(shift.shift_date)} with 
-        ${shift.client.name} from ${shift.start_time} to ${shift.end_time}.  Please either respond 
-        to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
-        Thank you from the office of Schedule Plus Plus!`
+      // yes the indentation looks terrible here, but it's necessary otherwise the text msgs will ALSO have indents
+      const personalizedMsg = (`
+====================
+Hello ${employee.name}!  
+          
+We have a shift available:
+  Date: ${formatDate(shift.shift_date)}
+  Client: ${shift.client.name}
+  Time: ${convertTimeString(shift.start_time)} to ${convertTimeString(shift.end_time)}.  
+
+Please either respond to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+
+Thank you from the office of Schedule Plus Plus!
+====================`
         );
 
       return(
@@ -167,27 +166,18 @@ export default class AdminDash extends React.Component {
       );
     }
 
-    for (const employee of textableEmployees) {
-      axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj))
-      .then( response => console.log("back end says:", response.data))
-      .catch(error => console.log(error.message));
-    }
+    const allAxiosPostReqs = textableEmployees.map( employee => {
+      return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj)));
+    })
 
-
-    // const allAxiosPostReqs = textableEmployees.map( employee => {
-    //   return (
-    //     () => axios.post(SEND_TEXT, 
-    //     { "phoneNumber": employee.phone, "message": messageToEmp(employee, shiftObj) })
-    //   );
-    // })
-
-    // axios.all([allAxiosPostReqs])
-    // .then(axios.spread((...responses) => {
-    //   for ( const eachText of responses ) {
-    //     console.log("back end says", eachText.data);
-    //   }
-    // }))
-    // .catch( errors => console.log(errors));
+    // bundled all the individual post requests together,
+    // failed texts will not get in the way of successful texts
+    axios.all(allAxiosPostReqs)
+    .then(axios.spread((...responses) => {
+      for ( const eachText of responses ) {
+        console.log("back end says", eachText.data);
+      }}))
+    .catch( errors => console.log(errors));
   }
 
   ////////////////////// render //////////////////////

@@ -32,19 +32,19 @@ class LoginBanner extends React.Component {
   ////////////////////// DASHBOARD BUTTONS //////////////////////
   showDashWithLogout = () => {
     const authenticatedRole = this.props.authenticatedRole;
+    const name = sessionStorage.getItem("username");
+
     if (authenticatedRole === "ADMIN") {
       return (
         <section>
-          Hello {sessionStorage.getItem("username")}
-          <button className="btn btn-success"><Link to="/adminDash">ADMIN Dashboard</Link></button>
+          <button className="btn btn-success"><Link to="/adminDash">{name}'s Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
         <section>
-          Hello {sessionStorage.getItem("username")}
-          <button className="btn btn-success"><Link to="/employeeDash">EMPLOYEE Dashboard</Link></button>
+          <button className="btn btn-success"><Link to="/employeeDash">{name}'s Dashboard</Link></button>
           <button className="btn btn-danger" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
         </section>
       );
