@@ -31,15 +31,11 @@ class App extends React.Component {
 
     axios.get(endpoint)
       .then(response => {
-        console.log("got this back from backend:", response.data);
-
-
         if (Object.entries(response.data).length === 0) {
           console.log("NOT IN OUR DB!!! ");
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
           this.setState({ authenticatedRole: "NEED UUID" });
         }
-
         const authenticatedRoleDB = Object.keys(response.data)[0];
         const usernameDB = Object.values(response.data)[0].name;
         const databaseId = Object.values(response.data)[0].id;
@@ -60,7 +56,7 @@ class App extends React.Component {
   }
 
   logout = () => {
-    console.log("APP.js is logging you out!!!");
+    console.log("LOG OUT! send toaster pop up!");
     this.setState({
       authenticatedRole: "",  
       googleId: "",
@@ -71,7 +67,11 @@ class App extends React.Component {
   }
 
   render() {
-    
+    const role = this.state.authenticatedRole;
+    const username = this.state.username;
+    const googleId = this.state.googleId;
+    const databaseId = this.state.databaseId;
+
     return (
       
       <Router>
@@ -82,8 +82,9 @@ class App extends React.Component {
           <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
-            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
-            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
+            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
+            {/* <Route path="/employeeDash/text" component={} /> */}
+            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
           </Switch>
 
           <Footer />
