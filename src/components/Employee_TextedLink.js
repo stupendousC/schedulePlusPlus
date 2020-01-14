@@ -2,10 +2,7 @@ import React from 'react';
 import LoginError from './LoginError';
 
 export default function LinkTextedToEmployee({match}) {
-    // send API call to get the shift info, then display it here
-    // once they click on accept or decline button, send info back to API
-    // what if they decline?  gonna have to rejigger that too... it'd be useful to know if there's a hard NO from everyone
-    // but i dont want them to decline, I want to keep bugging them until someone takes the shift
+    
     return (
       <section className="homepage-section">
     NO NEED TO LOG IN, the UUID in the URL is verification enough b/c it's user's phone<br/>
