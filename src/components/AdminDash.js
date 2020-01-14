@@ -154,7 +154,7 @@ We have a shift available:
   Client: ${shift.client.name}
   Time: ${convertTimeString(shift.start_time)} to ${convertTimeString(shift.end_time)}.  
 
-Please either respond to this text with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+Please click on [http://localhost:3000/text/12345] and respond with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
 
 Thank you from the office of Schedule Plus Plus!
 ====================`

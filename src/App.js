@@ -7,8 +7,10 @@ import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
 
+import LinkTextedToEmployee from './components/Employee_TextedLink';
+
 import {} from './components/Helpers';
-import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Homepage from './components/Homepage';
 
 class App extends React.Component {
@@ -31,15 +33,11 @@ class App extends React.Component {
 
     axios.get(endpoint)
       .then(response => {
-        console.log("got this back from backend:", response.data);
-
-
         if (Object.entries(response.data).length === 0) {
           console.log("NOT IN OUR DB!!! ");
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
           this.setState({ authenticatedRole: "NEED UUID" });
         }
-
         const authenticatedRoleDB = Object.keys(response.data)[0];
         const usernameDB = Object.values(response.data)[0].name;
         const databaseId = Object.values(response.data)[0].id;
@@ -54,13 +52,15 @@ class App extends React.Component {
           googleId: googleId,
           username: usernameDB,
           databaseId: databaseId      
-      })
+        })
+
+        
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
   }
 
   logout = () => {
-    console.log("APP.js is logging you out!!!");
+    console.log("LOG OUT! send toaster pop up!");
     this.setState({
       authenticatedRole: "",  
       googleId: "",
@@ -71,19 +71,32 @@ class App extends React.Component {
   }
 
   render() {
-    
+    const role = this.state.authenticatedRole;
+    const username = this.state.username;
+    const googleId = this.state.googleId;
+    const databaseId = this.state.databaseId;
+
     return (
       
       <Router>
-          <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
-          
-          
-
+        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
+        
+        {role === "ADMIN" ? (<Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
+        {role === "EMPLOYEE" ? (<Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
+  
           <Switch>   
             {/* Displays only 1 of these components based on on what the URL is */}
             <Route path="/" exact component={Homepage}/>    
-            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
-            <Route path="/employeeDash" component={() => <EmployeeDash authenticatedRole={this.state.authenticatedRole} username={this.state.username} googleId={this.state.googleId} databaseId={this.state.databaseId}/>} />
+            <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
+            <Route path="/employeeDash" exact component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
+            
+            
+            {/* this route is problematic b/c login redirects will never let u see this page... i dont' want to give up either one! */}
+            {/* <Route path="/employeeDash/:id/text/:shiftId"  component={LinkTextedToEmployee} /> */}
+            
+            {/* WHAT IF... I use a UUID instead? that way you don't have to log in? just say yes or no*/}
+            <Route path="/text/:uuid"  component={LinkTextedToEmployee} />
+
           </Switch>
 
           <Footer />

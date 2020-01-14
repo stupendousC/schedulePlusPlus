@@ -60,6 +60,12 @@
   margin: 2rem 1rem;
 }
 
+.homepage-logo {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
 .footer {
   text-align: center;
   margin: 1rem;
@@ -69,7 +75,6 @@
 .newShift-component {
   background-color: pink;
 }
-
 
 .navbar {
   background-color: pink;
@@ -129,7 +134,7 @@
 }
 
 /* ===== IMAGE SIZES ===== */
-.img-90, .homepage-logo {
+.img-90 {
   width: 90%;
   height: 90%;
 }
