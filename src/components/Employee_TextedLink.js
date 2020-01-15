@@ -9,7 +9,8 @@ export default function LinkTextedToEmployee({match}) {
 
   const [shiftOrMsg, setShiftOrMsg] = useState("LOADING");
 
-  const sendGetFromDb = () => {
+  const getFromDb = () => {
+    // if shift is still available, response from backend will be the shift obj, otherwise null
     axios.get(URL_ENDPOINT)
       .then(response => setShiftOrMsg(response.data))
       .catch(error => console.log('ERROR:', error.message));
@@ -19,24 +20,25 @@ export default function LinkTextedToEmployee({match}) {
     // send API call to backend to accept shift
     console.log("sending info to backend");
 
+    // response from backend will be a boolean, as to whether user really got the shift, or if someone else beat them to it
     axios.post(URL_ENDPOINT)
-    .then(response => console.log(setShiftOrMsg("ACCEPTED")))
+    .then(response => setShiftOrMsg(response.data))
     .catch(error => console.log('ERROR:', error.message));
-
-    // setting state should re-render with congrats MessageComp
-    setShiftOrMsg("ACCEPTED");
   }
 
   ///////////////////////// render //////////////////////////
+
   if (shiftOrMsg === "LOADING") {
-    sendGetFromDb();
+    getFromDb();
     return <MessageComponent message="Loading..." icon="hourglass"/>;
 
-  } else if (shiftOrMsg === null) {
-    // urls with bogus uuid will also see this
-    return <ErrorGeneral message="Sorry, shift is taken" icon="alarm"/>;
+  } else if (shiftOrMsg === null || shiftOrMsg === false) {
+    // you'll see this if... 1. clicked on link after shift is taken.
+    // 2. clicked on link before shift is taken, but clicked confirm after someone else did. 
+    // 3. if you typed in base-url/text/{bogus-uuid-here}
+    return <ErrorGeneral message="Sorry, shift is taken" icon="stopwatch"/>;
   
-  } else if (shiftOrMsg === "ACCEPTED") {
+  } else if (shiftOrMsg === true) {
     return <MessageComponent message="YAY YOU GOT IT!" icon="thumbsUp"/>;
 
   } else {
@@ -77,19 +79,3 @@ export default function LinkTextedToEmployee({match}) {
     );
   }
 }
-
-
-
-
-
-
-
-
-{/* <h1>LOGIC FLOW</h1>
-    1. client clicking on this link, will send api call to backend and check to see if 
-    shift obj still exists in Texts db. <br/><br/>
-    2A. If yes, then see confirmation screen <br/>
-      ...2A1. Once emp clicks on confirm button, send API call to backend,<br/>
-      ...2A2. add that emp obj to the shift obj,<br/>
-      ...2A3. delete all rows in Texts that belong to that shift obj<br/><br/>
-    2B. If no, then see shift taken screen <br /> */}
