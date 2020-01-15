@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ErrorGeneral from './ErrorGeneral';
+import MessageComponent from './MessageComponent';
 import {convertTimeString} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
-  const URL_ENDPOINT = `http://localhost:5000/text/${match.params.uuid}`;
+  const URL_ENDPOINT = `${process.env.REACT_APP_TEXTED_LINK}/${match.params.uuid}`;
 
-  const [shift, setShiftOrMsg] = useState("LOADING");
+  const [shiftOrMsg, setShiftOrMsg] = useState("LOADING");
 
-  axios.get(URL_ENDPOINT)
-  .then(response => setShiftOrMsg(response.data))
-  .catch(error => console.log(error.message));
+  const sendGetFromDb = () => {
+    axios.get(URL_ENDPOINT)
+      .then(response => setShiftOrMsg(response.data))
+      .catch(error => console.log('ERROR:', error.message));
+  }
 
   const acceptShift = () => {
     // send API call to backend to accept shift
@@ -18,23 +21,28 @@ export default function LinkTextedToEmployee({match}) {
 
     axios.post(URL_ENDPOINT)
     .then(response => console.log(setShiftOrMsg("ACCEPTED")))
-    .catch(error => console.log(error.message));
+    .catch(error => console.log('ERROR:', error.message));
 
-    // setting state should redirect to congrats page
+    // setting state should re-render with congrats MessageComp
+    setShiftOrMsg("ACCEPTED");
   }
 
   ///////////////////////// render //////////////////////////
-  if (shift === "LOADING") {
-    return (
-      <section>LOADING...</section>
-    )
-  } else if (shift === null) {
-    return (
-      <ErrorGeneral message="Sorry, shift is taken" />
-    )
-  } else if (shift === "ACCEPTED") {
-    return (<ErrorGeneral message="YAY YOU GOT IT!" />);
+  if (shiftOrMsg === "LOADING") {
+    sendGetFromDb();
+    return <MessageComponent message="Loading..." icon="hourglass"/>;
+
+  } else if (shiftOrMsg === null) {
+    // urls with bogus uuid will also see this
+    return <ErrorGeneral message="Sorry, shift is taken" icon="alarm"/>;
+  
+  } else if (shiftOrMsg === "ACCEPTED") {
+    return <MessageComponent message="YAY YOU GOT IT!" icon="thumbsUp"/>;
+
   } else {
+    // there's a real shift in the state, not just a msg placeholder
+    const shift = shiftOrMsg;
+
     return (
       <section className="homepage-section">
         <h1 className="text-centered">Please Confirm Below</h1>
@@ -69,6 +77,13 @@ export default function LinkTextedToEmployee({match}) {
     );
   }
 }
+
+
+
+
+
+
+
 
 {/* <h1>LOGIC FLOW</h1>
     1. client clicking on this link, will send api call to backend and check to see if 
