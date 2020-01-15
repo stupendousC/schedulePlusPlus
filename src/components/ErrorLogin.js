@@ -1,12 +1,12 @@
 import React from 'react';
-import blackLock from '../images/blackLock.svg';
+import lock from '../images/comboLock.svg';
 
 export default function ErrorLogin(props) {
 
   return (
     <section>
       <h1 className="text-centered">{props.message}</h1>
-      <img src={blackLock} alt="blackLock" className="homepage-logo"/>
+      <img src={lock} alt="a lock" className="homepage-logo"/>
     </section>
   );
 }
