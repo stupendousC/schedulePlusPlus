@@ -4,15 +4,26 @@ import ErrorGeneral from './ErrorGeneral';
 import {convertTimeString} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
+  const URL_ENDPOINT = `http://localhost:5000/text/${match.params.uuid}`;
 
-  const [shift, setShiftOrNull] = useState("LOADING");
+  const [shift, setShiftOrMsg] = useState("LOADING");
 
-  axios.get(`http://localhost:5000/text/${match.params.uuid}`)
-  .then(response => setShiftOrNull(response.data))
+  axios.get(URL_ENDPOINT)
+  .then(response => setShiftOrMsg(response.data))
   .catch(error => console.log(error.message));
 
+  const acceptShift = () => {
+    // send API call to backend to accept shift
+    console.log("sending info to backend");
 
-  
+    axios.post(URL_ENDPOINT)
+    .then(response => console.log(setShiftOrMsg("ACCEPTED")))
+    .catch(error => console.log(error.message));
+
+    // setting state should redirect to congrats page
+  }
+
+  ///////////////////////// render //////////////////////////
   if (shift === "LOADING") {
     return (
       <section>LOADING...</section>
@@ -21,6 +32,8 @@ export default function LinkTextedToEmployee({match}) {
     return (
       <ErrorGeneral message="Sorry, shift is taken" />
     )
+  } else if (shift === "ACCEPTED") {
+    return (<ErrorGeneral message="YAY YOU GOT IT!" />);
   } else {
     return (
       <section className="homepage-section">
@@ -36,17 +49,17 @@ export default function LinkTextedToEmployee({match}) {
 
         <section className="card-client">
           <p>CLIENT</p>
-          { shift.client ? <p>{shift.client.name}</p> : <p></p> }
+          <p>{shift.client.name}</p>
           <p>PHONE</p>
-          { shift.client ? <p>{shift.client.phone}</p> : <p></p> }
+          <p>{shift.client.phone}</p>
           <p>EMAIL</p>
-          { shift.client ? <p>{shift.client.email}</p> : <p></p> }
+          <p>{shift.client.email}</p>
           <p>ADDRESS</p>
-          { shift.client ? <p>{shift.client.address}</p> : <p></p> }
+          <p>{shift.client.address}</p>
         </section>
 
         <section className="text-centered">
-          <button  className="btn btn-primary">YES, I WANT THIS SHIFT!</button>
+          <button onClick={acceptShift} className="btn btn-primary">YES, I WANT THIS SHIFT!</button>
           <li className="fine-print">This shift will appear on your employee dashboard after you accept.</li>
           <li className="fine-print">Close this window if you want to cancel.</li>
           <li className="fine-print">Or login above to access your dashboard for other options.</li>
