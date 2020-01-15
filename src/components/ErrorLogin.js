@@ -1,7 +1,7 @@
 import React from 'react';
 import blackLock from '../images/blackLock.svg';
 
-export default function LoginError(props) {
+export default function ErrorLogin(props) {
 
   return (
     <section>

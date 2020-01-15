@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import ErrorGeneral from './ErrorGeneral';
+import MessageComponent from './MessageComponent';
 import {convertTimeString} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
-  const URL_ENDPOINT = `http://localhost:5000/text/${match.params.uuid}`;
+  const URL_ENDPOINT = `${process.env.REACT_APP_TEXTED_LINK}/${match.params.uuid}`;
 
   const [shift, setShiftOrMsg] = useState("LOADING");
 
   axios.get(URL_ENDPOINT)
   .then(response => setShiftOrMsg(response.data))
-  .catch(error => console.log(error.message));
+  .catch(error => setShiftOrMsg(`ERROR: ${error.message}`));
 
   const acceptShift = () => {
     // send API call to backend to accept shift
@@ -25,15 +26,17 @@ export default function LinkTextedToEmployee({match}) {
 
   ///////////////////////// render //////////////////////////
   if (shift === "LOADING") {
-    return (
-      <section>LOADING...</section>
-    )
+    return <MessageComponent message="Loading..." />;
+
   } else if (shift === null) {
-    return (
-      <ErrorGeneral message="Sorry, shift is taken" />
-    )
+    return <ErrorGeneral message="Sorry, shift is taken" icon="alarm"/>;
+  
   } else if (shift === "ACCEPTED") {
-    return (<ErrorGeneral message="YAY YOU GOT IT!" />);
+    return <MessageComponent message="YAY YOU GOT IT!" icon="thumbsUp"/>;
+
+  } else if (shift.startsWith("ERROR") ) {
+    return<ErrorGeneral message={shift} />;
+
   } else {
     return (
       <section className="homepage-section">
@@ -69,6 +72,13 @@ export default function LinkTextedToEmployee({match}) {
     );
   }
 }
+
+
+
+
+
+
+
 
 {/* <h1>LOGIC FLOW</h1>
     1. client clicking on this link, will send api call to backend and check to see if 
