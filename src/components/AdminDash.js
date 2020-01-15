@@ -42,13 +42,6 @@ export default class AdminDash extends React.Component {
   getAllUnavailsDB = () => axios.get(ALL_UNAVAILS);
 
   componentDidMount() {
-    console.log("HELLO, name=", this.props.username, "role=", this.props.authenticatedRole);
-
-    if (this.props.authenticatedRole !== "ADMIN") {
-      console.log("YOU ARE *NOT* AN ADMIN!");
-      return;
-    }   
-
     // initial loading of data fromd atabase
     axios.all([
       this.getAllEmpsDB(),
@@ -161,7 +154,7 @@ We have a shift available:
   Client: ${shift.client.name}
   Time: ${convertTimeString(shift.start_time)} to ${convertTimeString(shift.end_time)}.  
 
-Please click on [http://localhost:3000/text/${uuid}] and respond with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+Please click on [http://localhost:3000/text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
 
 Thank you from the office of Schedule Plus Plus!
 ====================`

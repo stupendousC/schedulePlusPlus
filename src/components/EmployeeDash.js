@@ -37,11 +37,6 @@ export default class EmployeeDash extends React.Component {
   getUnstaffedShifts = () => axios.get(this.state.EMP_DASH+"/unstaffedShifts");
   
   componentDidMount() {
-    if (this.props.authenticatedRole !== "EMPLOYEE") {
-      console.log("\n\nYou are *NOT* an employee!!!!");
-      return;
-    }
-
     // initial loading of data from database
     axios.all([
       this.getEmpInfo(), 
