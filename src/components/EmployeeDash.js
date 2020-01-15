@@ -233,7 +233,12 @@ export default class EmployeeDash extends React.Component {
 
     axios.put(URL_endpoint)
     .then(response => {
-      // api sending back current list of emp's shifts
+      // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
+      // need to compare the arrays of existing this.state.empShifts VS response.data
+        // if same, then user did NOT actually get the shift, get an alert
+        // if not, then user did successfully get the shift, also get an alert, plus save thsi new state
+      
+        // api sending back current list of emp's shifts
       this.setState({ empShifts: response.data })
       // need to update state unstaffedShifts[] as well, b/c now we took one out
       this.updateLatestUnstaffedShifts();
