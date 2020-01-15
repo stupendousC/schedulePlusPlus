@@ -1,11 +1,13 @@
 import React from 'react';
+import _ from 'underscore';
+
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import UnavailDays from './EmployeeDash_UnavailDays';
 import ErrorLogin from './ErrorLogin';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
+import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST, deepCompareTwoSchedArrayss } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -234,14 +236,20 @@ export default class EmployeeDash extends React.Component {
     axios.put(URL_endpoint)
     .then(response => {
       // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
-      // need to compare the arrays of existing this.state.empShifts VS response.data
+      // need to compare the arrays of existing this.state.empShifts VS response.data... http://underscorejs.org/#isEqual
         // if same, then user did NOT actually get the shift, get an alert
         // if not, then user did successfully get the shift, also get an alert, plus save thsi new state
-      
-        // api sending back current list of emp's shifts
-      this.setState({ empShifts: response.data })
-      // need to update state unstaffedShifts[] as well, b/c now we took one out
-      this.updateLatestUnstaffedShifts();
+        if (deepCompareTwoSchedArrayss(this.state.empShifts, response.data)) {
+          console.log("UH OH! SHIFT TAKEN! show toaster");
+        } else {
+          // api sending back current list of emp's shifts
+          console.log("you got the shift! show toaster");
+          this.setState({ empShifts: response.data })
+        }
+        
+        // need to update state unstaffedShifts[] either way, b/c now that shift is no longer unavailable
+        this.updateLatestUnstaffedShifts();
+        
     })
     .catch(error => console.log(error.message));
   }
