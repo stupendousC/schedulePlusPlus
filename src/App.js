@@ -2,6 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LoginBanner from './LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
