@@ -3,18 +3,20 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {sortShiftsByDate, isPhoneValid, formatDate, convertTimeString} from './Helpers';
-
 import LoginError from './LoginError';
+
+import {sortShiftsByDate, isPhoneValid, formatDate, convertTimeString} from './Helpers';
+const uuidv4 = require('uuid/v4');
+
+
 
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
 const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 const ALL_UNAVAILS = process.env.REACT_APP_ALL_EMPS;
-// const ALL_UNAVAILS = process.env.REACT_APP_ALL_UNAVAILS;
 
-const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
+// const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
 
 export default class AdminDash extends React.Component {
 
@@ -137,7 +139,7 @@ export default class AdminDash extends React.Component {
       // if an employee wants that shift, they can still see it from their dashboard where they'll be told they wanted the day off
       // and they can change their minds and accept the shift anyway.  They just won't get a text here, nobody wants a text on their day off.
 
-    // of the availEmpsOfDay, we can only text those with a valid AND verified phone number
+    // of the availEmpsOfDay, we can only text those with a valid (Helper fcn) AND verified (added to Twilio console) phone number
     // verify phone number via Twilio console https://www.twilio.com/console/phone-numbers/verified, employee will need to give me the code they received!
     const textableEmployees = availEmpsOfDay.filter( emp => {
       return isPhoneValid(emp.phone);
@@ -146,6 +148,9 @@ export default class AdminDash extends React.Component {
     console.log("Out of those available, we can text...", textableEmployees);
 
     const jsonForTextAPI = (employee, shift) => {
+      // each text gets assigned an uuid for the db
+      const uuid = uuidv4();
+
       // yes the indentation looks terrible here, but it's necessary otherwise the text msgs will ALSO have indents
       const personalizedMsg = (`
 ====================
@@ -156,19 +161,32 @@ We have a shift available:
   Client: ${shift.client.name}
   Time: ${convertTimeString(shift.start_time)} to ${convertTimeString(shift.end_time)}.  
 
-Please click on [http://localhost:3000/text/12345] and respond with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
+Please click on [http://localhost:3000/text/${uuid}] and respond with a "YES" or "NO", or log onto your employee dashboard to claim this shift.  
 
 Thank you from the office of Schedule Plus Plus!
 ====================`
         );
 
+      console.log("sending uuid =", uuid);
       return(
         { "phoneNumber": employee.phone,
-          "message": personalizedMsg }
+          "message": personalizedMsg,
+          "uuid": uuid,
+          "client": shift.client,
+          "employee": employee,
+          "shift": shift
+        }
       );
     }
 
     const allAxiosPostReqs = textableEmployees.map( employee => {
+
+      // const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;  FROM THE TOP, temporarily replacing with...abs
+      // experimentig with moving sendText to under AdminCtrller in backend
+      const SEND_TEXT = "http://localhost:5000/admin/sendText";
+
+
+      // each employee gets a text
       return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj)));
     })
 
