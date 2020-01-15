@@ -1,25 +1,80 @@
-import React from 'react';
-import LoginError from './LoginError';
+import React, { useState } from 'react';
+import axios from 'axios';
+import ErrorGeneral from './ErrorGeneral';
+import {convertTimeString} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
-    
+  const URL_ENDPOINT = `http://localhost:5000/text/${match.params.uuid}`;
+
+  const [shift, setShiftOrMsg] = useState("LOADING");
+
+  axios.get(URL_ENDPOINT)
+  .then(response => setShiftOrMsg(response.data))
+  .catch(error => console.log(error.message));
+
+  const acceptShift = () => {
+    // send API call to backend to accept shift
+    console.log("sending info to backend");
+
+    axios.post(URL_ENDPOINT)
+    .then(response => console.log(setShiftOrMsg("ACCEPTED")))
+    .catch(error => console.log(error.message));
+
+    // setting state should redirect to congrats page
+  }
+
+  ///////////////////////// render //////////////////////////
+  if (shift === "LOADING") {
+    return (
+      <section>LOADING...</section>
+    )
+  } else if (shift === null) {
+    return (
+      <ErrorGeneral message="Sorry, shift is taken" />
+    )
+  } else if (shift === "ACCEPTED") {
+    return (<ErrorGeneral message="YAY YOU GOT IT!" />);
+  } else {
     return (
       <section className="homepage-section">
-    NO NEED TO LOG IN, the UUID in the URL is verification enough b/c it's user's phone<br/>
-    you'll either see... 1. Confirmation screen, or 2. Sorry shift is taken<br/><br/>
+        <h1 className="text-centered">Please Confirm Below</h1>
+        <section className="card-shift blue-bg">
+          <p>DATE</p>
+          <p>{shift.shift_date}</p>
+          <p>START</p>
+          <p>{convertTimeString(shift.start_time)}</p>
+          <p>END</p>
+          <p>{convertTimeString(shift.end_time)}</p>
+        </section>
 
-    We received UUID = {match.params.uuid}<br/>
+        <section className="card-client">
+          <p>CLIENT</p>
+          <p>{shift.client.name}</p>
+          <p>PHONE</p>
+          <p>{shift.client.phone}</p>
+          <p>EMAIL</p>
+          <p>{shift.client.email}</p>
+          <p>ADDRESS</p>
+          <p>{shift.client.address}</p>
+        </section>
 
-    <h1>LOGIC FLOW</h1>
+        <section className="text-centered">
+          <button onClick={acceptShift} className="btn btn-primary">YES, I WANT THIS SHIFT!</button>
+          <li className="fine-print">This shift will appear on your employee dashboard after you accept.</li>
+          <li className="fine-print">Close this window if you want to cancel.</li>
+          <li className="fine-print">Or login above to access your dashboard for other options.</li>
+        </section>
+        
+      </section>
+    );
+  }
+}
+
+{/* <h1>LOGIC FLOW</h1>
     1. client clicking on this link, will send api call to backend and check to see if 
     shift obj still exists in Texts db. <br/><br/>
     2A. If yes, then see confirmation screen <br/>
       ...2A1. Once emp clicks on confirm button, send API call to backend,<br/>
       ...2A2. add that emp obj to the shift obj,<br/>
       ...2A3. delete all rows in Texts that belong to that shift obj<br/><br/>
-    2B. If no, then see shift taken screen <br />
-  </section>
-    );
-  
-  
-}
+    2B. If no, then see shift taken screen <br /> */}
