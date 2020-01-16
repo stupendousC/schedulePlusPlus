@@ -101,7 +101,7 @@ export const isPhoneValid = (phoneStr) => {
     // "4251112222"       // Length = 10
     // "14251112222"      // Length = 11
     // "425-111-2222"     // Length = 12
-    // "(425)111-2222"    // Length = 13
+    // "(425)111-2222"    // Length = 13  // BUT IT WILL NOT WORK WITH TWILIO!!!
     // "1-425-111-2222"   // Length = 14
   // else returns False
 
@@ -176,4 +176,12 @@ export const deepCompareTwoSchedArrayss = (array1, array2) => {
 // for use by deepCompareTwoArrays()
 const sortById = (listOfObjs) => {
   return listOfObjs.sort((a,b) => b.id <= a.id ? 1:-1);
+}
+
+export const truncateString = (longStr, numberCharsToShow) => {
+  if (longStr.length <= numberCharsToShow) {
+    return longStr;
+  } else {
+    return (longStr.slice(0,numberCharsToShow) + "...");
+  }
 }
