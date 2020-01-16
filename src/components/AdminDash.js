@@ -137,6 +137,16 @@ export default class AdminDash extends React.Component {
       return isPhoneValid(emp.phone);
     });    
 
+    if (availEmpsOfDay.length === 0) {  // u can see this if u make a shift on 1/25/2020
+      toast.error("No employees available to work that day!");
+      return;
+    } else if (textableEmployees.length === 0) {    // u can see this if u make a shift on 2/3/2020
+      toast.info("No available employees with valid phone numbers to text.  However, they'll be able to see the shift on their dashboard");
+      return;
+    } else {
+      toast.info("Sending texts...");
+    }
+
     const jsonForTextAPI = (employee, shift) => {
       // each text gets assigned an uuid for the db
       const uuid = uuidv4();
@@ -173,9 +183,7 @@ Thank you from the office of Schedule Plus Plus!
       // each employee gets a text
       return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj)));
     })
-
-    toast.info("Sending texts...");
-
+    
     // bundled all the individual post requests together,
     // failed texts will not get in the way of successful texts
     axios.all(allAxiosPostReqs)
