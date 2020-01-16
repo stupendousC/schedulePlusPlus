@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'underscore';
+import { ToastContainer, toast } from 'react-toastify';
 
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
@@ -236,20 +237,19 @@ export default class EmployeeDash extends React.Component {
     axios.put(URL_endpoint)
     .then(response => {
       // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
-      // need to compare the arrays of existing this.state.empShifts VS response.data... http://underscorejs.org/#isEqual
-        // if same, then user did NOT actually get the shift, get an alert
-        // if not, then user did successfully get the shift, also get an alert, plus save thsi new state
+      // need to compare the arrays of existing this.state.empShifts VS response.data... 
+        // if same, then user did NOT actually get the shift
+        // if not, then user did successfully get the shift, plus save this new state
         if (deepCompareTwoSchedArrayss(this.state.empShifts, response.data)) {
-          console.log("UH OH! SHIFT TAKEN! show toaster");
+          toast.error("UH OH! Shift was just taken by someone else 😕");
         } else {
           // api sending back current list of emp's shifts
-          console.log("you got the shift! show toaster");
+          toast.success("The shift is yours! Huzzah! 🥳")
           this.setState({ empShifts: response.data })
         }
         
         // need to update state unstaffedShifts[] either way, b/c now that shift is no longer unavailable
         this.updateLatestUnstaffedShifts();
-        
     })
     .catch(error => console.log(error.message));
   }

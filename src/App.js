@@ -61,12 +61,12 @@ class App extends React.Component {
         this.greetToast(usernameDB);
         
       })
-      .catch(error => console.log("LOGIN ERROR!", error.message));
+      .catch(error => toast.error("LOGIN ERROR!", error.message));
   }
 
   greetToast = (usernameDB) => {
     const hourNow = (new Date()).getHours();
-    let greetingBasedOnHour = "Hello";  // generic default in case of unforeseen bugs
+    let greetingBasedOnHour;
     if (hourNow < 12) {
       greetingBasedOnHour = "Good morning";
     } else if (hourNow < 17) {
@@ -75,18 +75,18 @@ class App extends React.Component {
       greetingBasedOnHour = "Good evening";
     }
     
-    console.log("now is ", hourNow);
-    toast(`${greetingBasedOnHour}, ${usernameDB} 😄`);
+    toast.success(`${greetingBasedOnHour}, ${usernameDB} 😄`);
   }
 
   logout = () => {
-    console.log("LOG OUT! send toaster pop up!");
     this.setState({
       authenticatedRole: "",  
       googleId: "",
       username: "",
       databaseId: ""
     })
+    toast.success(`Goodbye ${sessionStorage.getItem('username')} 👋`);
+
     sessionStorage.clear();
   }
 
