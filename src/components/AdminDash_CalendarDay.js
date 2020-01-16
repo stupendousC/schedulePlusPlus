@@ -20,7 +20,7 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   const showTableOrNothing = () => {
     if (!basicShiftsInfo || basicShiftsInfo === [] || basicShiftsInfo.length === 0) {
       return (
-        <h3>No shifts scheduled</h3>
+        <h3 className="text-centered">No shifts scheduled</h3>
       );
     } else {
       return (
