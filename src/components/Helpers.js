@@ -177,3 +177,11 @@ export const deepCompareTwoSchedArrayss = (array1, array2) => {
 const sortById = (listOfObjs) => {
   return listOfObjs.sort((a,b) => b.id <= a.id ? 1:-1);
 }
+
+export const truncateString = (longStr, numberCharsToShow) => {
+  if (longStr.length <= numberCharsToShow) {
+    return longStr;
+  } else {
+    return (longStr.slice(0,numberCharsToShow) + "...");
+  }
+}

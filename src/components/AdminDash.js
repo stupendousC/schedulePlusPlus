@@ -4,7 +4,7 @@ import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
 import {toast} from 'react-toastify';
-import {sortShiftsByDate, isPhoneValid, formatDate, formatTime} from './Helpers';
+import {sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
 const uuidv4 = require('uuid/v4');
 
@@ -183,7 +183,19 @@ Thank you from the office of Schedule Plus Plus!
       for ( const eachText of responses ) {
         console.log("back end says", eachText.data);
       }}))
-    .catch( errors => toast.error(`ERROR: ${errors.message}`));
+    .catch( errors => {
+      const fullErrorMsg = errors.response.data.message;    
+      const fullTextBody = JSON.parse(errors.config.data);
+      const badPhone = fullTextBody.phoneNumber;
+      const unreachableEmp = textableEmployees.find( emp => emp.phone === badPhone );
+      let reason = "";
+      if (fullErrorMsg.includes("number  is unverified")) {
+        reason = "Employee needs to verify number with Twilio";
+      } else {
+        reason = truncateString(fullErrorMsg, 20);
+      }
+      toast.error(`Unable to text ${unreachableEmp.name}: ${reason}`);
+    });
   }
 
   ////////////////////// render //////////////////////
