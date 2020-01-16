@@ -5,7 +5,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 
-import { convertToPST, formatDate, convertDateString } from './Helpers';
+import { convertToPST, formatDate, convertDateString, dateInThePast } from './Helpers';
 
 const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, shiftsOfDay, availStatusOfDay, unstaffedShifts, updateStateForCalendarDayCB, toggleAvailCallback}) => {
   const today = new Date();
@@ -31,9 +31,11 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
     
     const targetDate = convertDateString(date);
     // <Calendar> will iterate thru each date in the display month
-      // if employee is working that day -> blue background
+      // if employee is working that day -> green background
       // if employee is unavailable that day -> red background
-      // if it's on today -> special marker
+      // These 2 conditions below supersedes the 2 above
+      // if date is in the past -> gray background
+      // if it's on today -> gold background
     
     if (isDateInEmpUnavails(targetDate)) {
       tileCaption = "OFF";
@@ -44,9 +46,12 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
     } else {
       // left room here for future customization
     }
-    
+  
     // I want tile-today's css to override any of the prev
-    if (targetDate === convertDateString(today)) {
+    if (dateInThePast(targetDate)) {
+      tileCaption = " x ";
+      tileClassName = "tile-past";
+    } else if (targetDate === convertDateString(today)) {
       tileCaption = "TODAY";
       tileClassName = "tile-today";
     }

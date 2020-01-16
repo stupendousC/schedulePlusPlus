@@ -200,19 +200,28 @@
 
 /* ===== CALENDAR TILES ===== */
 .tile-work {
-  background-color:skyblue;
+  background-color:green;
   font-weight: bold;
-  color: black;
+  color: white;
 }
 
 .tile-unavail {
-  background-color: rgb(139, 54, 139);
+  background-color: red;
   font-weight: bold;
-  color: black;
+  color: white;
 }
 
 .tile-today {
   background-color: gold;
   font-weight: bolder;
+  font-size: small;
   color: black;
+}
+
+.tile-past {
+  background-color: rgb(202, 201, 201);
+}
+
+.tile-work, .tile-unavail, .tile-today {
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
