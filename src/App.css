@@ -1,42 +1,3 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 /* ============================ */
 /* ===== MY CUSTOM STYLES ===== */
 /* ============================ */
@@ -87,14 +48,26 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .newShift-component {
-  background-color: pink;
+  background-color: gold;
 }
 
-.navbar {
-  background-color: pink;
+.calendar-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem;
 }
 
+/* ===== ACCORDION STYLES ===== */
+.accordion-toggle_button {
+  width: 100%;
+}
 
+.accordion-container {
+  /* display: flex;
+  justify-content: center; */
+  margin: 1rem;
+}
 
 /* ===== TABLE STYLES ===== */
 .peopleTable {
@@ -117,13 +90,20 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: 1fr 1fr;
 }
 
-.accordion-toggle_button {
-  width: 100%;
-}
-
-.card-shift, .card-client, .card-employee {
+/* .card-shift, .card-client, .card-employee {
   display: grid;
   grid-template-columns: 1fr 2fr;
+  margin: 1rem;
+} */
+
+.shift-card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.employee-dash-shift-table {
+  margin: 1rem;
 }
 
 .employee-dash-unavails-table {
@@ -133,10 +113,22 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: 1fr 1fr;
 }
 
+.thead-dark {
+  background-color: black;
+  color: white;
+}
+a
+td, th {
+  padding: 0.5rem;
+}
 
 /* ===== BACKGROUND COLORS ===== */
 .blue-bg {
   background-color: lightblue;
+}
+
+.darkerblue-bg {
+  background-color: rgb(74, 131, 255);
 }
 
 .gray-bg {
@@ -149,6 +141,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .purple-bg {
   background-color: rgb(139, 54, 139);
+}
+
+.gold-bg {
+  background-color: gold;
+}
+
+.lightergold-bg {
+  background-color: rgb(253, 232, 109);
 }
 
 /* ===== IMAGE SIZES ===== */

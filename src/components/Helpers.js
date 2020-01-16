@@ -51,7 +51,7 @@ export const getWeekday = (timeStr_or_timeObj) => {
   return weekdayArray[timeObj.getDay()];
 }
 
-export const convertTimeString = (timeStr) => {
+export const formatTime = (timeStr) => {
   // takes "HH:MM:SS" and turns it into "HH:MM AM/PM"
   let hours = parseInt(timeStr.slice(0,2));
   if (hours < 12) {

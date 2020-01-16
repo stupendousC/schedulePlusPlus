@@ -4,7 +4,7 @@ import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
 
-import {sortShiftsByDate, isPhoneValid, formatDate, convertTimeString} from './Helpers';
+import {sortShiftsByDate, isPhoneValid, formatDate, formatTime} from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
 const uuidv4 = require('uuid/v4');
 
@@ -152,7 +152,7 @@ Hello ${employee.name}!
 We have a shift available:
   Date: ${formatDate(shift.shift_date)}
   Client: ${shift.client.name}
-  Time: ${convertTimeString(shift.start_time)} to ${convertTimeString(shift.end_time)}.  
+  Time: ${formatTime(shift.start_time)} to ${formatTime(shift.end_time)}.  
 
 Please click on [http://localhost:3000/text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
 

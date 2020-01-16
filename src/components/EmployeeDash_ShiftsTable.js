@@ -1,6 +1,6 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import { convertTimeString, formatDate, dateInThePast, getWeekday } from './Helpers';
+import { formatTime, formatDate, dateInThePast, getWeekday } from './Helpers';
 
 const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails, takeShiftCallback, freeToWorkCallback}) => {
 
@@ -87,9 +87,9 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
-          <p>{convertTimeString(shift.start_time)}</p>
+          <p>{formatTime(shift.start_time)}</p>
           <p>END</p>
-          <p>{convertTimeString(shift.end_time)}</p>
+          <p>{formatTime(shift.end_time)}</p>
         </section>
 
         <section className="card-client">

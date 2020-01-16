@@ -1,15 +1,11 @@
 import React from 'react';
 import { toast } from 'react-toastify';
-
-// import Calendar from 'react-calendar';
-
 import CalendarTab from './EmployeeDash_CalendarTab';
-import CalendarDay from './EmployeeDash_CalendarDay';
 import UnavailDays from './EmployeeDash_UnavailDays';
 import ErrorGeneral from './ErrorGeneral';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST, deepCompareTwoSchedArrayss } from './Helpers';
+import { convertDateString, sortUnavailsByDate, sortShiftsByDate, deepCompareTwoSchedArrayss } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -64,7 +60,6 @@ export default class EmployeeDash extends React.Component {
           empInfo: empInfo,
           empShifts: empShifts,
           empUnavails: empUnavails,
-          today: today,
           shiftsToday: shiftsToday,
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool,
@@ -179,27 +174,6 @@ export default class EmployeeDash extends React.Component {
       toggleAvailCallback={this.toggleAvail}
     />;
   }
-
- 
-      
-
-  /////////// SAFEKEEPING //////////
-  // showCalendar = () => {
-  //   const tileContent = ({ date, view }) => {
-  //     return (
-  //       <section>
-  //         {date.getDay() === 0 ? <p className="blue-bg">Sun</p> : <p> </p>}
-  //         {date.getDay() === 1 ? <p className="gray-bg">Mon</p> : <p> </p>}
-  //       </section>);
-  //   }
-
-  //   return (
-  //     <section>
-  //       <Calendar tileContent={tileContent} onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-  //       <CalendarDay toggleAvailCallback={this.toggleAvail} today={this.state.today} shiftsToday={this.state.shiftsToday} shiftsOfDaySpotlight={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
-  //     </section>
-  //   );
-  // }
 
   updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
