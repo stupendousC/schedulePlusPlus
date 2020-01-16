@@ -127,6 +127,14 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
     }
   }
 
+  const showButtonValue = () => {
+    if (availEmpsOfDay.length === 0) {
+      return "No one is available -> MAKE NEW SHIFT anyway";
+    } else {
+      return "MAKE NEW SHIFT & NOTIFY ALL THOSE AVAILABLE";
+    }
+  }
+
   //////////////////// render ///////////////////
 
   return(
@@ -159,7 +167,7 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
           </section>
           
           {isFormValid() ? null: showErrorMsgs()}
-          <input type="submit" className="btn btn-primary" value="MAKE NEW SHIFT & NOTIFY ALL THOSE AVAILABLE" disabled={!isFormValid()}/>
+          <input type="submit" className="btn btn-primary" value={showButtonValue()} disabled={!isFormValid()}/>
           <li className="fine-print">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
           <li className="fine-print">Texts will also be sent to all those available, with valid phone numbers in their record</li>
         </form>
