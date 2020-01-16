@@ -1,9 +1,10 @@
 import React from 'react';
-import { convertDateString, formatDate } from './Helpers';
+import { convertDateString, formatDate, convertToPST } from './Helpers';
 import Accordion from 'react-bootstrap/Accordion';
 
 
-const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
+const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
+  const today = new Date();
 
   const showShifts = (shiftsInArray) => {
     // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[]  
@@ -51,8 +52,10 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
           {showShifts(shiftsOfDaySpotlight)}
         </section>
       );
+      
     } else if (inThePast) {
       return (<h3 className="text-centered">Nothing that day</h3>);
+
     } else if (shiftsOfDaySpotlight.length === 0 && availStatus === true) {
       return (
         <section className="text-centered">
@@ -80,7 +83,7 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
           <Accordion.Toggle eventKey="showToday" className="accordion-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
-              <section>TODAY: {formatDate(today)}</section>
+              <section>TODAY: {formatDate(convertDateString(today))}</section>
               <section>▼</section>
             </section>
           </Accordion.Toggle>
