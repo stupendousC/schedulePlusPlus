@@ -15,6 +15,9 @@ export const convertToPST = (timeStr) => {
 }
 
 export const convertDateString = (timeObj) => {
+  // For data comparison purposes, between JS time obj and postgres's date column format
+  // Takes time obj (such as from JS), converts it to "YYYY-MM-DD"
+  // "YYYY-MM-DD" is the shift_date format that comes from backend's postgres db
   const year = timeObj.getFullYear();
   let month = timeObj.getMonth() + 1;
   let day = timeObj.getDate();
@@ -64,6 +67,8 @@ export const convertTimeString = (timeStr) => {
 }
 
 export const formatDate = (arg_date) => {
+  // For visual display purposes
+  // Takes a date string like "YYYY-MM-DD" and converts to human-friendly "Jan 15, 2020"
   const date = new Date(arg_date);
   const month = date.toLocaleString('default', { month: 'short' });
   const day = date.getUTCDate();

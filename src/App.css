@@ -133,6 +133,10 @@
   background-color: red;
 }
 
+.purple-bg {
+  background-color: rgb(139, 54, 139);
+}
+
 /* ===== IMAGE SIZES ===== */
 .img-90 {
   width: 90%;
@@ -191,4 +195,24 @@
   -moz-box-shadow:    inset 0 0 0px white;
   -webkit-box-shadow: inset 0 0 0px white;
   box-shadow:         inset 0 0 0px white;
+}
+
+
+/* ===== CALENDAR TILES ===== */
+.tile-work {
+  background-color:skyblue;
+  font-weight: bold;
+  color: black;
+}
+
+.tile-unavail {
+  background-color: rgb(139, 54, 139);
+  font-weight: bold;
+  color: black;
+}
+
+.tile-today {
+  background-color: gold;
+  font-weight: bolder;
+  color: black;
 }

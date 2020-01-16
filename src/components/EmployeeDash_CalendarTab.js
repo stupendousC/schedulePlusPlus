@@ -9,18 +9,64 @@ import { convertToPST, formatDate, convertDateString } from './Helpers';
 
 const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, shiftsOfDay, availStatusOfDay, unstaffedShifts, updateStateForCalendarDayCB, toggleAvailCallback}) => {
   const today = new Date();
-  console.log('today=', today);
+
+  const isDateInEmpUnavails = (targetDate) => {
+    for (const shiftObj of empUnavails) {
+      if (shiftObj.day_off === targetDate) { return true }
+    }
+    return false;
+  }
+
+  const isDateInEmpShifts = (targetDate) => {
+    for (const shiftObj of empShifts) {
+      if (shiftObj.shift_date === targetDate) { return true }
+    }
+    return false;
+  }
   
 
+  const tileContent = ({ date, view }) => {
+    let tileCaption = " - ";
+    let tileClassName = "";
+    
+    const targetDate = convertDateString(date);
+    // <Calendar> will iterate thru each date in the display month
+      // if employee is working that day -> blue background
+      // if employee is unavailable that day -> red background
+      // if it's on today -> special marker
+    
+    if (isDateInEmpUnavails(targetDate)) {
+      tileCaption = "OFF";
+      tileClassName = "tile-unavail";
+    } else if (isDateInEmpShifts(targetDate)) {
+      tileCaption = "ON";
+      tileClassName = "tile-work";
+    } else {
+      // left room here for future customization
+    }
+    
+    // I want tile-today's css to override any of the prev
+    if (targetDate === convertDateString(today)) {
+      tileCaption = "TODAY";
+      tileClassName = "tile-today";
+    }
 
+
+    if (view === "month") {
+      return (
+        <section className={tileClassName}>{tileCaption}</section>
+      );
+    } 
+    // if view !== monthly, we don't need the colored tiles when looking at the year as a whole
+    // there's no daily view here
+  }
 
 
 
   /////////// render ////////////
   return(
     <section>
-      
-      <Calendar onChange={updateStateForCalendarDayCB} value={convertToPST(daySpotlight)}/>
+      <Calendar tileContent={tileContent} onChange={updateStateForCalendarDayCB} value={convertToPST(daySpotlight)}/>
       <CalendarDay toggleAvailCallback={toggleAvailCallback} shiftsToday={shiftsToday} shiftsOfDaySpotlight={shiftsOfDay} dateStr={daySpotlight} availStatus={availStatusOfDay}/>
     </section>
   );
@@ -28,13 +74,13 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
 }
 
 // showCalendar = () => {
-//   const tileContent = ({ date, view }) => {
-//     return (
-//       <section>
-//         {date.getDay() === 0 ? <p className="blue-bg">Sun</p> : <p> </p>}
-//         {date.getDay() === 1 ? <p className="gray-bg">Mon</p> : <p> </p>}
-//       </section>);
-//   }
+  // const tileContent = ({ date, view }) => {
+  //   return (
+  //     <section>
+  //       {date.getDay() === 0 ? <p className="blue-bg">Sun</p> : <p> </p>}
+  //       {date.getDay() === 1 ? <p className="gray-bg">Mon</p> : <p> </p>}
+  //     </section>);
+  // }
 
 //   return (
 //     <section>
