@@ -69,12 +69,9 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
 
   const getAndSetAvailEmpsByDate = (targetDateStr) => {
     const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDateStr}`;
-    
-    // console.log("SENDING API TO", URL_getAllAvailEmpsByDate);
 
     axios.get(URL_getAllAvailEmpsByDate)
     .then(response => {
-      // console.log("backend sent us... ", response.data);
       setAvailEmpsOfDay(response.data);
     })
     .catch(error => console.log(error.message));
@@ -124,8 +121,10 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     return(
       
       <section>
-      <Calendar tileContent={tileContent} onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
-      {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        <section className="calendar-container">
+          <Calendar tileContent={tileContent} onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
+          {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
+        </section>
 
       <Accordion>
           <Accordion.Toggle eventKey="newShift" className="accordion-toggle_button">
@@ -140,7 +139,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       </Accordion>
       
       <Accordion>
-        <Accordion.Toggle eventKey="availEmpList" className="accordion-toggle_button">
+        <Accordion.Toggle eventKey="availEmpList" className={availEmpsOfDay.length === 0 ? "accordion-toggle_button_red" : "accordion-toggle_button"}>
           <section>
             <section>▼ {availEmpsOfDay === "LOADING" ? "Loading":availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
           </section>

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { formatDate, dateInThePast } from './Helpers';
+import { formatDate, dateInThePast, convertDateString } from './Helpers';
 
 
-const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmployeesCallback}) => {
+const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback}) => {
   // need for sending POST request to backend
   const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 
@@ -111,10 +111,26 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
     
   }
 
+  const showColorBasedOnDay = () => {
+    // if today => bg-color = gold
+    // if past => bg-color = gray
+    // if no one to work => bg-color = red
+    // default => bg-color => blue
+    if (daySpotlight === convertDateString(new Date())) {
+      return "gold-bg";
+    } else if (dateInThePast(daySpotlight)) {
+      return "gray-bg";
+    } else if (availEmpsOfDay.length === 0) {
+      return "red-bg";
+    } else {
+      return "blue-bg";
+    }
+  }
+
   //////////////////// render ///////////////////
 
   return(
-    <section className="newShift-component"> 
+    <section className={showColorBasedOnDay()}> 
       {showDateHeader()}
       
         <form onSubmit={onFormSubmit} className="px-4 py-3">
