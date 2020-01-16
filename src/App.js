@@ -58,9 +58,25 @@ class App extends React.Component {
           databaseId: databaseId      
         })
 
+        this.greetToast(usernameDB);
         
       })
       .catch(error => console.log("LOGIN ERROR!", error.message));
+  }
+
+  greetToast = (usernameDB) => {
+    const hourNow = (new Date()).getHours();
+    let greetingBasedOnHour = "Hello";  // generic default in case of unforeseen bugs
+    if (hourNow < 12) {
+      greetingBasedOnHour = "Good morning";
+    } else if (hourNow < 17) {
+      greetingBasedOnHour = "Good afternoon";
+    } else {
+      greetingBasedOnHour = "Good evening";
+    }
+    
+    console.log("now is ", hourNow);
+    toast(`${greetingBasedOnHour}, ${usernameDB} 😄`);
   }
 
   logout = () => {
@@ -104,6 +120,7 @@ class App extends React.Component {
           </Switch>
 
           <Footer />
+          <ToastContainer />
       </Router>
   );
   }
