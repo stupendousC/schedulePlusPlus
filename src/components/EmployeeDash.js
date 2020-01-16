@@ -6,6 +6,7 @@ import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import UnavailDays from './EmployeeDash_UnavailDays';
 import ErrorLogin from './ErrorLogin';
+import ErrorGeneral from './ErrorGeneral';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
 import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST, deepCompareTwoSchedArrayss } from './Helpers';
@@ -263,6 +264,10 @@ export default class EmployeeDash extends React.Component {
   ////////////////////// render //////////////////////
   render() {
 
+      if (this.props.authenticatedRole !== "EMPLOYEE") {
+        return <ErrorGeneral message="Please log in to see EMPLOYEE dashboard" icon="lock"/>
+      }
+
       return (
         <section>
 
@@ -281,7 +286,7 @@ export default class EmployeeDash extends React.Component {
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "EMPLOYEE" ? this.showChosenCategory() : <ErrorLogin message="Please log in to see EMPLOYEE dashboard"/>}  
+          {this.showChosenCategory()}
 
         </section>
       );
