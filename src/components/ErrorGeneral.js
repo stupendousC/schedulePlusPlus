@@ -3,6 +3,7 @@ import alarmClock from '../images/alarmClock.svg';
 import stopwatch from '../images/stopwatch.svg';
 import warning from '../images/warning.svg';
 import questionBubble from '../images/questionBubble.svg';
+import lock from '../images/comboLock.svg';
 
 export default function ErrorGeneral(props) {
 
@@ -13,6 +14,8 @@ export default function ErrorGeneral(props) {
       return <img src={stopwatch} alt="stopwatch" className="homepage-logo"/>
     } else if (props.icon === "warning") {
       return <img src={warning} alt="warning sign" className="homepage-logo"/>
+    } else if (props.icon === "lock") {
+      return <img src={lock} alt="lock" className="homepage-logo"/>
     } else {
       return <img src={questionBubble} alt="man with question bubble above head" className="homepage-logo"/>
     }

@@ -3,9 +3,9 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import ErrorLogin from './ErrorLogin';
 
 import {sortShiftsByDate, isPhoneValid, formatDate, convertTimeString} from './Helpers';
+import ErrorGeneral from './ErrorGeneral';
 const uuidv4 = require('uuid/v4');
 
 
@@ -195,7 +195,10 @@ Thank you from the office of Schedule Plus Plus!
 
   ////////////////////// render //////////////////////
     render() {
-
+      if (this.props.authenticatedRole !== "ADMIN") {
+        return <ErrorGeneral message="Please log in to see ADMIN dashboard" icon="lock"/>
+      }
+      
       return (
         <section>
 
@@ -217,7 +220,7 @@ Thank you from the office of Schedule Plus Plus!
             </li>
           </ul>
 
-          {this.props.authenticatedRole === "ADMIN" ? this.showChosenCategory() : <ErrorLogin message="Please log in to see ADMIN dashboard"/>}  
+          {this.showChosenCategory()}
 
         </section>
         
