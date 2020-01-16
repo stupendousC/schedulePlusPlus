@@ -6,7 +6,7 @@ import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './AdminDash_NewShift';
 
-import { convertToPST, formatDate, convertDateString } from './Helpers';
+import { convertToPST, formatDate, convertDateString, dateInThePast } from './Helpers';
 
 
 const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback, textEmployeesCallback}) => {
@@ -15,11 +15,39 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
   const [availEmpsOfDay, setAvailEmpsOfDay] = useState("LOADING");
 
-  // console.log("\n\n\nCalendarTab props: allShifts = ", allShifts, "\nallEmployees = ", allEmployees, "\nallUnavails = ", allUnavails, "\nallClients = ", allClients);
-  
+  const tileContent = ({ date, view }) => {
+    let tileCaption = " - ";
+    let tileClassName = "";
+    
+    const targetDate = convertDateString(date);
+    // <Calendar> will iterate thru each date in the display month
+      // if no one's avail to work that day -> red background!
+      // these 2 below supercedes display above
+      // if date is in the past -> gray background
+      // if it's on today -> gold background  
+    if (daySpotlight === targetDate && availEmpsOfDay.length === 0) {
+      tileCaption = "😱";
+      tileClassName = "tile-no-workers";
+    }
+
+    if (dateInThePast(targetDate)) {
+      tileCaption = " x ";
+      tileClassName = "tile-past";
+    } else if (targetDate === today) {
+      tileCaption = "TODAY";
+      tileClassName = "tile-today";
+    }
+
+    // we only need to see the colored tiles when looking at monthly view.
+    if (view === "month") {
+      return (
+        <section className={tileClassName}>{tileCaption}</section>
+      );
+    } 
+  }
+
   const updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
-    console.log("\n\nsetting: daySpotlight = ", dateStr);
     
     getAndSetShiftsOfDay(dateStr);
     getAndSetAvailEmpsByDate(dateStr);
@@ -96,8 +124,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     return(
       
       <section>
-        <h1>MARK: 1. TODAY, 2. PAST, 3. RED if no one can work that day~</h1>
-      <Calendar onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
+      <Calendar tileContent={tileContent} onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
       {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
 
       <Accordion>
@@ -108,7 +135,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} availEmpsOfDay={availEmpsOfDay} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} /> 
           </Accordion.Collapse>
       </Accordion>
       

@@ -58,8 +58,6 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
   const onFormSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Which button did u click on?", e.target.value);
-
     // find clientObj so backend doesn't have to
     const clientObj = allClients.find( client => {
       return (client.id === clientId);
@@ -80,7 +78,6 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
     axios.post(ALL_SHIFTS, jsonForNewShiftAPI )
     .then(response => {
       newShift = response.data;
-      console.log("newShift =", newShift);
       
       // send callback back up to <CalendarTab> which will pass up to <AdminDash> for new API call
       // which gets latest allShifts from backend db, and re-render everything
@@ -136,7 +133,7 @@ const NewShift = ({daySpotlight, allClients, updateAllShiftsCallback, textEmploy
               <option defaultValue>-- Select --</option>
               {allClients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
             </select>
-
+            
             <label>Start time</label>
             <input id="startTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultStartTime}></input>
             

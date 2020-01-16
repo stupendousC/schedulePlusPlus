@@ -1,12 +1,12 @@
-/* ============================ */
-/* ===== MY CUSTOM STYLES ===== */
-/* ============================ */
-
 /* ===== GOOGLE FONTS ===== */
 /* font-family: 'Heebo', sans-serif;
 font-family: 'Exo', sans-serif;
 font-family: 'Work Sans', sans-serif; */
 
+
+/* ============================ */
+/* ===== MY CUSTOM STYLES ===== */
+/* ============================ */
 * {
   font-family: 'Work Sans', sans-serif;
 }
@@ -38,7 +38,6 @@ h1, h2, h3, h4, h5, h6 {
 .homepage-logo {
   width: 100%;
   height: 100%;
-  text-align: center;
 }
 
 .footer {
@@ -224,7 +223,7 @@ td, th {
   color: white;
 }
 
-.tile-unavail {
+.tile-unavail, .tile-no-workers {
   background-color: red;
   font-weight: bold;
   color: white;

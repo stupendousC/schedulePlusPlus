@@ -31,7 +31,7 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
     // <Calendar> will iterate thru each date in the display month
       // if employee is working that day -> green background
       // if employee is unavailable that day -> red background
-      // These 2 conditions below supersedes the 2 above
+      // These 2 conditions below supercedes the 2 above
       // if date is in the past -> gray background
       // if it's on today -> gold background
     
@@ -54,14 +54,12 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
       tileClassName = "tile-today";
     }
 
-
+    // we only need to see the colored tiles when looking at monthly view .
     if (view === "month") {
       return (
         <section className={tileClassName}>{tileCaption}</section>
       );
     } 
-    // if view !== monthly, we don't need the colored tiles when looking at the year as a whole
-    // there's no daily view here
   }
 
   /////////// render ////////////

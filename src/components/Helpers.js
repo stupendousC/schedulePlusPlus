@@ -101,7 +101,7 @@ export const isPhoneValid = (phoneStr) => {
     // "4251112222"       // Length = 10
     // "14251112222"      // Length = 11
     // "425-111-2222"     // Length = 12
-    // "(425)111-2222"    // Length = 13
+    // "(425)111-2222"    // Length = 13  // BUT IT WILL NOT WORK WITH TWILIO!!!
     // "1-425-111-2222"   // Length = 14
   // else returns False
 

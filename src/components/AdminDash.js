@@ -3,7 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-
+import {toast} from 'react-toastify';
 import {sortShiftsByDate, isPhoneValid, formatDate, formatTime} from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
 const uuidv4 = require('uuid/v4');
@@ -15,8 +15,7 @@ const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
 const ALL_ADMINS = process.env.REACT_APP_ALL_ADMINS;
 const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 const ALL_UNAVAILS = process.env.REACT_APP_ALL_EMPS;
-
-// const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
+const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;
 
 export default class AdminDash extends React.Component {
 
@@ -123,7 +122,7 @@ export default class AdminDash extends React.Component {
       const sortedShifts = sortShiftsByDate(response.data);
       this.setState({ allShifts: sortedShifts });
     })
-    .catch(error => console.log(error.message));
+    .catch(error => toast.error(error.message));
   }
 
   textEmployees = (shiftObj, availEmpsOfDay) => {
@@ -137,8 +136,6 @@ export default class AdminDash extends React.Component {
     const textableEmployees = availEmpsOfDay.filter( emp => {
       return isPhoneValid(emp.phone);
     });    
-    
-    console.log("Out of those available, we can text...", textableEmployees);
 
     const jsonForTextAPI = (employee, shift) => {
       // each text gets assigned an uuid for the db
@@ -173,15 +170,11 @@ Thank you from the office of Schedule Plus Plus!
     }
 
     const allAxiosPostReqs = textableEmployees.map( employee => {
-
-      // const SEND_TEXT = process.env.REACT_APP_TEXT_EMPS;  FROM THE TOP, temporarily replacing with...abs
-      // experimentig with moving sendText to under AdminCtrller in backend
-      const SEND_TEXT = "http://localhost:5000/admin/sendText";
-
-
       // each employee gets a text
       return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj)));
     })
+
+    toast.info("Sending texts...");
 
     // bundled all the individual post requests together,
     // failed texts will not get in the way of successful texts
@@ -190,7 +183,7 @@ Thank you from the office of Schedule Plus Plus!
       for ( const eachText of responses ) {
         console.log("back end says", eachText.data);
       }}))
-    .catch( errors => console.log(errors));
+    .catch( errors => toast.error(`ERROR: ${errors.message}`));
   }
 
   ////////////////////// render //////////////////////
