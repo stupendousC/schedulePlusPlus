@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import ErrorGeneral from './ErrorGeneral';
 import MessageComponent from './MessageComponent';
-import {convertTimeString} from './Helpers';
+import {formatTime} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
   const URL_ENDPOINT = `${process.env.REACT_APP_TEXTED_LINK}/${match.params.uuid}`;
@@ -52,9 +52,9 @@ export default function LinkTextedToEmployee({match}) {
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
-          <p>{convertTimeString(shift.start_time)}</p>
+          <p>{formatTime(shift.start_time)}</p>
           <p>END</p>
-          <p>{convertTimeString(shift.end_time)}</p>
+          <p>{formatTime(shift.end_time)}</p>
         </section>
 
         <section className="card-client">

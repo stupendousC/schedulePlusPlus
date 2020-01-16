@@ -1,9 +1,10 @@
 import React from 'react';
-import { convertDateString, formatDate } from './Helpers';
+import { convertDateString, formatDate, formatTime } from './Helpers';
 import Accordion from 'react-bootstrap/Accordion';
 
 
-const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
+const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
+  const today = new Date();
 
   const showShifts = (shiftsInArray) => {
     // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[]  
@@ -13,27 +14,48 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
   }
 
   const showWholeShiftCard = (shift) => {
-    return (
-      <section key={shift.id}>
-        <section className="card-shift blue-bg" >
-          <p>DATE</p>
-          <p>{(shift.shift_date)}</p>
-          <p>START</p>
-          <p>{(shift.start_time)}</p>
-          <p>END</p>
-          <p>{(shift.end_time)}</p>
-        </section>
 
-        <section className="card-client">
-          <p>CLIENT</p>
-          { shift.client ? <p>{shift.client.name}</p> : <p></p> }
-          <p>PHONE</p>
-          { shift.client ? <p>{shift.client.phone}</p> : <p></p> }
-          <p>EMAIL</p>
-          { shift.client ? <p>{shift.client.email}</p> : <p></p> }
-          <p>ADDRESS</p>
-          { shift.client ? <p>{shift.client.address}</p> : <p></p> }
-        </section>
+    return (
+      <section key={shift.id} className="shift-card-container">
+        <table className="employee-dash-shift-table" >
+          <tr className="thead-dark">
+            <th>SHIFT INFO</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>DATE</td>
+            <td>{formatDate(shift.shift_date)}</td>
+          </tr>
+          <tr>
+            <td>START</td>
+            <td>{formatTime(shift.start_time)}</td>
+          </tr>
+          <tr>
+            <td>END</td>
+            <td>{formatTime(shift.end_time)}</td>
+          </tr>
+
+          <tr className="thead-dark">
+            <th>CLIENT INFO</th>
+            <th></th>
+          </tr>
+          <tr>
+            <td>CLIENT</td>
+            {shift.client ? <td>{shift.client.name}</td> : <td></td> }
+          </tr>
+          <tr>
+            <td>PHONE</td>
+            { shift.client ? <td>{shift.client.phone}</td> : <td></td> }
+          </tr>
+          <tr>
+            <td>EMAIL</td>
+            { shift.client ? <td>{shift.client.email}</td> : <td></td> }
+          </tr>
+          <tr>
+            <td>ADDRESS</td>
+            { shift.client ? <td>{shift.client.address}</td> : <td></td> }
+          </tr>
+        </table>
 
       </section>
     );
@@ -51,8 +73,10 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
           {showShifts(shiftsOfDaySpotlight)}
         </section>
       );
+      
     } else if (inThePast) {
       return (<h3 className="text-centered">Nothing that day</h3>);
+
     } else if (shiftsOfDaySpotlight.length === 0 && availStatus === true) {
       return (
         <section className="text-centered">
@@ -74,19 +98,19 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
   ////////////////////////////// render //////////////////////////////
   return(
 
-    <section> 
+    <section className="accordion-container"> 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showToday" className="accordion-toggle_button blue-bg" >
+          <Accordion.Toggle eventKey="showToday" className="accordion-toggle_button gold-bg" >
             <section className="section-3-col">
               <section>▼</section>
-              <section>TODAY: {formatDate(today)}</section>
+              <section>TODAY</section>
               <section>▼</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showToday">
-            <section>{showShifts(shiftsToday)}</section>
+            <section className="lightergold-bg">{showShifts(shiftsToday)}</section>
           </Accordion.Collapse>
 
         </section>
@@ -94,16 +118,16 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button blue-bg" >
+          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button darkerblue-bg" >
             <section className="section-3-col">
               <section>▼</section>
-              <section>DAY SPOTLIGHT: {formatDate(dateStr)}</section>
+              <section>{formatDate(dateStr).toUpperCase()}</section>
               <section>▼</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showCalendarClick">
-            <section>{showAgendaOrOptions()}</section>
+            <section className="blue-bg">{showAgendaOrOptions()}</section>
           </Accordion.Collapse>
 
         </section>
@@ -116,3 +140,30 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
 
 export default CalendarDay;
 
+
+
+/////// OLD TABLE, might revert back later
+    // return (
+    //   <section key={shift.id}>
+    //     <section className="card-shift blue-bg" >
+    //       <p>DATE</p>
+    //       <p>{formatDate(shift.shift_date)}</p>
+    //       <p>START</p>
+    //       <p>{formatTime(shift.start_time)}</p>
+    //       <p>END</p>
+    //       <p>{formatTime(shift.end_time)}</p>
+    //     </section>
+
+    //     <section className="card-client">
+    //       <p>CLIENT</p>
+    //       { shift.client ? <p>{shift.client.name}</p> : <p></p> }
+    //       <p>PHONE</p>
+    //       { shift.client ? <p>{shift.client.phone}</p> : <p></p> }
+    //       <p>EMAIL</p>
+    //       { shift.client ? <p>{shift.client.email}</p> : <p></p> }
+    //       <p>ADDRESS</p>
+    //       { shift.client ? <p>{shift.client.address}</p> : <p></p> }
+    //     </section>
+
+    //   </section>
+    // );

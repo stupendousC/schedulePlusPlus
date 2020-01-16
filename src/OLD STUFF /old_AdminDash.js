@@ -3,7 +3,7 @@ import axios from 'axios';
 import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
 import NewShift from './NewShift';
-import {convertDateString, formatDate, convertTimeString} from './Helpers';
+import {convertDateString, formatDate, formatTime} from './Helpers';
 
 import Error from './Error';
 

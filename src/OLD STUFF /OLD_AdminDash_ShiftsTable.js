@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
-import { convertTimeString, formatDate, sortShiftsByDate, sendTexts } from '../components/Helpers';
+import { formatTime, formatDate, sortShiftsByDate, sendTexts } from '../components/Helpers';
 
 const ShiftsTable = ({allShifts}) => {
   
@@ -55,9 +55,9 @@ const ShiftsTable = ({allShifts}) => {
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
-          <p>{convertTimeString(shift.start_time)}</p>
+          <p>{formatTime(shift.start_time)}</p>
           <p>END</p>
-          <p>{convertTimeString(shift.end_time)}</p>
+          <p>{formatTime(shift.end_time)}</p>
         </section>
 
         <section className="card-client">

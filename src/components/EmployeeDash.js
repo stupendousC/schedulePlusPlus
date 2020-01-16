@@ -1,15 +1,12 @@
 import React from 'react';
-import _ from 'underscore';
-import { ToastContainer, toast } from 'react-toastify';
-
-import Calendar from 'react-calendar';
-import CalendarDay from './EmployeeDash_CalendarDay';
+import { toast } from 'react-toastify';
+import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
-import ErrorLogin from './ErrorLogin';
+import Info from './EmployeeDash_Info';
 import ErrorGeneral from './ErrorGeneral';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST, deepCompareTwoSchedArrayss } from './Helpers';
+import { convertDateString, sortUnavailsByDate, sortShiftsByDate, deepCompareTwoSchedArrayss } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -64,7 +61,6 @@ export default class EmployeeDash extends React.Component {
           empInfo: empInfo,
           empShifts: empShifts,
           empUnavails: empUnavails,
-          today: today,
           shiftsToday: shiftsToday,
           shiftsOfDay: shiftsToday,
           availStatusOfDay: canWorkBool,
@@ -92,32 +88,37 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: own info tab //////////////////////
-  showAllInfo = () => {
-    const info = this.state.empInfo;
+  // showAllInfo = () => {
+  //   const info = this.state.empInfo;
     
-    return(
-      <section>   
-        <form>
-          <fieldset>
-            <div className="form-group">
-              <label>Name</label>
-              <input type="text" className="form-control" placeholder={info.name}/>
-              <label>Address</label>
-              <input type="text" className="form-control" placeholder={info.address}/>
-              <label>Phone</label>
-              <input type="text" className="form-control" placeholder={info.phone}/>
-              <label>Email</label>
-              <input type="text" className="form-control" placeholder={info.email}/>
-            </div>
-            <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
-          </fieldset>
-        </form>
-      </section>
-    );
+  //   return(
+  //     <section>   
+  //       <form>
+  //         <fieldset>
+  //           <div className="form-group">
+  //             <label>Name</label>
+  //             <input type="text" className="form-control" placeholder={info.name}/>
+  //             <label>Address</label>
+  //             <input type="text" className="form-control" placeholder={info.address}/>
+  //             <label>Phone</label>
+  //             <input type="text" className="form-control" placeholder={info.phone}/>
+  //             <label>Email</label>
+  //             <input type="text" className="form-control" placeholder={info.email}/>
+  //           </div>
+  //           <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
+  //         </fieldset>
+  //       </form>
+  //     </section>
+  //   );
+  // }
+
+  showAllInfo = () => {
+    return <Info info={this.state.empInfo} updateCallback={this.update}/>;
   }
 
   update = (e) => {
     e.preventDefault();
+    //TODO
   }
 
   ////////////////////// DISPLAY: shifts tab //////////////////////
@@ -163,13 +164,20 @@ export default class EmployeeDash extends React.Component {
   }
   
   ////////////////////// DISPLAY: calendar tab //////////////////////
+
   showCalendar = () => {
-    return (
-      <section>
-        <Calendar onChange={this.updateStateForCalendarDay} value={convertToPST(this.state.daySpotlight)}/>
-        <CalendarDay toggleAvailCallback={this.toggleAvail} today={this.state.today} shiftsToday={this.state.shiftsToday} shiftsOfDaySpotlight={this.state.shiftsOfDay} dateStr={this.state.daySpotlight} availStatus={this.state.availStatusOfDay}/>
-      </section>
-    );
+    return <CalendarTab 
+      URL={this.state.EMP_DASH}
+      empUnavails={this.state.empUnavails}
+      empShifts={this.state.empShifts}
+      daySpotlight={this.state.daySpotlight}
+      shiftsToday={this.state.shiftsToday}
+      shiftsOfDay={this.state.shiftsOfDay}
+      availStatusOfDay={this.state.availStatusOfDay}
+      unstaffedShifts={this.state.unstaffedShifts}
+      updateStateForCalendarDayCB={this.updateStateForCalendarDay}
+      toggleAvailCallback={this.toggleAvail}
+    />;
   }
 
   updateStateForCalendarDay = (e) => {
