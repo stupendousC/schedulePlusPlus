@@ -61,7 +61,7 @@ class App extends React.Component {
         this.greetToast(usernameDB);
         
       })
-      .catch(error => toast.error("LOGIN ERROR!", error.message));
+      .catch(error => toast.error(`LOGIN ERROR! ${error.message}`));
   }
 
   greetToast = (usernameDB) => {

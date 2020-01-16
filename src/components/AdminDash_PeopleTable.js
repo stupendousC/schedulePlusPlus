@@ -7,6 +7,9 @@ import ToastUndo from './ToastUndo';
 ///////////////////// People can be either admins, employees, or clients /////////////////////
 const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
   const [personSpotlight, setPersonSpotlight] = useState("");
+  
+  // not gonna useState on this b/c that's asynch AND I don't need re-rendering for it
+  let personInPurgatory = null;
 
   const showAll = (peopleList, URL_endpoint) => {
     return ( peopleList.map((person, i) => {
@@ -58,18 +61,35 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
     // TODO: add fields for input
   }
 
-  const deactivate = (person, URL_endpoint) => {
-    console.log("If employee, need to reopen shifts they alreay committed to!!!");
-    toast(<ToastUndo msg="are you sure?"/>);
-
+  const deactivate = (person) => {
     setPersonSpotlight("");
-    axios.delete(URL_endpoint + "/" + person.id)
+    personInPurgatory = person;
+
+    console.log("TODO: If employee, need to reopen shifts they alreay committed to!!! and inform employees!!!");
+    console.log("TODO: If client, need to close shifts they alreay committed to!!! and inform employees!!!");
+
+    toast(<ToastUndo undo={undo} message={`Deleting ${person.name}`}/>, {
+      // hook will be called when the component unmount
+      onClose: sendDeleteAPIOrNot
+    });
+  }
+
+  const undo = () => {
+    personInPurgatory = null;
+  }
+
+  const sendDeleteAPIOrNot = () => {
+    if (!personInPurgatory) {
+      return;
+    }
+
+    // if there's really a person to deactivate
+    axios.delete(URL_endpoint + "/" + personInPurgatory.id)
     .then(response => {
-      console.log(`deactivated ${person.name} from database`);
-      const updatedPeopleList = peopleList.filter( p => p !== person );
+      const updatedPeopleList = peopleList.filter( p => p !== personInPurgatory );
       updatePeopleListCB(setStateKey, updatedPeopleList);
     })
-    .catch(error => console.log("ERROR:", error.message));
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
   //////////////////////////// render ////////////////////////////
