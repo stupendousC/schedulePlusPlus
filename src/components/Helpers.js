@@ -1,4 +1,5 @@
 // import axios from 'axios';
+import _ from 'underscore';
 
 export const convertToPST = (timeStr) => {
   // UTC to PST conversion:
@@ -158,4 +159,16 @@ const areStringsInListAllIntegers = (list_of_strings) => {
   }
   // if nobody in the list fails, then they all pass
   return true;
+}
+
+export const deepCompareTwoSchedArrayss = (array1, array2) => {
+  if (array1.length !== array2.length) return false;
+  const sortedArray1 = sortById(array1);
+  const sortedArray2 = sortById(array2);
+  return _.isEqual(sortedArray1, sortedArray2);
+}
+
+// for use by deepCompareTwoArrays()
+const sortById = (listOfObjs) => {
+  return listOfObjs.sort((a,b) => b.id <= a.id ? 1:-1);
 }

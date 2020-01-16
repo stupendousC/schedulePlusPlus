@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import ToastUndo from './ToastUndo';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
 const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
   const [personSpotlight, setPersonSpotlight] = useState("");
+  
+  // not gonna useState on this b/c that's asynch AND I don't need re-rendering for it
+  let personInPurgatory = null;
 
   const showAll = (peopleList, URL_endpoint) => {
     return ( peopleList.map((person, i) => {
@@ -56,26 +61,43 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
     // TODO: add fields for input
   }
 
-  const deactivate = (person, URL_endpoint) => {
-    console.log("deactivate", person.name, "from", URL_endpoint, "\nMAYBE POP UP AN ALERT CONFIRMATION?");
-    console.log("need to reopen shifts they alreay committed to!!!");
-
+  const deactivate = (person) => {
     setPersonSpotlight("");
-    axios.delete(URL_endpoint + "/" + person.id)
-    .then(response => {
-      console.log(`deactivated ${person.name} from database`);
-      const updatedPeopleList = peopleList.filter( p => p !== person );
-      updatePeopleListCB(setStateKey, updatedPeopleList);
+    personInPurgatory = person;
 
-      // console.log(updatedPeopleList, "VS", currPeopleList);
-      // setCurrPeopleList(updatedPeopleList);
+    console.log("TODO: If employee, need to reopen shifts they alreay committed to!!! and inform employees!!!");
+    console.log("TODO: If client, need to close shifts they alreay committed to!!! and inform employees!!!");
+
+    toast(<ToastUndo undo={undo} message={`Deleting ${person.name}`}/>, {
+      // hook will be called when the component unmount
+      onClose: sendDeleteAPIOrNot
+    });
+  }
+
+  const undo = () => {
+    personInPurgatory = null;
+  }
+
+  const sendDeleteAPIOrNot = () => {
+    if (!personInPurgatory) {
+      return;
+    }
+
+    // if there's really a person to deactivate
+    axios.delete(URL_endpoint + "/" + personInPurgatory.id)
+    .then(response => {
+      const updatedPeopleList = peopleList.filter( p => p !== personInPurgatory );
+      updatePeopleListCB(setStateKey, updatedPeopleList);
     })
-    .catch(error => console.log("ERROR:", error.message));
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
   //////////////////////////// render ////////////////////////////
   return (
     <section>
+      <h1>How about ADD function here?? and it knows if you want admin/employee/client</h1>
+      <h1>ALSO!!! If u delete admin -> then deactivate all their shifts!!! and alert the employees!</h1>
+      <h1>OR if you delete employee -> remove them from the shifts! open it againa nd alert the empoyees!</h1>
       {showAll(peopleList, URL_endpoint)}
     </section>
   );

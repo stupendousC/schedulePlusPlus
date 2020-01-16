@@ -96,6 +96,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     return(
       
       <section>
+        <h1>WHAT IS TODAY????!!!</h1>
       <Calendar onChange={updateStateForCalendarDay} value={convertToPST(daySpotlight)}/>
       {/* <NewShift /> and <CalendarDay /> will change based on which day you click on in the <Calendar> */}
 

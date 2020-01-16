@@ -47,15 +47,15 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
     if (shiftsOfDaySpotlight.length > 0) {
       return (
         <section>
-          { inThePast ? (<h5>Shift completed!</h5>) : null }
+          { inThePast ? (<h3 className="text-centered">Shift completed!</h3>) : null }
           {showShifts(shiftsOfDaySpotlight)}
         </section>
       );
     } else if (inThePast) {
-      return (<section>Nothing that day</section>);
+      return (<h3 className="text-centered">Nothing that day</h3>);
     } else if (shiftsOfDaySpotlight.length === 0 && availStatus === true) {
       return (
-        <section>
+        <section className="text-centered">
           <h3>No shifts scheduled</h3>
           <button onClick={() => {toggleAvailCallback(false)}} className="btn btn-danger">Take the day off</button>
         </section>
@@ -63,7 +63,7 @@ const CalendarDay = ({today, shiftsToday, shiftsOfDaySpotlight, dateStr, availSt
 
     } else if (shiftsOfDaySpotlight.length === 0 && availStatus === false) {
       return (
-        <section>
+        <section className="text-centered">
           <h3>You have the day off</h3>
           <button onClick={() => {toggleAvailCallback(true)}} className="btn btn-success">I'm free to work</button>
         </section>

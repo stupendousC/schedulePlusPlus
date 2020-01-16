@@ -1,11 +1,14 @@
 import React from 'react';
+import _ from 'underscore';
+import { ToastContainer, toast } from 'react-toastify';
+
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import UnavailDays from './EmployeeDash_UnavailDays';
 import ErrorLogin from './ErrorLogin';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST } from './Helpers';
+import { convertDateString, sortUnavailsByDate, sortShiftsByDate, convertToPST, deepCompareTwoSchedArrayss } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -37,11 +40,6 @@ export default class EmployeeDash extends React.Component {
   getUnstaffedShifts = () => axios.get(this.state.EMP_DASH+"/unstaffedShifts");
   
   componentDidMount() {
-    if (this.props.authenticatedRole !== "EMPLOYEE") {
-      console.log("\n\nYou are *NOT* an employee!!!!");
-      return;
-    }
-
     // initial loading of data from database
     axios.all([
       this.getEmpInfo(), 
@@ -238,10 +236,20 @@ export default class EmployeeDash extends React.Component {
 
     axios.put(URL_endpoint)
     .then(response => {
-      // api sending back current list of emp's shifts
-      this.setState({ empShifts: response.data })
-      // need to update state unstaffedShifts[] as well, b/c now we took one out
-      this.updateLatestUnstaffedShifts();
+      // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
+      // need to compare the arrays of existing this.state.empShifts VS response.data... 
+        // if same, then user did NOT actually get the shift
+        // if not, then user did successfully get the shift, plus save this new state
+        if (deepCompareTwoSchedArrayss(this.state.empShifts, response.data)) {
+          toast.error("UH OH! Shift was just taken by someone else 😕");
+        } else {
+          // api sending back current list of emp's shifts
+          toast.success("The shift is yours! Huzzah! 🥳")
+          this.setState({ empShifts: response.data })
+        }
+        
+        // need to update state unstaffedShifts[] either way, b/c now that shift is no longer unavailable
+        this.updateLatestUnstaffedShifts();
     })
     .catch(error => console.log(error.message));
   }

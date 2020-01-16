@@ -2,6 +2,10 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import LoginBanner from './LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
@@ -54,19 +58,35 @@ class App extends React.Component {
           databaseId: databaseId      
         })
 
+        this.greetToast(usernameDB);
         
       })
-      .catch(error => console.log("LOGIN ERROR!", error.message));
+      .catch(error => toast.error(`LOGIN ERROR! ${error.message}`));
+  }
+
+  greetToast = (usernameDB) => {
+    const hourNow = (new Date()).getHours();
+    let greetingBasedOnHour;
+    if (hourNow < 12) {
+      greetingBasedOnHour = "Good morning";
+    } else if (hourNow < 17) {
+      greetingBasedOnHour = "Good afternoon";
+    } else {
+      greetingBasedOnHour = "Good evening";
+    }
+    
+    toast.success(`${greetingBasedOnHour}, ${usernameDB} 😄`);
   }
 
   logout = () => {
-    console.log("LOG OUT! send toaster pop up!");
     this.setState({
       authenticatedRole: "",  
       googleId: "",
       username: "",
       databaseId: ""
     })
+    toast.success(`Goodbye ${sessionStorage.getItem('username')} 👋`);
+
     sessionStorage.clear();
   }
 
@@ -100,6 +120,7 @@ class App extends React.Component {
           </Switch>
 
           <Footer />
+          <ToastContainer />
       </Router>
   );
   }
