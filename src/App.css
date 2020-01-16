@@ -41,6 +41,20 @@
 /* ===== MY CUSTOM STYLES ===== */
 /* ============================ */
 
+/* ===== GOOGLE FONTS ===== */
+/* font-family: 'Heebo', sans-serif;
+font-family: 'Exo', sans-serif;
+font-family: 'Work Sans', sans-serif; */
+
+* {
+  font-family: 'Work Sans', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Heebo', sans-serif;
+  font-weight: bolder;
+}
+
 .text-centered {
   text-align: center;
 }
@@ -155,6 +169,11 @@
 
 /* ===== BUTTONS ===== */
 
+.btn a {
+  color: black;
+  font-weight: bold;
+}
+
 .btn-google {
   width: 90%;
   margin-top: 1rem;
@@ -225,3 +244,4 @@
 .tile-work, .tile-unavail, .tile-today {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
