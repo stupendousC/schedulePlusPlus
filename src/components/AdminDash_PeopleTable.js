@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import ToastUndo from './ToastUndo';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
@@ -57,8 +59,8 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
   }
 
   const deactivate = (person, URL_endpoint) => {
-    console.log("deactivate", person.name, "from", URL_endpoint, "\nMAYBE POP UP AN ALERT CONFIRMATION?");
-    console.log("need to reopen shifts they alreay committed to!!!");
+    console.log("If employee, need to reopen shifts they alreay committed to!!!");
+    toast(<ToastUndo msg="are you sure?"/>);
 
     setPersonSpotlight("");
     axios.delete(URL_endpoint + "/" + person.id)
@@ -66,9 +68,6 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
       console.log(`deactivated ${person.name} from database`);
       const updatedPeopleList = peopleList.filter( p => p !== person );
       updatePeopleListCB(setStateKey, updatedPeopleList);
-
-      // console.log(updatedPeopleList, "VS", currPeopleList);
-      // setCurrPeopleList(updatedPeopleList);
     })
     .catch(error => console.log("ERROR:", error.message));
   }
