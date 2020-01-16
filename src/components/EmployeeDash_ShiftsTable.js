@@ -143,7 +143,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
         );
       } else if (offThatDay) {
         return (
-          <section className="gray-bg">
+          <section className="gray-bg text-centered">
             <p>You have the day off but you can change your mind!</p>
             {/* Clicking on this button will result in re-rendering this section as 'eligible for shift', user should see blue-bg w/ blue button b/c reeval'd cannot=false */}
             <button onClick={() =>{removeUnavail(shift)}} className="btn btn-success">Take the shift</button>
@@ -153,7 +153,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
       
     } else {
       return (
-        <section className="blue-bg">
+        <section className="blue-bg text-centered">
           <p>You are eligible for this shift!</p>
           <button onClick={() =>{takeShiftCallback(shift)}} className="btn btn-primary">Take the shift</button>
           </section>

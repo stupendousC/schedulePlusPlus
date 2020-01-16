@@ -2,6 +2,7 @@ import React from 'react';
 import { toast } from 'react-toastify';
 import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
+import Info from './EmployeeDash_Info';
 import ErrorGeneral from './ErrorGeneral';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
@@ -87,28 +88,32 @@ export default class EmployeeDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: own info tab //////////////////////
-  showAllInfo = () => {
-    const info = this.state.empInfo;
+  // showAllInfo = () => {
+  //   const info = this.state.empInfo;
     
-    return(
-      <section>   
-        <form>
-          <fieldset>
-            <div className="form-group">
-              <label>Name</label>
-              <input type="text" className="form-control" placeholder={info.name}/>
-              <label>Address</label>
-              <input type="text" className="form-control" placeholder={info.address}/>
-              <label>Phone</label>
-              <input type="text" className="form-control" placeholder={info.phone}/>
-              <label>Email</label>
-              <input type="text" className="form-control" placeholder={info.email}/>
-            </div>
-            <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
-          </fieldset>
-        </form>
-      </section>
-    );
+  //   return(
+  //     <section>   
+  //       <form>
+  //         <fieldset>
+  //           <div className="form-group">
+  //             <label>Name</label>
+  //             <input type="text" className="form-control" placeholder={info.name}/>
+  //             <label>Address</label>
+  //             <input type="text" className="form-control" placeholder={info.address}/>
+  //             <label>Phone</label>
+  //             <input type="text" className="form-control" placeholder={info.phone}/>
+  //             <label>Email</label>
+  //             <input type="text" className="form-control" placeholder={info.email}/>
+  //           </div>
+  //           <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
+  //         </fieldset>
+  //       </form>
+  //     </section>
+  //   );
+  // }
+
+  showAllInfo = () => {
+    return <Info info={this.state.empInfo} updateCallback={this.update}/>;
   }
 
   update = (e) => {
