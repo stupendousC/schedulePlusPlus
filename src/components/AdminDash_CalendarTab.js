@@ -126,7 +126,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
 
   const showRowsOfEmps = () => availEmpsOfDay.map(emp => {
       return(
-        <section key={emp.id} className="section-2-col">
+        <section key={emp.id} className="section-2-col text-centered">
           <section>{emp.name}</section>
           <section>{emp.phone}</section>
         </section>
