@@ -157,8 +157,6 @@ class ShiftsTable extends React.Component {
     } else {
       return(
         <section>
-          <h1>1. DIVIDE INTO PAST & CURRENT!</h1>
-          <h1>2. GIVE ABILITY TO DELETE SHIFTS!  Notify employee though!</h1>
           {this.props.allShifts.map(shift => {
             return (
               <Accordion key={shift.id}>

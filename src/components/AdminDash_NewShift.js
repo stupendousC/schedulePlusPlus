@@ -93,12 +93,12 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
     const errorMsgs = genErrorMsgs();
       const rowsOfMsgs = errorMsgs.map( (msg,i) => {
         return (
-          <li key={i}>{msg}</li>
+          <li key={i} className="centered-text">{msg}</li>
         );
       });
 
       return (
-        <ul>{rowsOfMsgs}</ul>
+        <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
       );
     
   }
@@ -119,13 +119,6 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
       
       <form onSubmit={onFormSubmit} className="px-4 py-3">
 
-          {/* Decided to disable this for now, looks prettier when user clicks on the calendar
-          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
-          <section className="form-group">
-            <label>Date</label>
-            <input className="form-control" value={daySpotlight} />
-          </section> */}
-
         <section className="form-group">
 
           <label>Client</label>
@@ -141,11 +134,15 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
           <input id="endTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultEndTime}></input>
           
         </section>
-          
+        
         {isFormValid() ? null: showErrorMsgs()}
-        <input type="submit" className="btn btn-primary" value={showButtonValue()} disabled={!isFormValid()}/>
-        <li className="fine-print">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
-        <li className="fine-print">Texts will also be sent to all those available, with valid phone numbers in their record</li>
+
+        <section className="centered-children-per-row_container">
+          <input type="submit" className="btn btn-primary" value={showButtonValue()} disabled={!isFormValid()}/>
+          <li className="fine-print centered-text">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
+          <li className="fine-print centered-text">Texts will also be sent to all those available, with valid phone numbers in their record</li>
+        </section>
+        
       </form>
 
     </section>
@@ -155,3 +152,9 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 export default NewShift;
 
 
+{/* Decided to disable this for now, looks prettier when user clicks on the calendar
+          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
+          <section className="form-group">
+            <label>Date</label>
+            <input className="form-control" value={daySpotlight} />
+          </section> */}
