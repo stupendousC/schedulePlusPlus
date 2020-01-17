@@ -7,10 +7,19 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
   const today = new Date();
 
   const showShifts = (shiftsInArray) => {
-    // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[]  
-    return ( shiftsInArray.map (shift => {
-      return (showWholeShiftCard(shift));
-    }));
+    // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[] 
+    if (shiftsInArray.length > 0) {
+      return ( shiftsInArray.map (shift => {
+        return (showWholeShiftCard(shift));
+      }));
+    } else {
+      return (
+        <section className="text-centered">
+          <h3>No shifts scheduled</h3>
+        </section>
+      );
+    }
+    
   }
 
   const showWholeShiftCard = (shift) => {
@@ -69,7 +78,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
     if (shiftsOfDaySpotlight.length > 0) {
       return (
         <section>
-          { inThePast ? (<h3 className="text-centered">Shift completed!</h3>) : null }
+          {inThePast ? (<h3 className="text-centered">Shift completed!</h3>) : null }
           {showShifts(shiftsOfDaySpotlight)}
         </section>
       );

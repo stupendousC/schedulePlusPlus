@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import LoginBanner from './LoginBanner';
+import LoginBanner from './components/LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
