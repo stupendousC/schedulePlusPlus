@@ -5,7 +5,7 @@ import ToastUndo from './ToastUndo';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
-const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
+const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
   const [personSpotlight, setPersonSpotlight] = useState("");
   
   // not gonna useState on this b/c that's asynch AND I don't need re-rendering for it
@@ -95,6 +95,7 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
   //////////////////////////// render ////////////////////////////
   return (
     <section>
+<h1 className="text-centered">{title}</h1>
       {showAll(peopleList, URL_endpoint)}
     </section>
   );

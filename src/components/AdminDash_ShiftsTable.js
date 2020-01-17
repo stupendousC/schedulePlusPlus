@@ -111,14 +111,16 @@ class ShiftsTable extends React.Component {
     } else {
       // the button really is just for show, 
       // clicking on the entire bar (inc the button) is what sends an API call to backend for the list of avail employees
-      return (<section className="fake-btn">Find employees</section>);
+      return (
+        <section className="fake-btn">Find employees</section>
+        );
     }
   }
 
   showWholeShiftCard = (shift, timeCategory, secondaryColorClass) => {
     return (
       <section>
-        <section className={`card-shift ${secondaryColorClass}`}>
+        <section className={`card-shift centered-children-per-row_container ${secondaryColorClass}`}>
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -127,7 +129,7 @@ class ShiftsTable extends React.Component {
           <p>{formatTime(shift.end_time)}</p>
         </section>
 
-        <section className="card-client">
+        <section className="card-client centered-children-per-row_container">
           <p>CLIENT</p>
           { shift.client ? <p>{shift.client.name}</p> : <p></p> }
           <p>PHONE</p>
@@ -139,7 +141,9 @@ class ShiftsTable extends React.Component {
         </section>
 
         {/* employee info section shows either: A. actual employee info if staffed. B. list of available employees for that shift */}
-        { this.showEmployeeCardSection(shift, timeCategory, secondaryColorClass) }
+        <section>
+          { this.showEmployeeCardSection(shift, timeCategory, secondaryColorClass) }
+        </section>
         
       </section>
     );
@@ -188,7 +192,7 @@ class ShiftsTable extends React.Component {
       const availEmpList = this.state.availEmployeesByShiftId[shift.id];
       // console.log("shift id", shift.id, "corresponds to ", availEmpList);
       
-      if (!availEmpList) {
+      if (availEmpList.length === 0) {
         return (
           // DO SOEMTHING SUPER SPECIAL FOR THIS EMERGENCY!!!  
           <section className="card-employee red-bg">NO EMPLOYEES AVAILABLE!</section>
@@ -200,7 +204,7 @@ class ShiftsTable extends React.Component {
 
         return (
           <section className="lightblue-bg">
-          <button onClick={()=>{this.props.textEmployeesCallback(empList, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
+          <button onClick={()=>{this.props.textEmployeesCallback(shift, availEmpList)}} className="btn btn-primary margin-left-1rem">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
           {this.rowsOfEmps(empList)}
           </section>
         );

@@ -52,7 +52,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 1rem;
 }
 
-/* ===== ADMIN DASH SECTIONS ===== */
+/* ===== ADMIN DASH SECTIONS ===== *//* ===== EMPLOYEE DASH SECTIONS ===== */
 
 .calendar-container {
   display: flex;
@@ -61,7 +61,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 1rem;
 }
 
-/* ===== EMPLOYEE DASH SECTIONS ===== */
+
 
 
 
@@ -116,7 +116,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .card-shift, .card-client, .card-employee {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: 1fr 1fr;
   margin: 1rem;
 }
 
@@ -277,3 +277,8 @@ td, th {
   font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
+
+/* ===== MISC ===== */
+.margin-left-1rem {
+  margin-left: 1rem;
+}
