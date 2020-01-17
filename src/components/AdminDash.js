@@ -3,6 +3,7 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
+import {Nav, Navbar} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import {sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
@@ -77,7 +78,7 @@ export default class AdminDash extends React.Component {
     
     if (chosen === "calendar") {
       return this.showCalendar();
-    } else if (chosen === "admin") {
+    } else if (chosen === "admins") {
       return this.showAllAdmins();
     } else if (chosen === "employees") {
       return this.showAllEmployees();
@@ -215,23 +216,16 @@ Thank you from the office of Schedule Plus Plus!
       return (
         <section>
 
-          <ul className="nav nav-tabs">
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('clients')}>CLIENTS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('admin')}>ADMIN</button>
-            </li>
-          </ul>
+          <Navbar bg="primary" variant="dark" sticky="top">
+            <Navbar.Brand onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
+            <Nav className="mr-auto">
+              <Nav.Link onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('employees')}>EMPLOYEES</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('clients')}>CLIENTS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('admins')}>ADMINS</Nav.Link>
+            </Nav>
+          </Navbar>
+          
 
           {this.showChosenCategory()}
 

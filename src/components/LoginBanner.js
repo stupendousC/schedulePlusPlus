@@ -59,7 +59,6 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
 ////////////////////// RENDER //////////////////////
   const currUrl = window.location.href;
 
-
   return(
     <section className="loginBanner-section text-centered">
       <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>

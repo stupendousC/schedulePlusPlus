@@ -265,29 +265,10 @@ export default class EmployeeDash extends React.Component {
             </Nav>
         </Navbar>
 
-
-          {this.showChosenCategory()}
+        {this.showChosenCategory()}
 
         </section>
       );
     }
 }
 
-
-
-
-{/*  OLD DASHBOARD TABS
-  <ul className="nav nav-tabs">
-<li className="nav-item">
-  <button className="nav-link" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
-</li>
-<li className="nav-item">
-  <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
-</li>
-<li className="nav-item">
-  <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
-</li>
-<li className="nav-item">
-  <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
-</li>
-</ul> */}
