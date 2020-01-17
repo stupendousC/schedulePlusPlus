@@ -4,7 +4,6 @@ import Accordion from 'react-bootstrap/Accordion';
 
 
 const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
-  const today = new Date();
 
   const showShifts = (shiftsInArray) => {
     // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[] 

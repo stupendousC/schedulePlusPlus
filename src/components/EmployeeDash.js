@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
@@ -86,31 +88,6 @@ export default class EmployeeDash extends React.Component {
       return this.showAllInfo();
     }
   }
-
-  ////////////////////// DISPLAY: own info tab //////////////////////
-  // showAllInfo = () => {
-  //   const info = this.state.empInfo;
-    
-  //   return(
-  //     <section>   
-  //       <form>
-  //         <fieldset>
-  //           <div className="form-group">
-  //             <label>Name</label>
-  //             <input type="text" className="form-control" placeholder={info.name}/>
-  //             <label>Address</label>
-  //             <input type="text" className="form-control" placeholder={info.address}/>
-  //             <label>Phone</label>
-  //             <input type="text" className="form-control" placeholder={info.phone}/>
-  //             <label>Email</label>
-  //             <input type="text" className="form-control" placeholder={info.email}/>
-  //           </div>
-  //           <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
-  //         </fieldset>
-  //       </form>
-  //     </section>
-  //   );
-  // }
 
   showAllInfo = () => {
     return <Info info={this.state.empInfo} updateCallback={this.update}/>;
@@ -279,20 +256,19 @@ export default class EmployeeDash extends React.Component {
       return (
         <section>
 
-          <ul className="nav nav-tabs">
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('info')}>INFO</button>
-            </li>
-          </ul>
+        <Navbar bg="primary" variant="dark" sticky="top">
+            <Navbar.Brand href="#home" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
+            <Nav className="mr-auto">
+              <Nav.Link href="#home" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>
+              <Nav.Link href="#features" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</Nav.Link>
+              <Nav.Link href="#pricing" onClick={()=>this.setShowCategory('info')}>INFO</Nav.Link>
+            </Nav>
+            <Form inline>
+              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+              <Button variant="outline-light">Search</Button>
+            </Form>
+          </Navbar>
+
 
           {this.showChosenCategory()}
 
@@ -301,3 +277,21 @@ export default class EmployeeDash extends React.Component {
     }
 }
 
+
+
+
+{/*  OLD DASHBOARD TABS
+  <ul className="nav nav-tabs">
+<li className="nav-item">
+  <button className="nav-link" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
+</li>
+<li className="nav-item">
+  <button className="nav-link" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
+</li>
+<li className="nav-item">
+  <button className="nav-link" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
+</li>
+<li className="nav-item">
+  <button className="nav-link" onClick={()=>this.setShowCategory('info')}>INFO</button>
+</li>
+</ul> */}

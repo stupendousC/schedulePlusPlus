@@ -99,7 +99,7 @@ class App extends React.Component {
     return (
       
       <Router>
-        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
+        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCallback={this.login} logoutCallback={this.logout}/>
         
         {role === "ADMIN" ? (<Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
         {role === "EMPLOYEE" ? (<Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}

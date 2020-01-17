@@ -5,73 +5,68 @@ import GoogleLogin from 'react-google-login';
 
 import {Link} from 'react-router-dom';
 
-class LoginBanner extends React.Component {
-  
+const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) => {
+
   ////////////////////// LOGIN //////////////////////
-  responseGoogle = (response) => {
+  const responseGoogle = (response) => {
     // send info up to App.js     
-    this.props.googleAuthCB(response.profileObj.googleId);
+    googleAuthCallback(response.profileObj.googleId);
   }
 
-  showBothLogins = () => {
+  const showGoogleLogin = () => {
     return (
       <section className="btn btn-google">
         <GoogleLogin
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           buttonText="LOGIN WITH GOOGLE"
-          onSuccess={this.responseGoogle}
-          onFailure={this.responseGoogle}
+          onSuccess={responseGoogle}
+          onFailure={responseGoogle}
           cookiePolicy={'single_host_origin'}
         />
       </section>
     );
   }
 
-
   ////////////////////// DASHBOARD BUTTONS //////////////////////
-  showDashWithLogout = () => {
-    const authenticatedRole = this.props.authenticatedRole;
+  const showDashWithLogout = () => {
     const name = sessionStorage.getItem("username");
 
     if (authenticatedRole === "ADMIN") {
       return (
         <section className="dashboard-buttons_container">
           <button className="btn btn-success dashboard-buttons"><Link to="/adminDash">{name}'s Dashboard</Link></button>
-          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger dashboard-buttons" onClick={logoutCallback}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else if (authenticatedRole === "EMPLOYEE") {
       return (
         <section className="dashboard-buttons_container">
           <button className="btn btn-success dashboard-buttons"><Link to="/employeeDash">{name}'s Dashboard</Link></button>
-          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger dashboard-buttons" onClick={logoutCallback}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     } else {
       return (
         <section className="dashboard-buttons_container">
           <button className="btn btn-warning dashboard-buttons">First time logging in?  Click to activate account with UUID (upcoming feature)</button>
-          <button className="btn btn-danger dashboard-buttons" onClick={this.logout}><Link to="/">LOGOUT</Link></button>
+          <button className="btn btn-danger dashboard-buttons" onClick={logoutCallback}><Link to="/">LOGOUT</Link></button>
         </section>
       );
     }
   }
 
-  ////////////////////// LOGOUT //////////////////////
-  logout = () => {
-    this.props.logoutCB();
-  }
 
 ////////////////////// RENDER //////////////////////
-  render() {
+  const currUrl = window.location.href;
 
-    return(
-      <section className="loginBanner-section text-centered">
-        <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>
-        {this.props.authenticatedRole? this.showDashWithLogout():this.showBothLogins()}
-      </section>
-    );
-  }
+
+  return(
+    <section className="loginBanner-section text-centered">
+      <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>
+      {authenticatedRole? showDashWithLogout():showGoogleLogin()}
+    </section>
+  );
+  
     
 }
 
