@@ -2,17 +2,29 @@ import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
-import { formatTime, formatDate } from './Helpers';
+import { formatTime, formatDate, dateInThePast } from './Helpers';
 
 class ShiftsTable extends React.Component {
   constructor() {
     super()
-    // props allShifts comes pre-sorted by date
     this.state = {
-      availEmployeesByShiftId: "LOADING"
+      availEmployeesByShiftId: "LOADING",
       // javascript weirdness abounds if I were to set initial state to null
       // safer to set it to "LOADING" or a real hashmap of { shift_id: [arrayOfAvailEmps] }
+      pastShifts: [],
+      currentShifts: []
     }
+  }
+
+  setPastVsCurrentShifts = () => {
+    let currentShifts = [];
+    let pastShifts = [];
+
+    for (const shift of this.props.allShifts) {
+      dateInThePast(shift.shift_date) ? pastShifts.push(shift) : currentShifts.push(shift);
+    }
+
+    this.setState({ pastShifts: pastShifts, currentShifts: currentShifts });
   }
   
   componentDidMount() {
@@ -42,9 +54,57 @@ class ShiftsTable extends React.Component {
       // console.log("this.state.availEmployeesByShiftId =", availEmployeesByShiftId);
     }))
     .catch( errors => console.log(errors));
+
+    // sort into pastShifts and currentShifts
+    this.setPastVsCurrentShifts();
   }
 
   ////////////////////////// display //////////////////////////
+  showShiftsTable = (listOfShifts, timeCategory) => {
+    let primaryColorClass = null;
+    let secondaryColorClass = null;
+    if (timeCategory === "PAST") {
+      primaryColorClass = "gray-bg";
+      secondaryColorClass = "lightgray-bg";
+    } else if (timeCategory === "CURRENT") {
+      primaryColorClass = "blue-bg";
+      secondaryColorClass = "lightblue-bg";
+    } 
+
+    if (listOfShifts.length === 0) {
+      return (
+        <section className={`text-centered ${secondaryColorClass}`}>No shifts</section>
+      );
+
+    } else {
+      return(
+        <section>
+          {listOfShifts.map(shift => {
+            return (
+              <Accordion key={shift.id}>
+                <section>
+                  <Accordion.Toggle eventKey="showInfo" className={`accordion-toggle_button ${primaryColorClass}`}>
+                    <section className="section-4-col">
+                      <section>▼ #{shift.id}</section>
+                      <section>{formatDate(shift.shift_date)}</section>
+                      <section>{shift.client.name}</section>
+                      <section>{timeCategory === "CURRENT" ? this.showEmpNameOrButton(shift):null}</section>
+                    </section>
+                  </Accordion.Toggle>
+
+                  <Accordion.Collapse eventKey="showInfo">
+                    <section>{this.showWholeShiftCard(shift, timeCategory, secondaryColorClass)}</section>
+                  </Accordion.Collapse>
+
+                </section>
+              </Accordion>
+            )}
+          )}
+        </section>
+      );
+    }    
+  }
+
   showEmpNameOrButton = (shift) => {
     if (shift.employee) {
       return (shift.employee.name);
@@ -55,10 +115,10 @@ class ShiftsTable extends React.Component {
     }
   }
 
-  showWholeShiftCard = (shift) => {
+  showWholeShiftCard = (shift, timeCategory, secondaryColorClass) => {
     return (
       <section>
-        <section className="card-shift lightblue-bg">
+        <section className={`card-shift ${secondaryColorClass}`}>
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -79,16 +139,28 @@ class ShiftsTable extends React.Component {
         </section>
 
         {/* employee info section shows either: A. actual employee info if staffed. B. list of available employees for that shift */}
-        { shift.employee ? this.showEmpInCard(shift) : this.showAvailEmpsInCard(shift) }
-
+        { this.showEmployeeCardSection(shift, timeCategory, secondaryColorClass) }
+        
       </section>
     );
   }
 
+  showEmployeeCardSection = (shift, timeCategory, secondaryColorClass) => {
+    if (timeCategory === "PAST") {
+      return (<section className={`${secondaryColorClass} text-centered`}>In the past</section>);
+    } else if (timeCategory === "CURRENT") {
+      if (shift.employee) {
+        return (this.showEmpInCard(shift, secondaryColorClass));
+      } else {
+        return (this.showAvailEmpsInCard(shift, secondaryColorClass));
+      }
+    }
+  }
+
   // showWholeShiftCard() calls this if ... A. shift is staffed
-  showEmpInCard = (shift) => {
+  showEmpInCard = (shift, colorClass) => {
     return (
-      <section className="card-employee lightblue-bg">
+      <section className={`card-employee ${colorClass}`}>
           <p>EMPLOYEE</p>
           { shift.employee ? <p>{shift.employee.name}</p> : <p></p> }
           <p>PHONE</p>
@@ -103,6 +175,7 @@ class ShiftsTable extends React.Component {
 
   // showWholeShiftCard() calls this if ... B. shift is unstaffed
   showAvailEmpsInCard = (shift) => {
+    
     let stillLoading = true;
     if (this.state.availEmployeesByShiftId !== "LOADING") { stillLoading = false; }
     
@@ -148,43 +221,54 @@ class ShiftsTable extends React.Component {
 
   ////////////////// render ////////////////////
   render() {
-    if (this.props.allShifts.length === 0) {
-      return (
-        <section>No upcoming shifts</section>
-      );
-    } else if (this.state.stillLoading) {
-      return (<section>Loading...</section>);
-    } else {
-      return(
-        <section>
-          {this.props.allShifts.map(shift => {
-            return (
-              <Accordion key={shift.id}>
-                <section>
-                  <Accordion.Toggle eventKey="showInfo" className="accordion-toggle_button">
-                  {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordion-toggle_button"> */}
-                    <section className="section-4-col">
-                      <section>▼ #{shift.id}</section>
-                      <section>{formatDate(shift.shift_date)}</section>
-                      <section>{shift.client.name}</section>
-                      <section>{this.showEmpNameOrButton(shift)}</section>
-                    </section>
-                  </Accordion.Toggle>
+    return(
+      <section>
+        <h1 className="text-centered lightblue-bg">CURRENT SHIFTS</h1>
+        {this.showShiftsTable(this.state.currentShifts, "CURRENT")}
 
-                  <Accordion.Collapse eventKey="showInfo">
-                    <section>{this.showWholeShiftCard(shift)}</section>
-                  </Accordion.Collapse>
-
-                </section>
-              </Accordion>
-            )}
-          )}
-        </section>
-      );
-    }    
-    }
+        <h1 className="text-centered gray-bg">PAST SHIFTS</h1>
+        {this.showShiftsTable(this.state.pastShifts, "PAST")}
+      </section>
+    );  
+  }
 }
 
 export default ShiftsTable;
 
 
+
+
+// if (this.props.allShifts.length === 0) {
+    //   return (
+    //     <section>No upcoming shifts</section>
+    //   );
+    // } else if (this.state.stillLoading) {
+    //   return (<section>Loading...</section>);
+    // } else {
+    //   return(
+    //     <section>
+    //       {this.props.allShifts.map(shift => {
+    //         return (
+    //           <Accordion key={shift.id}>
+    //             <section>
+    //               <Accordion.Toggle eventKey="showInfo" className="accordion-toggle_button">
+    //               {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordion-toggle_button"> */}
+    //                 <section className="section-4-col">
+    //                   <section>▼ #{shift.id}</section>
+    //                   <section>{formatDate(shift.shift_date)}</section>
+    //                   <section>{shift.client.name}</section>
+    //                   <section>{this.showEmpNameOrButton(shift)}</section>
+    //                 </section>
+    //               </Accordion.Toggle>
+
+    //               <Accordion.Collapse eventKey="showInfo">
+    //                 <section>{this.showWholeShiftCard(shift)}</section>
+    //               </Accordion.Collapse>
+
+    //             </section>
+    //           </Accordion>
+    //         )}
+    //       )}
+    //     </section>
+    //   );
+    // }   

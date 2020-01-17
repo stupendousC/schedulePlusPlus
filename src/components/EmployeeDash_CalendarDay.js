@@ -126,7 +126,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button darklightblue-bg" >
+          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button blue-bg" >
             <section className="section-3-col">
               <section>▼</section>
               <section>{formatDate(dateStr).toUpperCase()}</section>
