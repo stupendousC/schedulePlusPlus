@@ -45,7 +45,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   }
 
   const showOwnActiveShifts = () => {
-    return showOwnShifts(ownActiveShifts, "blue-bg");
+    return showOwnShifts(ownActiveShifts, "lightblue-bg");
   }
 
   const showOwnPastShifts = () => {
@@ -59,7 +59,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
           return (
             <Accordion key={shift.id}>
               <section>
-                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordion-toggle_button gray-bg"):("accordion-toggle_button blue-bg")}>
+                <Accordion.Toggle eventKey="showInfo" className={dateInThePast(shift.shift_date)? ("accordion-toggle_button gray-bg"):("accordion-toggle_button lightblue-bg")}>
                   <section className="section-4-col">
                     <section>▼</section>
                     <section>{formatDate(shift.shift_date)}</section>
@@ -83,7 +83,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
   const showWholeShiftCard = (shift, takeButton=false) => {
     return (
       <section>
-        <section className={dateInThePast(shift.shift_date)? ("card-shift gray-bg"):("card-shift blue-bg")} >
+        <section className={dateInThePast(shift.shift_date)? ("card-shift gray-bg"):("card-shift lightblue-bg")} >
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -145,7 +145,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
         return (
           <section className="gray-bg text-centered">
             <p>You have the day off but you can change your mind!</p>
-            {/* Clicking on this button will result in re-rendering this section as 'eligible for shift', user should see blue-bg w/ blue button b/c reeval'd cannot=false */}
+            {/* Clicking on this button will result in re-rendering this section as 'eligible for shift', user should see lightblue-bg w/ blue button b/c reeval'd cannot=false */}
             <button onClick={() =>{removeUnavail(shift)}} className="btn btn-success">Take the shift</button>
             </section>
         );
@@ -153,7 +153,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
       
     } else {
       return (
-        <section className="blue-bg text-centered">
+        <section className="lightblue-bg text-centered">
           <p>You are eligible for this shift!</p>
           <button onClick={() =>{takeShiftCallback(shift)}} className="btn btn-primary">Take the shift</button>
           </section>

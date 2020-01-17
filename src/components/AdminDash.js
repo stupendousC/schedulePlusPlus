@@ -168,7 +168,6 @@ Thank you from the office of Schedule Plus Plus!
 ====================`
         );
 
-      console.log("sending uuid =", uuid);
       return(
         { "phoneNumber": employee.phone,
           "message": personalizedMsg,
@@ -226,7 +225,6 @@ Thank you from the office of Schedule Plus Plus!
             </Nav>
           </Navbar>
           
-
           {this.showChosenCategory()}
 
         </section>

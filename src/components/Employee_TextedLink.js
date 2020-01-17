@@ -48,7 +48,7 @@ export default function LinkTextedToEmployee({match}) {
     return (
       <section className="homepage-section">
         <h1 className="text-centered">Please Confirm Below</h1>
-        <section className="card-shift blue-bg">
+        <section className="card-shift lightblue-bg">
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>

@@ -57,7 +57,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
 
 
 ////////////////////// RENDER //////////////////////
-  const currUrl = window.location.href;
+  // const currUrl = window.location.href;
 
   return(
     <section className="loginBanner-section text-centered">

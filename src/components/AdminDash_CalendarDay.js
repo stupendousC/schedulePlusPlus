@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CalendarDay = ({basicShiftsInfo, dateStr}) => {
+const CalendarDay = ({basicShiftsInfo, dateStr, showColorBasedOnDay}) => {
   // const [findEmployeesClicked, setFindEmployeesClicked] = useState(false);
   // console.log("CalendarDay showing", dateStr, "\nbasicShiftsInfo = ", basicShiftsInfo);
 
@@ -40,7 +40,7 @@ const CalendarDay = ({basicShiftsInfo, dateStr}) => {
   }
 
   return(
-    <section>
+    <section className={showColorBasedOnDay()}>
       {showTableOrNothing()}
     </section>
   );

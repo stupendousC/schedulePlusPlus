@@ -76,6 +76,16 @@ h1, h2, h3, h4, h5, h6 {
   background-color: red;
 }
 
+.accordion-toggle_button_gold {
+  width: 100%;
+  background-color: gold;
+}
+
+.accordion-toggle_button_gray, .accordion-toggle_button_grey {
+  width: 100%;
+  background-color: grey;
+}
+
 .accordion-container {
   /* display: flex;
   justify-content: center; */
@@ -136,11 +146,11 @@ td, th {
 }
 
 /* ===== BACKGROUND COLORS ===== */
-.blue-bg {
+.lightblue-bg {
   background-color: lightblue;
 }
 
-.darkerblue-bg {
+.darklightblue-bg {
   background-color: #007Bff;
 }
 
@@ -148,8 +158,16 @@ td, th {
   background-color: grey;
 }
 
+.lightgray-bg, .lightgrey-bg {
+  background-color: rgb(172, 172, 172);
+}
+
 .red-bg {
   background-color: red;
+}
+
+.lightred-bg {
+  background-color: rgb(248, 115, 115);
 }
 
 .purple-bg {
@@ -160,7 +178,7 @@ td, th {
   background-color: gold;
 }
 
-.lightergold-bg {
+.lightgold-bg {
   background-color: rgb(253, 232, 109);
 }
 
