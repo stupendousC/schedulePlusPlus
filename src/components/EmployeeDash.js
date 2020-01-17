@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Button, Navbar, Nav, Form, FormControl } from 'react-bootstrap';
+import { Container, Navbar, Nav } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
@@ -257,17 +257,13 @@ export default class EmployeeDash extends React.Component {
         <section>
 
         <Navbar bg="primary" variant="dark" sticky="top">
-            <Navbar.Brand href="#home" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
+            <Navbar.Brand onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
             <Nav className="mr-auto">
-              <Nav.Link href="#home" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>
-              <Nav.Link href="#features" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</Nav.Link>
-              <Nav.Link href="#pricing" onClick={()=>this.setShowCategory('info')}>INFO</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('info')}>INFO</Nav.Link>
             </Nav>
-            <Form inline>
-              <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-              <Button variant="outline-light">Search</Button>
-            </Form>
-          </Navbar>
+        </Navbar>
 
 
           {this.showChosenCategory()}
