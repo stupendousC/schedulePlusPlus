@@ -6,7 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import LoginBanner from './LoginBanner';
+import LoginBanner from './components/LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
@@ -99,7 +99,7 @@ class App extends React.Component {
     return (
       
       <Router>
-        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCB={this.login} logoutCB={this.logout}/>
+        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCallback={this.login} logoutCallback={this.logout}/>
         
         {role === "ADMIN" ? (<Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
         {role === "EMPLOYEE" ? (<Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}

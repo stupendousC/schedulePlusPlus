@@ -3,7 +3,7 @@ import axios from 'axios';
 import { formatDate, dateInThePast, convertDateString } from './Helpers';
 
 
-const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback}) => {
+const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback, showColorBasedOnDay}) => {
   // need for sending POST request to backend
   const ALL_SHIFTS = process.env.REACT_APP_ALL_SHIFTS;
 
@@ -88,43 +88,19 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
       })
     .catch(error => console.log(error.message));
   }
-  
-  const showDateHeader = () => {
-    if (dateInThePast(daySpotlight)) {
-      return (<h1 className="gray-bg text-centered">{formatDate(daySpotlight)}</h1>);
-    } else {
-      return (<h1 className="text-centered">{formatDate(daySpotlight)}</h1>);
-    } 
-  }
 
   const showErrorMsgs = () => {
     const errorMsgs = genErrorMsgs();
       const rowsOfMsgs = errorMsgs.map( (msg,i) => {
         return (
-          <li key={i}>{msg}</li>
+          <li key={i} className="centered-text">{msg}</li>
         );
       });
 
       return (
-        <ul>{rowsOfMsgs}</ul>
+        <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
       );
     
-  }
-
-  const showColorBasedOnDay = () => {
-    // if today => bg-color = gold
-    // if past => bg-color = gray
-    // if no one to work => bg-color = red
-    // default => bg-color => blue
-    if (daySpotlight === convertDateString(new Date())) {
-      return "gold-bg";
-    } else if (dateInThePast(daySpotlight)) {
-      return "gray-bg";
-    } else if (availEmpsOfDay.length === 0) {
-      return "red-bg";
-    } else {
-      return "blue-bg";
-    }
   }
 
   const showButtonValue = () => {
@@ -139,38 +115,35 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 
   return(
     <section className={showColorBasedOnDay()}> 
-      {showDateHeader()}
+      <h1 className="text-centered">{formatDate(daySpotlight)}</h1>
       
-        <form onSubmit={onFormSubmit} className="px-4 py-3">
+      <form onSubmit={onFormSubmit} className="px-4 py-3">
 
-          {/* Decided to disable this for now, looks prettier when user clicks on the calendar
-          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
-          <section className="form-group">
-            <label>Date</label>
-            <input className="form-control" value={daySpotlight} />
-          </section> */}
+        <section className="form-group">
 
-          <section className="form-group">
-
-            <label>Client</label>
-            <select className="form-control" onChange={onClientChange}>
-              <option defaultValue>-- Select --</option>
-              {allClients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
-            </select>
+          <label>Client</label>
+          <select className="form-control" onChange={onClientChange}>
+            <option defaultValue>-- Select --</option>
+            {allClients.map(client => <option key={client.id} value={client.id}>{client.name}</option>)}
+          </select>
             
-            <label>Start time</label>
-            <input id="startTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultStartTime}></input>
-            
-            <label>End time</label>
-            <input id="endTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultEndTime}></input>
+          <label>Start time</label>
+          <input id="startTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultStartTime}></input>
           
-          </section>
+          <label>End time</label>
+          <input id="endTime" onChange={onTimeChange} className="form-control" type="time" defaultValue={defaultEndTime}></input>
           
-          {isFormValid() ? null: showErrorMsgs()}
+        </section>
+        
+        {isFormValid() ? null: showErrorMsgs()}
+
+        <section className="centered-children-per-row_container">
           <input type="submit" className="btn btn-primary" value={showButtonValue()} disabled={!isFormValid()}/>
-          <li className="fine-print">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
-          <li className="fine-print">Texts will also be sent to all those available, with valid phone numbers in their record</li>
-        </form>
+          <li className="fine-print centered-text">New shift will be visible on employee dashboards, open on a first-come-first-served basis</li>
+          <li className="fine-print centered-text">Texts will also be sent to all those available, with valid phone numbers in their record</li>
+        </section>
+        
+      </form>
 
     </section>
   );
@@ -179,3 +152,9 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 export default NewShift;
 
 
+{/* Decided to disable this for now, looks prettier when user clicks on the calendar
+          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
+          <section className="form-group">
+            <label>Date</label>
+            <input className="form-control" value={daySpotlight} />
+          </section> */}

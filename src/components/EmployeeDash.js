@@ -1,4 +1,6 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import { Container, Navbar, Nav } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
@@ -86,31 +88,6 @@ export default class EmployeeDash extends React.Component {
       return this.showAllInfo();
     }
   }
-
-  ////////////////////// DISPLAY: own info tab //////////////////////
-  // showAllInfo = () => {
-  //   const info = this.state.empInfo;
-    
-  //   return(
-  //     <section>   
-  //       <form>
-  //         <fieldset>
-  //           <div className="form-group">
-  //             <label>Name</label>
-  //             <input type="text" className="form-control" placeholder={info.name}/>
-  //             <label>Address</label>
-  //             <input type="text" className="form-control" placeholder={info.address}/>
-  //             <label>Phone</label>
-  //             <input type="text" className="form-control" placeholder={info.phone}/>
-  //             <label>Email</label>
-  //             <input type="text" className="form-control" placeholder={info.email}/>
-  //           </div>
-  //           <button onClick={this.update} className="btn btn-primary">READ ONLY FOR NOW (updates planned for future release)</button>
-  //         </fieldset>
-  //       </form>
-  //     </section>
-  //   );
-  // }
 
   showAllInfo = () => {
     return <Info info={this.state.empInfo} updateCallback={this.update}/>;
@@ -279,22 +256,16 @@ export default class EmployeeDash extends React.Component {
       return (
         <section>
 
-          <ul className="nav nav-tabs">
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('calendar')}>CALENDAR</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('shifts')}>SHIFTS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</button>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link active" onClick={()=>this.setShowCategory('info')}>INFO</button>
-            </li>
-          </ul>
+        <Navbar bg="primary" variant="dark" sticky="top">
+            <Navbar.Brand onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
+            <Nav className="mr-auto">
+              <Nav.Link onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('unavails')}>UNAVAILABLE DAYS</Nav.Link>
+              <Nav.Link onClick={()=>this.setShowCategory('info')}>INFO</Nav.Link>
+            </Nav>
+        </Navbar>
 
-          {this.showChosenCategory()}
+        {this.showChosenCategory()}
 
         </section>
       );

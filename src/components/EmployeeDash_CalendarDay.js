@@ -4,13 +4,21 @@ import Accordion from 'react-bootstrap/Accordion';
 
 
 const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, toggleAvailCallback}) => {
-  const today = new Date();
 
   const showShifts = (shiftsInArray) => {
-    // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[]  
-    return ( shiftsInArray.map (shift => {
-      return (showWholeShiftCard(shift));
-    }));
+    // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[] 
+    if (shiftsInArray.length > 0) {
+      return ( shiftsInArray.map (shift => {
+        return (showWholeShiftCard(shift));
+      }));
+    } else {
+      return (
+        <section className="text-centered">
+          <h3>No shifts scheduled</h3>
+        </section>
+      );
+    }
+    
   }
 
   const showWholeShiftCard = (shift) => {
@@ -69,7 +77,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
     if (shiftsOfDaySpotlight.length > 0) {
       return (
         <section>
-          { inThePast ? (<h3 className="text-centered">Shift completed!</h3>) : null }
+          {inThePast ? (<h3 className="text-centered">Shift completed!</h3>) : null }
           {showShifts(shiftsOfDaySpotlight)}
         </section>
       );
@@ -110,7 +118,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showToday">
-            <section className="lightergold-bg">{showShifts(shiftsToday)}</section>
+            <section className="lightgold-bg">{showShifts(shiftsToday)}</section>
           </Accordion.Collapse>
 
         </section>
@@ -118,7 +126,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
 
       <Accordion>
         <section>
-          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button darkerblue-bg" >
+          <Accordion.Toggle eventKey="showCalendarClick" className="accordion-toggle_button darklightblue-bg" >
             <section className="section-3-col">
               <section>▼</section>
               <section>{formatDate(dateStr).toUpperCase()}</section>
@@ -127,7 +135,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showCalendarClick">
-            <section className="blue-bg">{showAgendaOrOptions()}</section>
+            <section className="lightblue-bg">{showAgendaOrOptions()}</section>
           </Accordion.Collapse>
 
         </section>
@@ -145,7 +153,7 @@ export default CalendarDay;
 /////// OLD TABLE, might revert back later
     // return (
     //   <section key={shift.id}>
-    //     <section className="card-shift blue-bg" >
+    //     <section className="card-shift lightblue-bg" >
     //       <p>DATE</p>
     //       <p>{formatDate(shift.shift_date)}</p>
     //       <p>START</p>

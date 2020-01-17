@@ -20,6 +20,13 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
+.centered-children-per-row_container {
+  display: grid;
+  
+  justify-content: center;
+  align-items: center;
+}
+
 .fine-print {
   font-size: 0.75rem;
   list-style: none;
@@ -43,7 +50,6 @@ h1, h2, h3, h4, h5, h6 {
 .footer {
   text-align: center;
   margin: 1rem;
-  background-color: lightyellow;
 }
 
 /* ===== ADMIN DASH SECTIONS ===== */
@@ -63,12 +69,22 @@ h1, h2, h3, h4, h5, h6 {
 /* ===== ACCORDION STYLES ===== */
 .accordion-toggle_button {
   width: 100%;
-  background-color: rgb(74, 131, 255);
+  background-color: #007Bff;
 }
 
 .accordion-toggle_button_red {
   width: 100%;
   background-color: red;
+}
+
+.accordion-toggle_button_gold {
+  width: 100%;
+  background-color: gold;
+}
+
+.accordion-toggle_button_gray, .accordion-toggle_button_grey {
+  width: 100%;
+  background-color: grey;
 }
 
 .accordion-container {
@@ -131,20 +147,28 @@ td, th {
 }
 
 /* ===== BACKGROUND COLORS ===== */
-.blue-bg {
+.lightblue-bg {
   background-color: lightblue;
 }
 
-.darkerblue-bg {
-  background-color: rgb(74, 131, 255);
+.darklightblue-bg {
+  background-color: #007Bff;
 }
 
 .gray-bg, .grey-bg {
   background-color: grey;
 }
 
+.lightgray-bg, .lightgrey-bg {
+  background-color: rgb(172, 172, 172);
+}
+
 .red-bg {
   background-color: red;
+}
+
+.lightred-bg {
+  background-color: rgb(248, 115, 115);
 }
 
 .purple-bg {
@@ -155,7 +179,7 @@ td, th {
   background-color: gold;
 }
 
-.lightergold-bg {
+.lightgold-bg {
   background-color: rgb(253, 232, 109);
 }
 

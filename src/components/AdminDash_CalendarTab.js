@@ -15,37 +15,6 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
   const [availEmpsOfDay, setAvailEmpsOfDay] = useState("LOADING");
 
-  const tileContent = ({ date, view }) => {
-    let tileCaption = " - ";
-    let tileClassName = "";
-    
-    const targetDate = convertDateString(date);
-    // <Calendar> will iterate thru each date in the display month
-      // if no one's avail to work that day -> red background!
-      // these 2 below supercedes display above
-      // if date is in the past -> gray background
-      // if it's on today -> gold background  
-    if (daySpotlight === targetDate && availEmpsOfDay.length === 0) {
-      tileCaption = "😱";
-      tileClassName = "tile-no-workers";
-    }
-
-    if (dateInThePast(targetDate)) {
-      tileCaption = " x ";
-      tileClassName = "tile-past";
-    } else if (targetDate === today) {
-      tileCaption = "TODAY";
-      tileClassName = "tile-today";
-    }
-
-    // we only need to see the colored tiles when looking at monthly view.
-    if (view === "month") {
-      return (
-        <section className={tileClassName}>{tileCaption}</section>
-      );
-    } 
-  }
-
   const updateStateForCalendarDay = (e) => {
     const dateStr = convertDateString(e);
     
@@ -77,16 +46,78 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     .catch(error => console.log(error.message));
   }
 
+  //////////////////// display options ////////////////////
+  const tileContent = ({ date, view }) => {
+    let tileCaption = " - ";
+    let tileClassName = "";
+    
+    const targetDate = convertDateString(date);
+    // <Calendar> will iterate thru each date in the display month
+      // if no one's avail to work that day -> red background!
+      // these 2 below supercedes display above
+      // if date is in the past -> gray background
+      // if it's on today -> gold background  
+    if (daySpotlight === targetDate && availEmpsOfDay.length === 0) {
+      tileCaption = "😱";
+      tileClassName = "tile-no-workers";
+    }
+
+    if (dateInThePast(targetDate)) {
+      tileCaption = " x ";
+      tileClassName = "tile-past";
+    } else if (targetDate === today) {
+      tileCaption = "TODAY";
+      tileClassName = "tile-today";
+    }
+
+    // we only need to see the colored tiles when looking at monthly view.
+    if (view === "month") {
+      return (
+        <section className={tileClassName}>{tileCaption}</section>
+      );
+    } 
+  }
+
+  const showAccordionHeaderColor = () => {
+    if (daySpotlight === today) {
+      return "accordion-toggle_button_gold";
+    } else if (availEmpsOfDay.length === 0) {
+      return "accordion-toggle_button_red";  
+    } else if (dateInThePast(daySpotlight)) {
+      return "accordion-toggle_button_gray";
+    } else {
+      return "accordion-toggle_button";
+    }
+  }
+
+  const showColorBasedOnDay = () => {
+    // if today => bg-color = gold
+    // if past => bg-color = gray
+    // if no one to work => bg-color = red
+    // default => bg-color => blue
+    if (daySpotlight === convertDateString(new Date())) {
+      return "lightgold-bg";
+    } else if (dateInThePast(daySpotlight)) {
+      return "lightgray-bg";
+    } else if (availEmpsOfDay.length === 0) {
+      return "lightred-bg";
+    } else {
+      return "lightblue-bg";
+    }
+  }
+
   const showAvailEmpsInCard = () => {
-    // console.log("availEmpsOfDay = ", availEmpsOfDay);
+    if (dateInThePast(daySpotlight)) {
+      return (<section className={showColorBasedOnDay()+" text-centered"}> This day is in the past...</section>);
+    }
 
     if (availEmpsOfDay === "LOADING") {
-      return (<section>Loading...</section>)
-    } else if (availEmpsOfDay === []) {
-      return (<section>No one is available!</section>);
+      return (<section className={showColorBasedOnDay()+" text-centered"}>Loading...</section>);
+    } else if (availEmpsOfDay.length === 0) {
+      return (<section className={showColorBasedOnDay()+" text-centered"}>No one is available!</section>);
     } else {
       return (
-      <section>
+      <section className={showColorBasedOnDay()}>
         {showRowsOfEmps()}
       </section>
     );
@@ -95,7 +126,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
 
   const showRowsOfEmps = () => availEmpsOfDay.map(emp => {
       return(
-        <section key={emp.id} className="section-2-col">
+        <section key={emp.id} className="section-2-col text-centered">
           <section>{emp.name}</section>
           <section>{emp.phone}</section>
         </section>
@@ -127,19 +158,19 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
         </section>
 
       <Accordion>
-          <Accordion.Toggle eventKey="newShift" className="accordion-toggle_button">
+          <Accordion.Toggle eventKey="newShift" className={showAccordionHeaderColor()}>
             <section>
               <section>▼ MAKE A NEW SHIFT</section>
             </section>
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="newShift">
-          <NewShift daySpotlight={daySpotlight} allClients={allClients} availEmpsOfDay={availEmpsOfDay} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} /> 
+          <NewShift daySpotlight={daySpotlight} allClients={allClients} availEmpsOfDay={availEmpsOfDay} updateAllShiftsCallback={updateAllShiftsCallback} textEmployeesCallback={prepForTextEmployeesCallback} showColorBasedOnDay={showColorBasedOnDay}/> 
           </Accordion.Collapse>
       </Accordion>
       
       <Accordion>
-        <Accordion.Toggle eventKey="availEmpList" className={availEmpsOfDay.length === 0 ? "accordion-toggle_button_red" : "accordion-toggle_button"}>
+        <Accordion.Toggle eventKey="availEmpList" className={showAccordionHeaderColor()}>
           <section>
             <section>▼ {availEmpsOfDay === "LOADING" ? "Loading":availEmpsOfDay.length} AVAILABLE EMPLOYEES FOR {formatDate(daySpotlight)}</section>
           </section>
@@ -152,14 +183,14 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       </Accordion>
 
       <Accordion>
-        <Accordion.Toggle eventKey="dayAgenda" className="accordion-toggle_button">
+        <Accordion.Toggle eventKey="dayAgenda" className={showAccordionHeaderColor()}>
           <section>
             <section>▼AGENDA FOR {formatDate(daySpotlight)}</section>
           </section>
         </Accordion.Toggle>
 
         <Accordion.Collapse eventKey="dayAgenda">
-          <CalendarDay basicShiftsInfo={shiftsOfDay} dateStr={daySpotlight} />
+          <CalendarDay basicShiftsInfo={shiftsOfDay} dateStr={daySpotlight} showColorBasedOnDay={showColorBasedOnDay} />
         </Accordion.Collapse>
       </Accordion>
 

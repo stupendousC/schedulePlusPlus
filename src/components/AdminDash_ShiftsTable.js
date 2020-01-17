@@ -58,7 +58,7 @@ class ShiftsTable extends React.Component {
   showWholeShiftCard = (shift) => {
     return (
       <section>
-        <section className="card-shift blue-bg">
+        <section className="card-shift lightblue-bg">
           <p>DATE</p>
           <p>{shift.shift_date}</p>
           <p>START</p>
@@ -88,7 +88,7 @@ class ShiftsTable extends React.Component {
   // showWholeShiftCard() calls this if ... A. shift is staffed
   showEmpInCard = (shift) => {
     return (
-      <section className="card-employee blue-bg">
+      <section className="card-employee lightblue-bg">
           <p>EMPLOYEE</p>
           { shift.employee ? <p>{shift.employee.name}</p> : <p></p> }
           <p>PHONE</p>
@@ -108,7 +108,7 @@ class ShiftsTable extends React.Component {
     
     if (stillLoading ) {
       return (
-        <section className="card-employee blue-bg">Loading...</section>
+        <section className="card-employee lightblue-bg">Loading...</section>
       );
 
     } else {
@@ -126,7 +126,7 @@ class ShiftsTable extends React.Component {
         const numEmps = empList.length;
 
         return (
-          <section className="blue-bg">
+          <section className="lightblue-bg">
           <button onClick={()=>{this.props.textEmployeesCallback(empList, shift)}} className="btn btn-primary">TEXT ALL {numEmps} AVAILABLE EMPLOYEES</button>
           {this.rowsOfEmps(empList)}
           </section>
@@ -138,7 +138,7 @@ class ShiftsTable extends React.Component {
   rowsOfEmps = (empList) => {
       return empList.map( (emp, i) => {
         return(
-          <section key={emp.id} className="card-employee blue-bg">
+          <section key={emp.id} className="card-employee lightblue-bg">
             <section>{emp.name}</section>
             <section>{emp.phone}</section>
           </section>
@@ -157,8 +157,6 @@ class ShiftsTable extends React.Component {
     } else {
       return(
         <section>
-          <h1>1. DIVIDE INTO PAST & CURRENT!</h1>
-          <h1>2. GIVE ABILITY TO DELETE SHIFTS!  Notify employee though!</h1>
           {this.props.allShifts.map(shift => {
             return (
               <Accordion key={shift.id}>

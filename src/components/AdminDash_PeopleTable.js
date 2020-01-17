@@ -95,9 +95,6 @@ const PeopleTable = ({peopleList, URL_endpoint, setStateKey, updatePeopleListCB 
   //////////////////////////// render ////////////////////////////
   return (
     <section>
-      <h1>How about ADD function here?? and it knows if you want admin/employee/client</h1>
-      <h1>ALSO!!! If u delete admin -> then deactivate all their shifts!!! and alert the employees!</h1>
-      <h1>OR if you delete employee -> remove them from the shifts! open it againa nd alert the empoyees!</h1>
       {showAll(peopleList, URL_endpoint)}
     </section>
   );
