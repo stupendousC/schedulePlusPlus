@@ -114,7 +114,7 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: 1fr 1fr;
 }
 
-.card-shift, .card-client, .card-employee {
+.card-shift, .card-client, .card-employee, .card-person {
   display: grid;
   grid-template-columns: 1fr 1fr;
   margin: 1rem;
@@ -281,4 +281,8 @@ td, th {
 /* ===== MISC ===== */
 .margin-left-1rem {
   margin-left: 1rem;
+}
+
+.margin-all-1rem {
+  margin: 1rem;
 }
