@@ -6,10 +6,11 @@ import Accordion from 'react-bootstrap/Accordion';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
-const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
+const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
   const [personSpotlight, setPersonSpotlight] = useState(null);
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
   const [updatedPerson, setUpdatedPerson] = useState(null);
+  const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null});
 
   // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
@@ -17,7 +18,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   // need this for adding new people
   const uuidv4 = require('uuid/v4');
 
-  const showAll = (peopleList, URL_endpoint) => {
+  const showAll = (peopleList) => {
     return ( peopleList.map((person, i) => {
       return (
         <section key={i} className="margin-all-1rem">
@@ -25,7 +26,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
             <section>{person.name}</section>
             <section><button onClick={() => read(i, peopleList)} className="btn btn-primary">Info</button></section>
             <section><button onClick={() => update(i, peopleList)} className="btn btn-warning">Update</button></section>
-            <section><button onClick={() => deactivate(person, URL_endpoint)} className="btn btn-danger">Deactivate</button></section>
+            <section><button onClick={() => deactivate(person)} className="btn btn-danger">Deactivate</button></section>
           </section>
           <section>
             {personSpotlight === person ? showPersonSpotlight(person):null}
@@ -40,17 +41,21 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
       return (
         <form className="margin-all-1rem">
           <fieldset>
-            <div className="form-group">
+            <section className="form-group">
               <label>NAME</label>
               <input type="text" className="form-control" name="name" placeholder={person.name} onChange={onUpdateFieldChange}/>
-              <label>Address</label>
+              <label>ADDRESS</label>
               <input type="text" className="form-control" name="address" placeholder={person.address} onChange={onUpdateFieldChange}/>
-              <label>Phone</label>
+              <label>PHONE</label>
               <input type="text" className="form-control" name="phone" placeholder={person.phone} onChange={onUpdateFieldChange}/>
-              <label>Email</label>
+              <label>EMAIL</label>
               <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onUpdateFieldChange}/>
-            </div>
-            <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
+            </section>
+
+            <section className="margin-all-1rem">
+              {isFormValid(updatedPerson) ? null: showErrorMsgs()}
+              <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
+            </section>
           </fieldset>
         </form>
       );
@@ -76,32 +81,37 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   }
 
   ////////////////////// ADD person //////////////////////
-  const showAddButton = () => {
+  const showAddSection = () => {
     const uuid = uuidv4();
 
     return (
       <Accordion>
       <section>
         <Accordion.Toggle eventKey="showForm" className={`accordion-toggle_button gold-bg`}>
-            <section className="margin-all-1rem">
-              ▼ Add New Person ▼
+            <section className="margin-all-1rem capitalize">
+              ▼ add new {personType} ▼
             </section>
         </Accordion.Toggle>
 
         <Accordion.Collapse eventKey="showForm">
         <form className="margin-all-1rem lightgold-bg">
           <fieldset>
-            <div className="form-group">
+            <section className="margin-all-1rem form-group">
               <label>NAME</label>
               <input type="text" className="form-control" name="name" onChange={onAddFieldChange}/>
-              <label>Address</label>
+              <label>ADDRESS</label>
               <input type="text" className="form-control" name="address" onChange={onAddFieldChange}/>
-              <label>Phone</label>
+              <label>PHONE</label>
               <input type="text" className="form-control" name="phone" onChange={onAddFieldChange}/>
-              <label>Email</label>
+              <label>EMAIL</label>
               <input type="text" className="form-control" name="email" onChange={onAddFieldChange}/>
-            </div>
-            <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
+              <label>UUID</label>
+              <input type="text" className="form-control" disabled name="uuid" placeholder={uuid}/>
+            </section>
+            <section className="centered-children-per-row_container margin-all-1rem">
+              {isFormValid(newPerson) ? null: showErrorMsgs()}
+              <button onClick={sendAddAPI} className="btn btn-primary">ADD</button>
+            </section>
           </fieldset>
         </form>
         </Accordion.Collapse>
@@ -111,8 +121,65 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     );
   }
 
-  const onAddFieldChange = () => {
-    console.log("adding");
+  const onAddFieldChange = (e) => {
+    newPerson[e.target.name] = e.target.value;
+    setNewPerson(newPerson);
+  }
+
+  const sendAddAPI = (e) => {
+    e.preventDefault();
+    newPerson.active = true;
+    
+    axios.post(URL_endpoint, newPerson)
+    .then(response => {
+      toast.success(`${newPerson.name} added successfully`);
+      console.log(response.data, "response.data");
+      const updatedPeopleList = peopleList.push(response.data);
+      updatePeopleListCB(setStateKey, updatedPeopleList)})
+    .catch(error => toast.error(`ERROR: ${error.message}`));
+
+  }
+  ////////////////////// FORM VALIDATION //////////////////////
+  const isFormValid = (newOrUpdatedPerson) => {
+    // // VALIDATE HERE
+    // console.log("VALIDATING...", newOrUpdatedPerson.name);
+    // // must have name, everything else is ok
+    // if (newOrUpdatedPerson.name === "" || !newOrUpdatedPerson.name) {
+    //   console.log("NO NAME!!!");
+    //   return false;
+    // }
+
+    return true;
+  }
+
+  const genErrorMsgs = () => {
+    // evaluate all form inputs and save invalid reasons in errorMsgs
+    let errorMsgs = [];
+
+    // if (dateInThePast(daySpotlight)) {
+    //   errorMsgs.push("Date cannot be in the past");
+    // }
+    // if (!clientId) {
+    //   errorMsgs.push("Please select a client before submitting form");
+    // }
+    // if (endTime < startTime) {
+    //   errorMsgs.push("Start time must be before end time");
+    // }
+
+    return errorMsgs;
+}
+
+  const showErrorMsgs = () => {
+    const errorMsgs = genErrorMsgs();
+      const rowsOfMsgs = errorMsgs.map( (msg,i) => {
+        return (
+          <li key={i} className="centered-text">{msg}</li>
+        );
+      });
+
+      return (
+        <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
+      );
   }
 
   ////////////////////// READ person //////////////////////
@@ -149,8 +216,6 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
 
   const sendUpdateAPI = (e) => {
     e.preventDefault();
-    console.log("UPDATED PERSON = ", updatedPerson);
-    console.log("personspotlight =", personSpotlight);
 
     axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
     .then( response => {
@@ -203,8 +268,8 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   //////////////////////////// render ////////////////////////////
   return (
     <section>
-      <h1 className="text-centered margin-all-1rem">{title}</h1>
-      {showAddButton()}
+      <h1 className="text-centered margin-all-1rem">ALL {personType.toUpperCase()}S</h1>
+      {showAddSection()}
       {showAll(peopleList, URL_endpoint)}
     </section>
   );
