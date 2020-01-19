@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
 import Accordion from 'react-bootstrap/Accordion';
-import { isPhoneValid, isEmailValid } from './Helpers';
+import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens } from './Helpers';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
@@ -152,14 +152,21 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     }
 
     // if phone given, make sure it's correct format
-    if (newOrUpdatedPerson.phone !== "") {
+    if (newOrUpdatedPerson.phone && newOrUpdatedPerson.phone !== "") {
       if (!isPhoneValid(newOrUpdatedPerson.phone)) {
-        errorMsgs.push(`Phone number format invalid`);
+        // if phone is actually in technically correct format of (425)111-2222, then we'll convert it to correct format of 425-111-2222 for user
+        const correctedPhoneNum = convertToValidPhoneNumberIfInParens(newOrUpdatedPerson.phone);
+        if (correctedPhoneNum) {
+          newOrUpdatedPerson.phone = correctedPhoneNum;
+        } else {
+          errorMsgs.push(`Phone number format invalid`);
+        }
       }
     }
 
     // if email given, make sure it's correct format
-    if (newOrUpdatedPerson.email !== "") {
+    console.log("email = ", newOrUpdatedPerson.email, newOrUpdatedPerson.email === "");
+    if (newOrUpdatedPerson.email && newOrUpdatedPerson.email !== "") {
       if (!isEmailValid(newOrUpdatedPerson.email)) {
         errorMsgs.push(`Email invalid`);
       }
