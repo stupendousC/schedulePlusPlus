@@ -7,9 +7,8 @@ import {Nav, Navbar} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import {sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
+
 const uuidv4 = require('uuid/v4');
-
-
 
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;

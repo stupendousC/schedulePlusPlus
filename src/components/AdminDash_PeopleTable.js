@@ -2,15 +2,20 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
+import Accordion from 'react-bootstrap/Accordion';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
 const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
   const [personSpotlight, setPersonSpotlight] = useState(null);
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
+  const [updatedPerson, setUpdatedPerson] = useState(null);
 
   // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
+
+  // need this for new people
+  const uuidv4 = require('uuid/v4');
 
   const showAll = (peopleList, URL_endpoint) => {
     return ( peopleList.map((person, i) => {
@@ -37,13 +42,13 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
           <fieldset>
             <div className="form-group">
               <label>NAME</label>
-              <input type="text" className="form-control" name="name" placeholder={person.name} onChange={onFieldChange}/>
+              <input type="text" className="form-control" name="name" placeholder={person.name} onChange={onUpdateFieldChange}/>
               <label>Address</label>
-              <input type="text" className="form-control" name="address" placeholder={person.address} onChange={onFieldChange}/>
+              <input type="text" className="form-control" name="address" placeholder={person.address} onChange={onUpdateFieldChange}/>
               <label>Phone</label>
-              <input type="text" className="form-control" name="phone" placeholder={person.phone} onChange={onFieldChange}/>
+              <input type="text" className="form-control" name="phone" placeholder={person.phone} onChange={onUpdateFieldChange}/>
               <label>Email</label>
-              <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onFieldChange}/>
+              <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onUpdateFieldChange}/>
             </div>
             <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
           </fieldset>
@@ -69,6 +74,44 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     );
     }
   }
+
+  ////////// HOLD UP!
+  const showAddButton = () => {
+    const uuid = uuidv4();
+
+    return (
+      // <section className="margin-all-1rem"> 
+      // </section>
+      <Accordion>
+      <section>
+        <Accordion.Toggle eventKey="showInfo" className={`accordion-toggle_button gold-bg`}>
+            <section className="margin-all-1rem">
+              ▼ Add New Person ▼
+            </section>
+        </Accordion.Toggle>
+
+        <Accordion.Collapse eventKey="showInfo">
+        <form className="margin-all-1rem">
+          <fieldset>
+            <div className="form-group">
+              <label>NAME</label>
+              <input type="text" className="form-control" name="name" onChange={onAddFieldChange}/>
+              <label>Address</label>
+              <input type="text" className="form-control" name="address" onChange={onAddFieldChange}/>
+              <label>Phone</label>
+              <input type="text" className="form-control" name="phone" onChange={onAddFieldChange}/>
+              <label>Email</label>
+              <input type="text" className="form-control" name="email" onChange={onAddFieldChange}/>
+            </div>
+            <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
+          </fieldset>
+        </form>
+        </Accordion.Collapse>
+
+      </section>
+    </Accordion>
+    );
+  }
   ////////////////////// read/update/deactivate //////////////////////
   const toggleAsPersonSpotlight = (selectedPerson) => {
     if (personSpotlight === selectedPerson) {
@@ -80,29 +123,49 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
 
   const read = (i, peopleList) => {
     const selectedPerson = peopleList[i];
-    setUpdateSpotlightBool(false);
     toggleAsPersonSpotlight(selectedPerson);
+
+    setUpdateSpotlightBool(false);
   }
 
   const update = (i, peopleList) => {
     const selectedPerson = peopleList[i];
-    setUpdateSpotlightBool(true);
     toggleAsPersonSpotlight(selectedPerson);
+
+    setUpdateSpotlightBool(true);
+    const copiedPerson = JSON.parse(JSON.stringify(selectedPerson));
+    setUpdatedPerson(copiedPerson);
   }
 
-  const onFieldChange = (e) => {
+  const onUpdateFieldChange = (e) => {
     // console.log("input: ", e.target.name, "-->", e.target.value);
-    let personObj = personSpotlight;
-    personObj[e.target.name] = e.target.value;
-    setPersonSpotlight(personObj);
+    updatedPerson[e.target.name] = e.target.value;
+    setUpdatedPerson(updatedPerson);
   }
 
   const sendUpdateAPI = (e) => {
     e.preventDefault();
+    console.log("UPDATED PERSON = ", updatedPerson);
+    console.log("personspotlight =", personSpotlight);
 
-    axios.put(`${URL_endpoint}/${personSpotlight.id}`, personSpotlight)
-    .then(toast.success(`${personSpotlight.name} updated successfully`))
+    axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
+    .then( response => {
+      toast.success(`${updatedPerson.name} updated successfully`);
+      const updatedPeopleList = peopleList.map(person => {
+        if (person.id === updatedPerson.id) {
+          return response.data;
+        } else {
+          return person;
+        }
+      });
+      updatePeopleListCB(setStateKey, updatedPeopleList)
+    }
+    )
     .catch(error => toast.error(`ERROR: ${error.message}`));
+  }
+
+  const onAddFieldChange = () => {
+    console.log("adding");
   }
 
   const deactivate = (person) => {
@@ -140,7 +203,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   return (
     <section>
       <h1 className="text-centered">{title}</h1>
-      
+      {showAddButton()}
       {showAll(peopleList, URL_endpoint)}
     </section>
   );
