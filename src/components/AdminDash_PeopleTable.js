@@ -3,7 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
 import Accordion from 'react-bootstrap/Accordion';
-import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens } from './Helpers';
+import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
@@ -161,11 +161,14 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
         } else {
           errorMsgs.push(`Phone number format invalid`);
         }
+      } else {
+        // convert from format of '4251112222' or '14251112222' to 425-111-2222 for readability
+        const newReadablePhone = convertToValidPhoneNumberIfAllNums(newOrUpdatedPerson.phone);
+        newOrUpdatedPerson.phone = newReadablePhone;
       }
     }
 
     // if email given, make sure it's correct format
-    console.log("email = ", newOrUpdatedPerson.email, newOrUpdatedPerson.email === "");
     if (newOrUpdatedPerson.email && newOrUpdatedPerson.email !== "") {
       if (!isEmailValid(newOrUpdatedPerson.email)) {
         errorMsgs.push(`Email invalid`);
