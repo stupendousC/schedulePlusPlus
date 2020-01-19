@@ -42,18 +42,22 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   const sendUuidApi = (e) => {
     e.preventDefault();
     handleCloseModal();
-    console.log("SEND API WITH uuid =", uuid);
-    console.log(sessionStorage.getItem('googleId'));
 
-    const URL_endpoint = `${process.env.REACT_APP_LOGIN}/${sessionStorage.getItem('googleId')}`;
+    const googleId = sessionStorage.getItem('googleId')
+    const URL_endpoint = `${process.env.REACT_APP_LOGIN}/${googleId}`;
 
     axios.post(URL_endpoint, {uuid: uuid})
-    .then(response => console.log(response.data))
+    .then(response => {
+      const roleDB = Object.keys(response.data)[0];
+
+      if (roleDB === "ADMIN" || roleDB === "EMPLOYEE") {
+        // uuid does match someone in the database, now invoke googleAuthCallback back up to App.js to save info & re-render/re-direct
+        googleAuthCallback(googleId);
+      } else {
+        toast.error("Invalid uuid verification code, please double check and try again");
+      }
+    })
     .catch(error => toast.error(error.message));
-
-
-
-    
   }
 
   ////////////////////// DASHBOARD BUTTONS //////////////////////
@@ -100,7 +104,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
         </Modal.Header>
 
         <Modal.Body>
-          Please copy and paste your unique verification id, including the dashes.
+          Please copy and paste your unique verification id (uuid), including the dashes.
           <form>
             <input type="text" className="form-control margin-top-1rem" onChange={updateUuid} placeholder={"Example: 12345678-abcd-abcd-abcd-1234abcd1234"}/>
             <section className="centered-children-per-row_container">
