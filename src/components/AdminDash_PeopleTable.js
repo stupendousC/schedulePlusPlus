@@ -3,6 +3,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
 import Accordion from 'react-bootstrap/Accordion';
+import { isPhoneValid, isEmailValid } from './Helpers';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
@@ -11,8 +12,9 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
   const [updatedPerson, setUpdatedPerson] = useState(null);
   const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null, active: true});
+  const [formErrorMsgs, setFormErrorMsgs] = useState([]);
 
-  // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
+  // no useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
 
   // need this for adding new people
@@ -53,7 +55,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
             </section>
 
             <section className="margin-all-1rem">
-              {isFormValid(updatedPerson) ? null: showErrorMsgs()}
+              {formErrorMsgs === [] ? null : showErrorMsgs()}
               <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
             </section>
           </fieldset>
@@ -109,7 +111,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
               <input type="text" className="form-control" disabled name="uuid" placeholder={uuid}/>
             </section>
             <section className="centered-children-per-row_container margin-all-1rem">
-              {isFormValid(newPerson) ? null: showErrorMsgs()}
+              {formErrorMsgs === [] ? null : showErrorMsgs()}
               <button onClick={sendAddAPI} className="btn btn-primary">ADD</button>
             </section>
           </fieldset>
@@ -128,6 +130,8 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
   const sendAddAPI = (e) => {
     e.preventDefault();
+
+    if (!isFormValid(newPerson)) return;
     
     axios.post(URL_endpoint, newPerson)
     .then(response => {
@@ -136,49 +140,44 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
       updatedPeopleList.push(newPerson);
       updatePeopleListCB(setStateKey, updatedPeopleList)})
     .catch(error => toast.error(`ERROR: ${error.message}`));
-
   }
   ////////////////////// FORM VALIDATION //////////////////////
   const isFormValid = (newOrUpdatedPerson) => {
-    // // VALIDATE HERE
-    // console.log("VALIDATING...", newOrUpdatedPerson.name);
-    // // must have name, everything else is ok
-    // if (newOrUpdatedPerson.name === "" || !newOrUpdatedPerson.name) {
-    //   console.log("NO NAME!!!");
-    //   return false;
-    // }
-
-    return true;
-  }
-
-  const genErrorMsgs = () => {
-    // evaluate all form inputs and save invalid reasons in errorMsgs
     let errorMsgs = [];
 
-    // if (dateInThePast(daySpotlight)) {
-    //   errorMsgs.push("Date cannot be in the past");
-    // }
-    // if (!clientId) {
-    //   errorMsgs.push("Please select a client before submitting form");
-    // }
-    // if (endTime < startTime) {
-    //   errorMsgs.push("Start time must be before end time");
-    // }
+    // name must be present
+    if (newOrUpdatedPerson.name === "" || !newOrUpdatedPerson.name) {
+      errorMsgs.push("Name cannot be blank");
+    }
 
-    return errorMsgs;
-}
+    // if phone given, make sure it's correct format
+    if (newOrUpdatedPerson.phone !== "") {
+      if (!isPhoneValid(newOrUpdatedPerson.phone)) {
+        errorMsgs.push(`Phone number format invalid`);
+      }
+    }
+
+    // if email given, make sure it's correct format
+    if (newOrUpdatedPerson.email !== "") {
+      if (!isEmailValid(newOrUpdatedPerson.email)) {
+        errorMsgs.push(`Email invalid`);
+      }
+    }
+
+    setFormErrorMsgs(errorMsgs);
+    return (errorMsgs.length === 0 ? true : false);
+  }
 
   const showErrorMsgs = () => {
-    const errorMsgs = genErrorMsgs();
-      const rowsOfMsgs = errorMsgs.map( (msg,i) => {
-        return (
-          <li key={i} className="centered-text">{msg}</li>
-        );
-      });
-
+    const rowsOfMsgs = formErrorMsgs.map( (msg,i) => {
       return (
-        <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
+        <li key={i} className="centered-text">{msg}</li>
       );
+    });
+
+    return (
+      <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
+    );
   }
 
   ////////////////////// READ person //////////////////////
@@ -216,6 +215,8 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const sendUpdateAPI = (e) => {
     e.preventDefault();
 
+    if (!isFormValid(newPerson)) return;
+    
     axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
     .then( response => {
       toast.success(`${updatedPerson.name} updated successfully`);

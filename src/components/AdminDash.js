@@ -112,9 +112,6 @@ export default class AdminDash extends React.Component {
   updatePeopleList = (setStateKey, updatedPeopleList) => {
     // this is a callback function for <PeopleTable> to send back updated peopleList
     // so we can .setState here to allow re-rendering of visuals
-
-    console.log("adminDash says updatedPeopleList =", updatedPeopleList);
-    
     this.setState({ [setStateKey]: updatedPeopleList });
   }
   

@@ -166,6 +166,11 @@ const areStringsInListAllIntegers = (list_of_strings) => {
   return true;
 }
 
+export const isEmailValid = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
+}
+
 export const deepCompareTwoSchedArrayss = (array1, array2) => {
   if (array1.length !== array2.length) return false;
   const sortedArray1 = sortById(array1);
