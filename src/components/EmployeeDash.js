@@ -1,6 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Container, Navbar, Nav } from 'react-bootstrap';
+import { Navbar, Nav } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import CalendarTab from './EmployeeDash_CalendarTab';
 import UnavailDays from './EmployeeDash_UnavailDays';
@@ -90,12 +90,7 @@ export default class EmployeeDash extends React.Component {
   }
 
   showAllInfo = () => {
-    return <Info info={this.state.empInfo} updateCallback={this.update}/>;
-  }
-
-  update = (e) => {
-    e.preventDefault();
-    //TODO
+    return <Info info={this.state.empInfo} URL_endpoint={this.state.EMP_DASH} updateInfoCallback={this.updateInfo}/>;
   }
 
   ////////////////////// DISPLAY: shifts tab //////////////////////
@@ -246,6 +241,9 @@ export default class EmployeeDash extends React.Component {
     .catch(error => console.log(error.message));
   }
   
+  updateInfo = (newEmpInfo) => {
+    this.setState({ empInfo: newEmpInfo });
+  }
   ////////////////////// render //////////////////////
   render() {
 

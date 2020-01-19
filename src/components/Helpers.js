@@ -137,9 +137,15 @@ export const isPhoneValid = (phoneStr) => {
 
 // for use by isPhoneValid()
 const canStringBeInteger = (str) => {
+  // if str has leading zeros, get rid of them
+  let nonZeroStr = str;
+  while (nonZeroStr[0] === "0" && nonZeroStr.length > 1) {
+    nonZeroStr = nonZeroStr.slice(1,nonZeroStr.length);
+  }
+
   const asInt = parseInt(str);
   const backToStr = asInt.toString();
-  return((str === backToStr) ? true:false);
+  return((nonZeroStr === backToStr) ? true:false);
 }
 
 // for use by isPhoneValid()
@@ -149,6 +155,17 @@ const areStringsInListAllIntegers = (list_of_strings) => {
   }
   // if nobody in the list fails, then they all pass
   return true;
+}
+
+export const convertToValidPhoneNumberIfAllNums = (phoneStr) => {
+  // if phoneStr is in format of '4251112222' or '14251112222', it's annoying to read for user, so change it to 425-111-2222 minus the 1
+  if (phoneStr.length === 10) {
+    return `${phoneStr.slice(0,3)}-${phoneStr.slice(3,6)}-${phoneStr.slice(6,10)}`;
+  } else if (phoneStr.length === 11) {
+    return convertToValidPhoneNumberIfAllNums(phoneStr.slice(1,11));
+  } else {
+    return phoneStr;
+  }
 }
 
 export const convertToValidPhoneNumberIfInParens = (phoneStr) => {

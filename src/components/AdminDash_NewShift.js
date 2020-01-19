@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { formatDate, dateInThePast, convertDateString } from './Helpers';
+import { formatDate, dateInThePast } from './Helpers';
 
 
 const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback, showColorBasedOnDay}) => {
@@ -150,11 +150,3 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 }
 
 export default NewShift;
-
-
-{/* Decided to disable this for now, looks prettier when user clicks on the calendar
-          IF I decide to enable this section, will need a setDaySpotlightCallback to send back to <AdminDash> so the calendar highted tile will match user input
-          <section className="form-group">
-            <label>Date</label>
-            <input className="form-control" value={daySpotlight} />
-          </section> */}
