@@ -101,9 +101,8 @@ export const isPhoneValid = (phoneStr) => {
     // "4251112222"       // Length = 10
     // "14251112222"      // Length = 11
     // "425-111-2222"     // Length = 12
-    // "(425)111-2222"    // Length = 13  // BUT IT WILL NOT WORK WITH TWILIO!!!
     // "1-425-111-2222"   // Length = 14
-  // else returns False
+  // else returns False, including "(425)111-2222", so will have convertToValidPhoneNumberIfInParens() for that, to minimize user interruption
 
   if (!phoneStr) return false;
   if (phoneStr.length < 10 || phoneStr.length > 14) return false;
@@ -118,20 +117,6 @@ export const isPhoneValid = (phoneStr) => {
     const areaCode = phoneStr.slice(0,3);
     const phone3 = phoneStr.slice(4,7);
     const phone4 = phoneStr.slice(8,12);
-    const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
-    return areNumberPartsOK;
-  }
-
-  if (phoneStr.length === 13) {
-    // check the non-numerical parts
-    if (phoneStr[0] !== "(") return false;
-    if (phoneStr[4] !== ")") return false;
-    if (phoneStr[8] !== "-") return false;
-
-    // check the number parts
-    const areaCode = phoneStr.slice(1,4);
-    const phone3 = phoneStr.slice(5,9);
-    const phone4 = phoneStr.slice(9,13);
     const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
     return areNumberPartsOK;
   }
@@ -164,6 +149,37 @@ const areStringsInListAllIntegers = (list_of_strings) => {
   }
   // if nobody in the list fails, then they all pass
   return true;
+}
+
+export const convertToValidPhoneNumberIfInParens = (phoneStr) => {
+  // if "(425)111-2222" was the input, fcn will convert it to twilio-accepted & db-accepted value of 425-111-2222
+
+  if (phoneStr.length === 13) {
+    // check the non-numerical parts
+    if (phoneStr[0] !== "(") return null;
+    if (phoneStr[4] !== ")") return null;
+    if (phoneStr[8] !== "-") return null;
+
+    // check the number parts
+    const areaCode = phoneStr.slice(1,4);
+    const phone3 = phoneStr.slice(5,8);
+    const phone4 = phoneStr.slice(9,13);
+    const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
+    // if phoneStr is in accepted convertable format, return it in target format like "425-111-2222"
+    if (areNumberPartsOK) {
+      return `${areaCode}-${phone3}-${phone4}`;
+    } else {
+      return null;
+    }
+
+  } else {
+    return null;
+  }
+}
+
+export const isEmailValid = (email) => {
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(String(email).toLowerCase());
 }
 
 export const deepCompareTwoSchedArrayss = (array1, array2) => {

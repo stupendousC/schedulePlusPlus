@@ -190,7 +190,6 @@ class ShiftsTable extends React.Component {
 
     } else {
       const availEmpList = this.state.availEmployeesByShiftId[shift.id];
-      // console.log("shift id", shift.id, "corresponds to ", availEmpList);
       
       if (availEmpList.length === 0) {
         return (
@@ -227,10 +226,10 @@ class ShiftsTable extends React.Component {
   render() {
     return(
       <section>
-        <h1 className="text-centered lightblue-bg">CURRENT SHIFTS</h1>
+        <h1 className="text-centered margin-all-1rem">CURRENT SHIFTS</h1>
         {this.showShiftsTable(this.state.currentShifts, "CURRENT")}
 
-        <h1 className="text-centered gray-bg">PAST SHIFTS</h1>
+        <h1 className="text-centered margin-all-1rem">PAST SHIFTS</h1>
         {this.showShiftsTable(this.state.pastShifts, "PAST")}
       </section>
     );  
@@ -239,40 +238,3 @@ class ShiftsTable extends React.Component {
 
 export default ShiftsTable;
 
-
-
-
-// if (this.props.allShifts.length === 0) {
-    //   return (
-    //     <section>No upcoming shifts</section>
-    //   );
-    // } else if (this.state.stillLoading) {
-    //   return (<section>Loading...</section>);
-    // } else {
-    //   return(
-    //     <section>
-    //       {this.props.allShifts.map(shift => {
-    //         return (
-    //           <Accordion key={shift.id}>
-    //             <section>
-    //               <Accordion.Toggle eventKey="showInfo" className="accordion-toggle_button">
-    //               {/* <Accordion.Toggle onClick={()=>{getAvailEmps(shift)}} eventKey="showInfo" className="accordion-toggle_button"> */}
-    //                 <section className="section-4-col">
-    //                   <section>▼ #{shift.id}</section>
-    //                   <section>{formatDate(shift.shift_date)}</section>
-    //                   <section>{shift.client.name}</section>
-    //                   <section>{this.showEmpNameOrButton(shift)}</section>
-    //                 </section>
-    //               </Accordion.Toggle>
-
-    //               <Accordion.Collapse eventKey="showInfo">
-    //                 <section>{this.showWholeShiftCard(shift)}</section>
-    //               </Accordion.Collapse>
-
-    //             </section>
-    //           </Accordion>
-    //         )}
-    //       )}
-    //     </section>
-    //   );
-    // }   

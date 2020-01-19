@@ -7,9 +7,8 @@ import {Nav, Navbar} from 'react-bootstrap';
 import {toast} from 'react-toastify';
 import {sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
+
 const uuidv4 = require('uuid/v4');
-
-
 
 const ALL_EMPS = process.env.REACT_APP_ALL_EMPS;
 const ALL_CLIENTS = process.env.REACT_APP_ALL_CLIENTS;
@@ -106,9 +105,9 @@ export default class AdminDash extends React.Component {
   }
 
   ////////////////////// DISPLAY: Employees/Clients/Admin //////////////////////
-  showAllEmployees = () => <PeopleTable title="ALL EMPLOYEES" peopleList={this.state.allEmployees} URL_endpoint={ALL_EMPS} setStateKey="allEmployees" updatePeopleListCB={this.updatePeopleList}/>
-  showAllAdmins = () => <PeopleTable title="ALL ADMINS" peopleList={this.state.allAdmins} URL_endpoint={ALL_ADMINS} setStateKey="allAdmins" updatePeopleListCB={this.updatePeopleList}/>
-  showAllClients = () => <PeopleTable title="ALL CLIENTS" peopleList={this.state.allClients} URL_endpoint={ALL_CLIENTS} setStateKey="allClients" updatePeopleListCB={this.updatePeopleList}/>
+  showAllEmployees = () => <PeopleTable personType="employee" peopleList={this.state.allEmployees} URL_endpoint={ALL_EMPS} setStateKey="allEmployees" updatePeopleListCB={this.updatePeopleList}/>
+  showAllAdmins = () => <PeopleTable personType="admin" peopleList={this.state.allAdmins} URL_endpoint={ALL_ADMINS} setStateKey="allAdmins" updatePeopleListCB={this.updatePeopleList}/>
+  showAllClients = () => <PeopleTable personType="client" peopleList={this.state.allClients} URL_endpoint={ALL_CLIENTS} setStateKey="allClients" updatePeopleListCB={this.updatePeopleList}/>
 
   updatePeopleList = (setStateKey, updatedPeopleList) => {
     // this is a callback function for <PeopleTable> to send back updated peopleList

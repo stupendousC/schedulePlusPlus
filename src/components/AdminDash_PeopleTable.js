@@ -2,17 +2,26 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
+import Accordion from 'react-bootstrap/Accordion';
+import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens } from './Helpers';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
-const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
-  const [personSpotlight, setPersonSpotlight] = useState("");
+const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
+  const [personSpotlight, setPersonSpotlight] = useState(null);
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
+  const [updatedPerson, setUpdatedPerson] = useState(null);
+  const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null, active: true});
+  const [addFormErrorMsgs, setAddFormErrorMsgs] = useState([]);
+  const [updateFormErrorMsgs, setUpdateFormErrorMsgs] = useState([]);
 
-  // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
+  // no useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
 
-  const showAll = (peopleList, URL_endpoint) => {
+  // need this for adding new people
+  const uuidv4 = require('uuid/v4');
+
+  const showAll = (peopleList) => {
     return ( peopleList.map((person, i) => {
       return (
         <section key={i} className="margin-all-1rem">
@@ -20,7 +29,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
             <section>{person.name}</section>
             <section><button onClick={() => read(i, peopleList)} className="btn btn-primary">Info</button></section>
             <section><button onClick={() => update(i, peopleList)} className="btn btn-warning">Update</button></section>
-            <section><button onClick={() => deactivate(person, URL_endpoint)} className="btn btn-danger">Deactivate</button></section>
+            <section><button onClick={() => deactivate(person)} className="btn btn-danger">Deactivate</button></section>
           </section>
           <section>
             {personSpotlight === person ? showPersonSpotlight(person):null}
@@ -35,17 +44,21 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
       return (
         <form className="margin-all-1rem">
           <fieldset>
-            <div className="form-group">
+            <section className="form-group">
               <label>NAME</label>
-              <input type="text" className="form-control" placeholder={person.name}/>
-              <label>Address</label>
-              <input type="text" className="form-control" placeholder={person.address}/>
-              <label>Phone</label>
-              <input type="text" className="form-control" placeholder={person.phone}/>
-              <label>Email</label>
-              <input type="text" className="form-control" placeholder={person.email}/>
-            </div>
-            <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
+              <input type="text" className="form-control" name="name" placeholder={person.name} onChange={onUpdateFieldChange}/>
+              <label>ADDRESS</label>
+              <input type="text" className="form-control" name="address" placeholder={person.address} onChange={onUpdateFieldChange}/>
+              <label>PHONE</label>
+              <input type="text" className="form-control" name="phone" placeholder={person.phone} onChange={onUpdateFieldChange}/>
+              <label>EMAIL</label>
+              <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onUpdateFieldChange}/>
+            </section>
+
+            <section className="margin-all-1rem">
+              {updateFormErrorMsgs === [] ? null : showErrorMsgs(updateFormErrorMsgs)}
+              <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
+            </section>
           </fieldset>
         </form>
       );
@@ -69,40 +82,166 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     );
     }
   }
-  ////////////////////// read/update/deactivate //////////////////////
+
+  ////////////////////// ADD person //////////////////////
+  const showAddSection = () => {
+    const uuid = uuidv4();
+
+    return (
+      <Accordion>
+      <section>
+        <Accordion.Toggle eventKey="showForm" className={`accordion-toggle_button gold-bg`}>
+            <section className="margin-all-1rem capitalize">
+              ▼ add new {personType} ▼
+            </section>
+        </Accordion.Toggle>
+
+        <Accordion.Collapse eventKey="showForm">
+        <form className="margin-all-1rem lightgold-bg">
+          <fieldset>
+            <section className="margin-all-1rem form-group">
+              <label>NAME</label>
+              <input type="text" className="form-control" name="name" onChange={onAddFieldChange}/>
+              <label>ADDRESS</label>
+              <input type="text" className="form-control" name="address" onChange={onAddFieldChange}/>
+              <label>PHONE</label>
+              <input type="text" className="form-control" name="phone" onChange={onAddFieldChange}/>
+              <label>EMAIL</label>
+              <input type="text" className="form-control" name="email" onChange={onAddFieldChange}/>
+              <label>UUID</label>
+              <input type="text" className="form-control" disabled name="uuid" placeholder={uuid}/>
+            </section>
+            <section className="centered-children-per-row_container margin-all-1rem">
+              {addFormErrorMsgs === [] ? null : showErrorMsgs(addFormErrorMsgs)}
+              <button onClick={sendAddAPI} className="btn btn-primary">ADD</button>
+            </section>
+          </fieldset>
+        </form>
+        </Accordion.Collapse>
+
+      </section>
+    </Accordion>
+    );
+  }
+
+  const onAddFieldChange = (e) => {
+    newPerson[e.target.name] = e.target.value;
+    setNewPerson(newPerson);
+  }
+
+  const sendAddAPI = (e) => {
+    e.preventDefault();
+
+    if (!isFormValid(newPerson, setAddFormErrorMsgs)) return;
+    
+    axios.post(URL_endpoint, newPerson)
+    .then(response => {
+      toast.success(`${newPerson.name} added successfully`);
+      const updatedPeopleList = [...peopleList];
+      updatedPeopleList.push(newPerson);
+      updatePeopleListCB(setStateKey, updatedPeopleList)})
+    .catch(error => toast.error(`ERROR: ${error.message}`));
+  }
+  ////////////////////// FORM VALIDATION //////////////////////
+  const isFormValid = (newOrUpdatedPerson, setAddOrUpdatedFormMsgs) => {
+    let errorMsgs = [];
+
+    // name must be present
+    if (newOrUpdatedPerson.name === "" || !newOrUpdatedPerson.name) {
+      errorMsgs.push("Name cannot be blank");
+    }
+
+    // if phone given, make sure it's correct format
+    if (newOrUpdatedPerson.phone && newOrUpdatedPerson.phone !== "") {
+      if (!isPhoneValid(newOrUpdatedPerson.phone)) {
+        // if phone is actually in technically correct format of (425)111-2222, then we'll convert it to correct format of 425-111-2222 for user
+        const correctedPhoneNum = convertToValidPhoneNumberIfInParens(newOrUpdatedPerson.phone);
+        if (correctedPhoneNum) {
+          newOrUpdatedPerson.phone = correctedPhoneNum;
+        } else {
+          errorMsgs.push(`Phone number format invalid`);
+        }
+      }
+    }
+
+    // if email given, make sure it's correct format
+    console.log("email = ", newOrUpdatedPerson.email, newOrUpdatedPerson.email === "");
+    if (newOrUpdatedPerson.email && newOrUpdatedPerson.email !== "") {
+      if (!isEmailValid(newOrUpdatedPerson.email)) {
+        errorMsgs.push(`Email invalid`);
+      }
+    }
+
+    setAddOrUpdatedFormMsgs(errorMsgs);
+    return (errorMsgs.length === 0 ? true : false);
+  }
+
+  const showErrorMsgs = (addOrUpdatedFormMsgs) => {
+    const rowsOfMsgs = addOrUpdatedFormMsgs.map( (msg,i) => {
+      return (
+        <li key={i} className="centered-text">{msg}</li>
+      );
+    });
+
+    return (
+      <ul className="centered-children-per-row_container">{rowsOfMsgs}</ul>
+    );
+  }
+
+  ////////////////////// READ person //////////////////////
   const toggleAsPersonSpotlight = (selectedPerson) => {
     if (personSpotlight === selectedPerson) {
       setPersonSpotlight("");
     } else {
       setPersonSpotlight(selectedPerson);
+      setUpdateFormErrorMsgs([]);
     }   
   }
 
   const read = (i, peopleList) => {
     const selectedPerson = peopleList[i];
-    setUpdateSpotlightBool(false);
     toggleAsPersonSpotlight(selectedPerson);
+
+    setUpdateSpotlightBool(false);
   }
 
+  ////////////////////// UPDATE person //////////////////////
   const update = (i, peopleList) => {
     const selectedPerson = peopleList[i];
-    setUpdateSpotlightBool(true);
     toggleAsPersonSpotlight(selectedPerson);
 
+    setUpdateSpotlightBool(true);
+    const copiedPerson = JSON.parse(JSON.stringify(selectedPerson));
+    setUpdatedPerson(copiedPerson);
+  }
 
-    // updatePeopleListCB(setStateKey, updatedPeopleList);
+  const onUpdateFieldChange = (e) => {
+    updatedPerson[e.target.name] = e.target.value;
+    setUpdatedPerson(updatedPerson);
   }
 
   const sendUpdateAPI = (e) => {
     e.preventDefault();
 
-    console.log("what do we have...?", e.target);
-
-    // axios.get(`${URL_endpoint}/${id}`)
-    // .then(respone => console.log('update from backend:', response.data))
-    // .catch(error => toast.error(`ERROR: ${error.message}`));
+    if (!isFormValid(updatedPerson, setUpdateFormErrorMsgs)) return;
+    
+    axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
+    .then( response => {
+      toast.success(`${updatedPerson.name} updated successfully`);
+      const updatedPeopleList = peopleList.map(person => {
+        if (person.id === updatedPerson.id) {
+          return response.data;
+        } else {
+          return person;
+        }
+      });
+      updatePeopleListCB(setStateKey, updatedPeopleList)
+    }
+    )
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
+  ////////////////////// DEACTIVATE person //////////////////////
   const deactivate = (person) => {
     setPersonSpotlight("");
     personInPurgatory = person;
@@ -137,9 +276,9 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   //////////////////////////// render ////////////////////////////
   return (
     <section>
-      <h1 className="text-centered">{title}</h1>
-      
-      {showAll(peopleList, URL_endpoint)}
+      <h1 className="text-centered margin-all-1rem">ALL {personType.toUpperCase()}S</h1>
+      {showAddSection()}
+      {showAll(peopleList)}
     </section>
   );
 

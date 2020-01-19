@@ -3,6 +3,10 @@
 font-family: 'Exo', sans-serif;
 font-family: 'Work Sans', sans-serif; */
 
+/* https://flaviocopes.com/how-to-uppercase-first-letter-javascript/ */
+.capitalize {
+  text-transform: capitalize;
+}
 
 /* ============================ */
 /* ===== MY CUSTOM STYLES ===== */
