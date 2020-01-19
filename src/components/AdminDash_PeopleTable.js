@@ -10,7 +10,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const [personSpotlight, setPersonSpotlight] = useState(null);
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
   const [updatedPerson, setUpdatedPerson] = useState(null);
-  const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null});
+  const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null, active: true});
 
   // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
@@ -128,13 +128,12 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
   const sendAddAPI = (e) => {
     e.preventDefault();
-    newPerson.active = true;
     
     axios.post(URL_endpoint, newPerson)
     .then(response => {
       toast.success(`${newPerson.name} added successfully`);
-      console.log(response.data, "response.data");
-      const updatedPeopleList = peopleList.push(response.data);
+      const updatedPeopleList = [...peopleList];
+      updatedPeopleList.push(newPerson);
       updatePeopleListCB(setStateKey, updatedPeopleList)})
     .catch(error => toast.error(`ERROR: ${error.message}`));
 
@@ -270,7 +269,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     <section>
       <h1 className="text-centered margin-all-1rem">ALL {personType.toUpperCase()}S</h1>
       {showAddSection()}
-      {showAll(peopleList, URL_endpoint)}
+      {showAll(peopleList)}
     </section>
   );
 
