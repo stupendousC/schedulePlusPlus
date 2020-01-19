@@ -226,10 +226,10 @@ class ShiftsTable extends React.Component {
   render() {
     return(
       <section>
-        <h1 className="text-centered lightblue-bg">CURRENT SHIFTS</h1>
+        <h1 className="text-centered margin-all-1rem">CURRENT SHIFTS</h1>
         {this.showShiftsTable(this.state.currentShifts, "CURRENT")}
 
-        <h1 className="text-centered gray-bg">PAST SHIFTS</h1>
+        <h1 className="text-centered margin-all-1rem">PAST SHIFTS</h1>
         {this.showShiftsTable(this.state.pastShifts, "PAST")}
       </section>
     );  

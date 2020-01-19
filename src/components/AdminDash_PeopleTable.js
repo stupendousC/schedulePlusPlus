@@ -14,7 +14,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
 
-  // need this for new people
+  // need this for adding new people
   const uuidv4 = require('uuid/v4');
 
   const showAll = (peopleList, URL_endpoint) => {
@@ -50,7 +50,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
               <label>Email</label>
               <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onUpdateFieldChange}/>
             </div>
-            <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
+            <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
           </fieldset>
         </form>
       );
@@ -75,23 +75,21 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     }
   }
 
-  ////////// HOLD UP!
+  ////////////////////// ADD person //////////////////////
   const showAddButton = () => {
     const uuid = uuidv4();
 
     return (
-      // <section className="margin-all-1rem"> 
-      // </section>
       <Accordion>
       <section>
-        <Accordion.Toggle eventKey="showInfo" className={`accordion-toggle_button gold-bg`}>
+        <Accordion.Toggle eventKey="showForm" className={`accordion-toggle_button gold-bg`}>
             <section className="margin-all-1rem">
               ▼ Add New Person ▼
             </section>
         </Accordion.Toggle>
 
-        <Accordion.Collapse eventKey="showInfo">
-        <form className="margin-all-1rem">
+        <Accordion.Collapse eventKey="showForm">
+        <form className="margin-all-1rem lightgold-bg">
           <fieldset>
             <div className="form-group">
               <label>NAME</label>
@@ -112,7 +110,12 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     </Accordion>
     );
   }
-  ////////////////////// read/update/deactivate //////////////////////
+
+  const onAddFieldChange = () => {
+    console.log("adding");
+  }
+
+  ////////////////////// READ person //////////////////////
   const toggleAsPersonSpotlight = (selectedPerson) => {
     if (personSpotlight === selectedPerson) {
       setPersonSpotlight("");
@@ -128,6 +131,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     setUpdateSpotlightBool(false);
   }
 
+  ////////////////////// UPDATE person //////////////////////
   const update = (i, peopleList) => {
     const selectedPerson = peopleList[i];
     toggleAsPersonSpotlight(selectedPerson);
@@ -164,10 +168,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
-  const onAddFieldChange = () => {
-    console.log("adding");
-  }
-
+  ////////////////////// DEACTIVATE person //////////////////////
   const deactivate = (person) => {
     setPersonSpotlight("");
     personInPurgatory = person;
@@ -202,7 +203,7 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
   //////////////////////////// render ////////////////////////////
   return (
     <section>
-      <h1 className="text-centered">{title}</h1>
+      <h1 className="text-centered margin-all-1rem">{title}</h1>
       {showAddButton()}
       {showAll(peopleList, URL_endpoint)}
     </section>
