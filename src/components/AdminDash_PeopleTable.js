@@ -6,7 +6,7 @@ import ToastUndo from './ToastUndo';
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
 const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeopleListCB }) => {
-  const [personSpotlight, setPersonSpotlight] = useState("");
+  const [personSpotlight, setPersonSpotlight] = useState(null);
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
 
   // not gonna useState on the following b/c that's asynch AND I don't need re-rendering for it
@@ -37,13 +37,13 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
           <fieldset>
             <div className="form-group">
               <label>NAME</label>
-              <input type="text" className="form-control" placeholder={person.name}/>
+              <input type="text" className="form-control" name="name" placeholder={person.name} onChange={onFieldChange}/>
               <label>Address</label>
-              <input type="text" className="form-control" placeholder={person.address}/>
+              <input type="text" className="form-control" name="address" placeholder={person.address} onChange={onFieldChange}/>
               <label>Phone</label>
-              <input type="text" className="form-control" placeholder={person.phone}/>
+              <input type="text" className="form-control" name="phone" placeholder={person.phone} onChange={onFieldChange}/>
               <label>Email</label>
-              <input type="text" className="form-control" placeholder={person.email}/>
+              <input type="text" className="form-control" name="email" placeholder={person.email} onChange={onFieldChange}/>
             </div>
             <button onClick={sendUpdateAPI} className="btn btn-primary">READ ONLY FOR NOW</button>
           </fieldset>
@@ -88,19 +88,21 @@ const PeopleTable = ({title, peopleList, URL_endpoint, setStateKey, updatePeople
     const selectedPerson = peopleList[i];
     setUpdateSpotlightBool(true);
     toggleAsPersonSpotlight(selectedPerson);
+  }
 
-
-    // updatePeopleListCB(setStateKey, updatedPeopleList);
+  const onFieldChange = (e) => {
+    // console.log("input: ", e.target.name, "-->", e.target.value);
+    let personObj = personSpotlight;
+    personObj[e.target.name] = e.target.value;
+    setPersonSpotlight(personObj);
   }
 
   const sendUpdateAPI = (e) => {
     e.preventDefault();
 
-    console.log("what do we have...?", e.target);
-
-    // axios.get(`${URL_endpoint}/${id}`)
-    // .then(respone => console.log('update from backend:', response.data))
-    // .catch(error => toast.error(`ERROR: ${error.message}`));
+    axios.put(`${URL_endpoint}/${personSpotlight.id}`, personSpotlight)
+    .then(toast.success(`${personSpotlight.name} updated successfully`))
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
   const deactivate = (person) => {

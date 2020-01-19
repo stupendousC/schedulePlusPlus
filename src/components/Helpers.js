@@ -101,7 +101,6 @@ export const isPhoneValid = (phoneStr) => {
     // "4251112222"       // Length = 10
     // "14251112222"      // Length = 11
     // "425-111-2222"     // Length = 12
-    // "(425)111-2222"    // Length = 13  // BUT IT WILL NOT WORK WITH TWILIO!!!
     // "1-425-111-2222"   // Length = 14
   // else returns False
 
@@ -122,19 +121,20 @@ export const isPhoneValid = (phoneStr) => {
     return areNumberPartsOK;
   }
 
-  if (phoneStr.length === 13) {
-    // check the non-numerical parts
-    if (phoneStr[0] !== "(") return false;
-    if (phoneStr[4] !== ")") return false;
-    if (phoneStr[8] !== "-") return false;
+  // "(425)111-2222"    // Length = 13  // BUT IT WILL NOT WORK WITH TWILIO!!!
+  // if (phoneStr.length === 13) {
+  //   // check the non-numerical parts
+  //   if (phoneStr[0] !== "(") return false;
+  //   if (phoneStr[4] !== ")") return false;
+  //   if (phoneStr[8] !== "-") return false;
 
-    // check the number parts
-    const areaCode = phoneStr.slice(1,4);
-    const phone3 = phoneStr.slice(5,9);
-    const phone4 = phoneStr.slice(9,13);
-    const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
-    return areNumberPartsOK;
-  }
+  //   // check the number parts
+  //   const areaCode = phoneStr.slice(1,4);
+  //   const phone3 = phoneStr.slice(5,9);
+  //   const phone4 = phoneStr.slice(9,13);
+  //   const areNumberPartsOK = areStringsInListAllIntegers([areaCode, phone3, phone4]);
+  //   return areNumberPartsOK;
+  // }
 
   if (phoneStr.length === 14) {
     // check the non-numerical parts
