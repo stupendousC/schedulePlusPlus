@@ -12,7 +12,8 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const [updateSpotlightBool, setUpdateSpotlightBool] = useState(false);
   const [updatedPerson, setUpdatedPerson] = useState(null);
   const [newPerson, setNewPerson] = useState({name: null, phone: null, email: null, address: null, active: true});
-  const [formErrorMsgs, setFormErrorMsgs] = useState([]);
+  const [addFormErrorMsgs, setAddFormErrorMsgs] = useState([]);
+  const [updateFormErrorMsgs, setUpdateFormErrorMsgs] = useState([]);
 
   // no useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
@@ -55,7 +56,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
             </section>
 
             <section className="margin-all-1rem">
-              {formErrorMsgs === [] ? null : showErrorMsgs()}
+              {updateFormErrorMsgs === [] ? null : showErrorMsgs(updateFormErrorMsgs)}
               <button onClick={sendUpdateAPI} className="btn btn-primary">UPDATE</button>
             </section>
           </fieldset>
@@ -111,7 +112,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
               <input type="text" className="form-control" disabled name="uuid" placeholder={uuid}/>
             </section>
             <section className="centered-children-per-row_container margin-all-1rem">
-              {formErrorMsgs === [] ? null : showErrorMsgs()}
+              {addFormErrorMsgs === [] ? null : showErrorMsgs(addFormErrorMsgs)}
               <button onClick={sendAddAPI} className="btn btn-primary">ADD</button>
             </section>
           </fieldset>
@@ -131,7 +132,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const sendAddAPI = (e) => {
     e.preventDefault();
 
-    if (!isFormValid(newPerson)) return;
+    if (!isFormValid(newPerson, setAddFormErrorMsgs)) return;
     
     axios.post(URL_endpoint, newPerson)
     .then(response => {
@@ -142,7 +143,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     .catch(error => toast.error(`ERROR: ${error.message}`));
   }
   ////////////////////// FORM VALIDATION //////////////////////
-  const isFormValid = (newOrUpdatedPerson) => {
+  const isFormValid = (newOrUpdatedPerson, setAddOrUpdatedFormMsgs) => {
     let errorMsgs = [];
 
     // name must be present
@@ -164,12 +165,12 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
       }
     }
 
-    setFormErrorMsgs(errorMsgs);
+    setAddOrUpdatedFormMsgs(errorMsgs);
     return (errorMsgs.length === 0 ? true : false);
   }
 
-  const showErrorMsgs = () => {
-    const rowsOfMsgs = formErrorMsgs.map( (msg,i) => {
+  const showErrorMsgs = (addOrUpdatedFormMsgs) => {
+    const rowsOfMsgs = addOrUpdatedFormMsgs.map( (msg,i) => {
       return (
         <li key={i} className="centered-text">{msg}</li>
       );
@@ -186,6 +187,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
       setPersonSpotlight("");
     } else {
       setPersonSpotlight(selectedPerson);
+      setUpdateFormErrorMsgs([]);
     }   
   }
 
@@ -207,7 +209,6 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   }
 
   const onUpdateFieldChange = (e) => {
-    // console.log("input: ", e.target.name, "-->", e.target.value);
     updatedPerson[e.target.name] = e.target.value;
     setUpdatedPerson(updatedPerson);
   }
@@ -215,7 +216,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   const sendUpdateAPI = (e) => {
     e.preventDefault();
 
-    if (!isFormValid(newPerson)) return;
+    if (!isFormValid(updatedPerson, setUpdateFormErrorMsgs)) return;
     
     axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
     .then( response => {
