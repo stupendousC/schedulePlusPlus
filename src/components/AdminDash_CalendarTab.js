@@ -112,7 +112,12 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
       return (<section className={showColorBasedOnDay()+" text-centered"}>No one is available!</section>);
     } else {
       return (
-      <section className={showColorBasedOnDay()}>
+      <section className={`padding-all-1rem ${showColorBasedOnDay()}`}>
+        <section className="section-3-col text-centered">
+          <h5>EMPLOYEE</h5>
+          <h5>PHONE</h5>
+          <h5>EMAIL</h5>
+        </section>
         {showRowsOfEmps()}
       </section>
     );
@@ -121,9 +126,10 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
 
   const showRowsOfEmps = () => availEmpsOfDay.map(emp => {
       return(
-        <section key={emp.id} className="section-2-col text-centered">
+        <section key={emp.id} className="section-3-col text-centered">
           <section>{emp.name}</section>
           <section>{emp.phone}</section>
+          <section>{emp.email}</section>
         </section>
       );
     })

@@ -20,19 +20,19 @@ const CalendarDay = ({basicShiftsInfo, dateStr, showColorBasedOnDay}) => {
   const showTableOrNothing = () => {
     if (!basicShiftsInfo || basicShiftsInfo === [] || basicShiftsInfo.length === 0) {
       return (
-        <h3 className="text-centered">No shifts scheduled</h3>
+        <h3 className="text-centered padding-all-1rem">No shifts scheduled</h3>
       );
     } else {
       return (
         <section>
-          <section className="section-4-col"> 
-            <section>CLIENT</section>
-            <section>EMPLOYEE</section>
-            <section>START</section>
-            <section>END</section>
+          <section className="section-4-col padding-top-1rem text-centered"> 
+            <h5>CLIENT</h5>
+            <h5>EMPLOYEE</h5>
+            <h5>START</h5>
+            <h5>END</h5>
           </section>
 
-          <section>
+          <section className="text-centered padding-bottom-1rem"> 
             {showShifts()}
           </section>
         </section>
