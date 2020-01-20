@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { formatTime } from './Helpers';
 
 const CalendarDay = ({basicShiftsInfo, dateStr, showColorBasedOnDay}) => {
@@ -50,3 +51,8 @@ const CalendarDay = ({basicShiftsInfo, dateStr, showColorBasedOnDay}) => {
 
 export default CalendarDay;
 
+CalendarDay.propTypes = {
+  basicShiftsInfo: PropTypes.arrayOf(PropTypes.object), 
+  dateStr: PropTypes.string.isRequired, 
+  showColorBasedOnDay: PropTypes.func.isRequired
+};

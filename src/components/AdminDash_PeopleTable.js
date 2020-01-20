@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
 import Accordion from 'react-bootstrap/Accordion';
@@ -291,3 +292,11 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
 
 export default PeopleTable;
+
+PeopleTable.propTypes = {
+  personType: PropTypes.string.isRequired, 
+  peopleList: PropTypes.arrayOf(PropTypes.object), 
+  URL_endpoint: PropTypes.string.isRequired, 
+  setStateKey: PropTypes.string.isRequired, 
+  updatePeopleListCB: PropTypes.func.isRequired,
+};

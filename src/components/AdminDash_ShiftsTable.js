@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
-
+import PropTypes from 'prop-types';
 import { formatTime, formatDate, dateInThePast } from './Helpers';
 import { toast } from 'react-toastify';
 
@@ -236,3 +236,7 @@ class ShiftsTable extends React.Component {
 
 export default ShiftsTable;
 
+ShiftsTable.propTypes = {
+  textEmployeesCallback: PropTypes.func.isRequired,
+  allShifts: PropTypes.arrayOf(PropTypes.object),
+};

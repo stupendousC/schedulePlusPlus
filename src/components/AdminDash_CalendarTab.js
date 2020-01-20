@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
@@ -9,7 +10,7 @@ import NewShift from './AdminDash_NewShift';
 import { convertToPST, formatDate, convertDateString, dateInThePast } from './Helpers';
 
 
-const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAllShiftsCallback, textEmployeesCallback}) => {
+const CalendarTab = ({allShifts, allClients, updateAllShiftsCallback, textEmployeesCallback}) => {
   const today = convertDateString(new Date());
   const [daySpotlight, setDaySpotlight] = useState(today);
   const [shiftsOfDay, setShiftsOfDay] = useState("LOADING");
@@ -202,3 +203,11 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
 
 
 export default CalendarTab;
+
+
+CalendarTab.propTypes = {
+  allShifts: PropTypes.arrayOf(PropTypes.object), 
+  allClients: PropTypes.arrayOf(PropTypes.object), 
+  updateAllShiftsCallback: PropTypes.func.isRequired, 
+  textEmployeesCallback: PropTypes.func.isRequired,
+};

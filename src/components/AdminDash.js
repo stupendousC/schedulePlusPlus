@@ -92,8 +92,6 @@ export default class AdminDash extends React.Component {
     return <CalendarTab 
       allClients={this.state.allClients} 
       allShifts={this.state.allShifts} 
-      allEmployees={this.state.allEmployees} 
-      allUnavails={this.state.allUnavails} 
       updateAllShiftsCallback={this.updateAllShifts}
       textEmployeesCallback={this.textEmployees}/>
   }

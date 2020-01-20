@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { formatDate, dateInThePast } from './Helpers';
 import { toast } from 'react-toastify';
 
@@ -149,3 +150,12 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 }
 
 export default NewShift;
+
+NewShift.propTypes = {
+  daySpotlight: PropTypes.string.isRequired, 
+  allClients: PropTypes.arrayOf(PropTypes.object), 
+  availEmpsOfDay: PropTypes.oneOfType(PropTypes.arrayOf(PropTypes.object), PropTypes.string), // coud be eihter "LOADING" or actual array of Employees
+  updateAllShiftsCallback: PropTypes.func.isRequired, 
+  textEmployeesCallback: PropTypes.func.isRequired, 
+  showColorBasedOnDay: PropTypes.func.isRequired,
+};
