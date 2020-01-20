@@ -282,13 +282,9 @@ td, th {
 }
 
 
-/* ===== MISC ===== */
+/* ===== MISC margins & paddings ===== */
 .margin-all-1rem {
   margin: 1rem;
-}
-
-.margin-all-3rem {
-  margin: 3rem;
 }
 
 .margin-left-1rem {
@@ -297,4 +293,16 @@ td, th {
 
 .margin-top-1rem {
   margin-top: 1rem;
+}
+
+.padding-top-1rem {
+  padding-top: 1rem;
+}
+
+.padding-bottom-1rem {
+  padding-bottom: 1rem;
+}
+
+.padding-all-1rem {
+  padding: 1rem;
 }

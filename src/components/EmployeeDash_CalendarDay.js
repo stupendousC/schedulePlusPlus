@@ -118,7 +118,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showToday">
-            <section className="lightgold-bg">{showShifts(shiftsToday)}</section>
+            <section className="lightgold-bg margin-all-1rem padding-all-1rem ">{showShifts(shiftsToday)}</section>
           </Accordion.Collapse>
 
         </section>
@@ -135,7 +135,7 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
           </Accordion.Toggle>
 
           <Accordion.Collapse eventKey="showCalendarClick">
-            <section className="lightblue-bg">{showAgendaOrOptions()}</section>
+            <section className="lightblue-bg margin-all-1rem padding-all-1rem ">{showAgendaOrOptions()}</section>
           </Accordion.Collapse>
 
         </section>
