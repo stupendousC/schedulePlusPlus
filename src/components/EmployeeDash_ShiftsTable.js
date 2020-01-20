@@ -1,6 +1,8 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
+import PropTypes from 'prop-types';
 import { formatTime, formatDate, dateInThePast, getWeekday } from './Helpers';
+import ShiftsTable from './AdminDash_ShiftsTable';
 
 const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sortedUnavails, takeShiftCallback, freeToWorkCallback}) => {
 
@@ -193,3 +195,12 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
 }
 
 export default EmployeeDash_ShiftsTable;
+
+
+ShiftsTable.propTypes = {
+  sortedOwnShifts: PropTypes.arrayOf(PropTypes.object), 
+  sortedUnstaffedShifts: PropTypes.arrayOf(PropTypes.object), 
+  sortedUnavails: PropTypes.arrayOf(PropTypes.object), 
+  takeShiftCallback: PropTypes.func.isRequired, 
+  freeToWorkCallback: PropTypes.func.isRequired,
+};

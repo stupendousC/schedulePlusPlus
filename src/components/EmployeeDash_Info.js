@@ -1,5 +1,6 @@
 import React, {useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
 
@@ -102,3 +103,11 @@ const Info = ({info, URL_endpoint, updateInfoCallback}) => {
 }
 
 export default Info;
+
+
+Info.propTypes = {
+  info: PropTypes.object, 
+  URL_endpoint: PropTypes.string.isRequired, 
+  updateInfoCallback: PropTypes.func.isRequired,
+};
+

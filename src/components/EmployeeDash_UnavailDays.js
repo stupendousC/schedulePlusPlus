@@ -1,5 +1,6 @@
 import React from 'react';
 import { formatDate } from './Helpers';
+import PropTypes from 'prop-types';
 
 const UnavailDays = ({sortedUnavails, freeToWorkCallback}) => {
 
@@ -25,3 +26,7 @@ const UnavailDays = ({sortedUnavails, freeToWorkCallback}) => {
 
 export default UnavailDays;
 
+UnavailDays.propTypes = {
+  sortedUnavails: PropTypes.arrayOf(PropTypes.object),
+  freeToWorkCallback: PropTypes.func.isRequired,
+};

@@ -139,7 +139,6 @@ export default class EmployeeDash extends React.Component {
 
   showCalendar = () => {
     return <CalendarTab 
-      URL={this.state.EMP_DASH}
       empUnavails={this.state.empUnavails}
       empShifts={this.state.empShifts}
       daySpotlight={this.state.daySpotlight}

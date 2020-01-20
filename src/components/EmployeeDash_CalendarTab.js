@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Calendar from 'react-calendar';
 import CalendarDay from './EmployeeDash_CalendarDay';
 import { convertToPST, convertDateString, dateInThePast } from './Helpers';
 
 
 
-const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, shiftsOfDay, availStatusOfDay, unstaffedShifts, updateStateForCalendarDayCB, toggleAvailCallback}) => {
+const CalendarTab = ({empUnavails, empShifts, daySpotlight, shiftsToday, shiftsOfDay, availStatusOfDay, unstaffedShifts, updateStateForCalendarDayCB, toggleAvailCallback}) => {
   const today = new Date();
 
   const isDateInEmpUnavails = (targetDate) => {
@@ -75,3 +76,15 @@ const CalendarTab = ({URL, empUnavails, empShifts, daySpotlight, shiftsToday, sh
 }
 
 export default CalendarTab;
+
+CalendarTab.propTypes = {
+  empUnavails: PropTypes.arrayOf(PropTypes.object),
+  empShifts: PropTypes.arrayOf(PropTypes.object),
+  daySpotlight: PropTypes.string.isRequired,
+  shiftsToday: PropTypes.arrayOf(PropTypes.object),
+  shiftsOfDay: PropTypes.arrayOf(PropTypes.object),
+  availStatusOfDay: PropTypes.bool.isRequired, 
+  unstaffedShifts: PropTypes.arrayOf(PropTypes.object), 
+  updateStateForCalendarDayCB: PropTypes.func.isRequired, 
+  toggleAvailCallback: PropTypes.func.isRequired,
+};

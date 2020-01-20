@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 import ErrorGeneral from './ErrorGeneral';
 import MessageComponent from './MessageComponent';
 import {formatTime} from './Helpers';
@@ -77,3 +78,7 @@ export default function LinkTextedToEmployee({match}) {
     );
   }
 }
+
+LinkTextedToEmployee.propTypes = {
+  match: PropTypes.object,
+};

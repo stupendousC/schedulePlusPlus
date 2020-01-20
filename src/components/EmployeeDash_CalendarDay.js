@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { convertDateString, formatDate, formatTime } from './Helpers';
 import Accordion from 'react-bootstrap/Accordion';
 
@@ -147,3 +148,11 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
 }
 
 export default CalendarDay;
+
+CalendarDay.propTypes = {
+  shiftsToday: PropTypes.arrayOf(PropTypes.object), 
+  shiftsOfDaySpotlight: PropTypes.arrayOf(PropTypes.object), 
+  dateStr: PropTypes.string.isRequired, 
+  availStatus: PropTypes.bool.isRequired, 
+  toggleAvailCallback: PropTypes.func.isRequired,
+};
