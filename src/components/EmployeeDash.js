@@ -124,7 +124,7 @@ export default class EmployeeDash extends React.Component {
 
     if (empUnavails.length === 0) {
       return (
-        <section>No upcoming unavailable days</section>
+        <h3 className="text-centered margin-all-1rem">No upcoming unavailable days</h3>
       );
     } else {
       return(

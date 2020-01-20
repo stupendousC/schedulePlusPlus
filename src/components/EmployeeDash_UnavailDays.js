@@ -8,7 +8,7 @@ const UnavailDays = ({sortedUnavails, freeToWorkCallback}) => {
       return(
         <section key={unavail.id} className="employee-dash-unavails-table">
           <section>{formatDate(unavail.day_off)}</section>
-          <button onClick={()=>{freeToWorkCallback(unavail)}} className="btn btn-success">I'm free to work</button>
+          <button onClick={()=>{freeToWorkCallback(unavail)}} className="btn btn-success margin-right-5rem">I'm free to work</button>
         </section>
       );
     })
