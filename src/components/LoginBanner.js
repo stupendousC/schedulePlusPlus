@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import bannerLogo from '../images/SPPbanner2.png';
 import GoogleLogin from 'react-google-login';
@@ -119,3 +120,9 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
 }
 
 export default LoginBanner;
+
+LoginBanner.propTypes = {
+  authenticatedRole: PropTypes.string,
+  googleAuthCallback: PropTypes.func.isRequired,
+  logoutCallback: PropTypes.func.isRequired,
+};

@@ -1,14 +1,15 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import hourglass from '../images/hourglass.svg';
 import thumbsUp from '../images/thumbsUp.svg';
 import twoPeopleInteract from '../images/twopeopleinteract.svg';
 
-export default function MessageComponent(props) {
+function MessageComponent({ icon, message }) {
 
   const showSpecificIcon = () => {
-    if (props.icon === "hourglass") {
+    if (icon === "hourglass") {
       return <img src={hourglass} alt="hourglass" className="homepage-logo"/>
-    } else if (props.icon === "thumbsUp") {
+    } else if (icon === "thumbsUp") {
       return <img src={thumbsUp} alt="thumbs up" className="homepage-logo"/>
     } else {
       return <img src={twoPeopleInteract} alt="2 people interacting" className="homepage-logo"/>
@@ -17,8 +18,14 @@ export default function MessageComponent(props) {
 
   return (
     <section>
-      <h1 className="text-centered">{props.message}</h1>
+      <h1 className="text-centered">{message}</h1>
       {showSpecificIcon()}
     </section>
   );
 }
+
+export default MessageComponent;
+
+MessageComponent.propTypes = {
+  icon: PropTypes.string,
+};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 // To use this component... see instructions below
 const ToastUndo = ({ undo, closeToast, message }) => {
@@ -7,7 +8,7 @@ const ToastUndo = ({ undo, closeToast, message }) => {
     undo();
     closeToast();
   }
- 
+
   return (
     <h3>
       {message} 
@@ -18,6 +19,11 @@ const ToastUndo = ({ undo, closeToast, message }) => {
 
 export default ToastUndo;
 
+ToastUndo.propTypes = {
+  undo: PropTypes.func.isRequired,
+  closeToast: PropTypes.func,
+  message: PropTypes.string.isRequired,
+};
 
 
 
