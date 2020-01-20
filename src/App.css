@@ -193,9 +193,9 @@ td, th {
   height: 90%;
 }
 
-.img-40 {
-  width: 40%;
-  height: 40%;
+.img-70 {
+  width: 70%;
+  height: 70%;
 }
 
 .img-5 {
@@ -282,15 +282,27 @@ td, th {
 }
 
 
-/* ===== MISC ===== */
-.margin-left-1rem {
-  margin-left: 1rem;
-}
-
+/* ===== MISC margins & paddings ===== */
 .margin-all-1rem {
   margin: 1rem;
 }
 
+.margin-left-1rem {
+  margin-left: 1rem;
+}
+
 .margin-top-1rem {
   margin-top: 1rem;
+}
+
+.padding-top-1rem {
+  padding-top: 1rem;
+}
+
+.padding-bottom-1rem {
+  padding-bottom: 1rem;
+}
+
+.padding-all-1rem {
+  padding: 1rem;
 }

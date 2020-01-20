@@ -86,6 +86,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
   ////////////////////// ADD person //////////////////////
   const showAddSection = () => {
     const uuid = uuidv4();
+    newPerson.uuid = uuid;
 
     return (
       <Accordion>
@@ -109,7 +110,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
               <label>EMAIL</label>
               <input type="text" className="form-control" name="email" onChange={onAddFieldChange}/>
               <label>UUID</label>
-              <input type="text" className="form-control" disabled name="uuid" placeholder={uuid}/>
+              <input type="text" className="form-control" disabled name="uuid" placeholder={newPerson.uuid}/>
             </section>
             <section className="centered-children-per-row_container margin-all-1rem">
               {addFormErrorMsgs === [] ? null : showErrorMsgs(addFormErrorMsgs)}
@@ -126,11 +127,11 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
   const onAddFieldChange = (e) => {
     newPerson[e.target.name] = e.target.value;
-    setNewPerson(newPerson);
   }
 
   const sendAddAPI = (e) => {
     e.preventDefault();
+    console.log(e.target);
 
     if (!isFormValid(newPerson, setAddFormErrorMsgs)) return;
     

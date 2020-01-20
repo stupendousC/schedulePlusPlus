@@ -21,24 +21,25 @@ class App extends React.Component {
   constructor() {
     super()
     this.state = {
-      authenticatedRole: "",       // TEMPORARY
+      authenticatedRole: "",       
       googleId: "",
-      username: "",// TEMPORARY
+      username: "",
       databaseId: ""
     }
-    sessionStorage.setItem('authenticatedRole', '');   // TEMPORARY
+    sessionStorage.setItem('authenticatedRole', '');   
     sessionStorage.setItem('googleId', '');
-    sessionStorage.setItem('username', '');    // TEMPORARY
+    sessionStorage.setItem('username', '');    
     sessionStorage.setItem('databaseId', '');
   }
 
   login = (googleId) => {
     const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
+    // save googleId whether or not log in is successful, bc it's needed for first time login cases, see LoginBanner.js
+    sessionStorage.setItem('googleId', googleId);
 
     axios.get(endpoint)
       .then(response => {
         if (Object.entries(response.data).length === 0) {
-          console.log("NOT IN OUR DB!!! ");
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
           this.setState({ authenticatedRole: "NEED UUID" });
         }
@@ -48,7 +49,6 @@ class App extends React.Component {
 
         sessionStorage.setItem('authenticatedRole', authenticatedRoleDB);
         sessionStorage.setItem('username', usernameDB);
-        sessionStorage.setItem('googleId', googleId);
         sessionStorage.setItem('databaseId', databaseId);
 
         this.setState({
@@ -61,7 +61,11 @@ class App extends React.Component {
         this.greetToast(usernameDB);
         
       })
-      .catch(error => toast.error(`LOGIN ERROR! ${error.message}`));
+      .catch(error => {
+        if (sessionStorage.getItem('authenticatedRole') !== "NEED UUID") {
+          toast.error(`LOGIN ERROR! ${error.message}`);
+        }
+      });
   }
 
   greetToast = (usernameDB) => {
@@ -110,11 +114,7 @@ class App extends React.Component {
             <Route path="/adminDash" component={() => <AdminDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
             <Route path="/employeeDash" exact component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />
             
-            
-            {/* this route is problematic b/c login redirects will never let u see this page... i dont' want to give up either one! */}
-            {/* <Route path="/employeeDash/:id/text/:shiftId"  component={LinkTextedToEmployee} /> */}
-            
-            {/* WHAT IF... I use a UUID instead? that way you don't have to log in? just say yes or no*/}
+            {/* This route is for users coming from the link admin texted them, so they can take a specific avail shift */}
             <Route path="/text/:uuid"  component={LinkTextedToEmployee} />
 
           </Switch>

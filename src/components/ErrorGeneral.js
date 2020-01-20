@@ -22,8 +22,8 @@ export default function ErrorGeneral(props) {
   }
   
   return (
-    <section>
-      <h1 className="text-centered">{props.message}</h1>
+    <section className="margin-all-1rem">
+      <h1 className="text-centered margin-all-1rem">{props.message}</h1>
       {showSpecificIcon()}
     </section>
   );

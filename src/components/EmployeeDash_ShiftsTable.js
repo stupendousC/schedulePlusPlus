@@ -137,25 +137,25 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
     if (cannotWork) {
       if (bookedElsewhere) {
         return (
-          <section className="gray-bg">
-            <p>You are already working elsewhere that day!</p>
+          <section className="gray-bg text-centered margin-all-1rem">
+            <p className="padding-all-1rem">You are already working elsewhere that day!</p>
             </section>
         );
       } else if (offThatDay) {
         return (
-          <section className="gray-bg text-centered">
-            <p>You have the day off but you can change your mind!</p>
+          <section className="gray-bg text-centered margin-all-1rem">
+            <p className="padding-top-1rem">You have the day off but you can change your mind!</p>
             {/* Clicking on this button will result in re-rendering this section as 'eligible for shift', user should see lightblue-bg w/ blue button b/c reeval'd cannot=false */}
-            <button onClick={() =>{removeUnavail(shift)}} className="btn btn-success">Take the shift</button>
+            <button onClick={() =>{removeUnavail(shift)}} className="btn btn-success margin-all-1rem">I can work</button>
             </section>
         );
       }
       
     } else {
       return (
-        <section className="lightblue-bg text-centered">
-          <p>You are eligible for this shift!</p>
-          <button onClick={() =>{takeShiftCallback(shift)}} className="btn btn-primary">Take the shift</button>
+        <section className="lightblue-bg text-centered margin-all-1rem">
+          <p className="padding-top-1rem">You are eligible for this shift!</p>
+          <button onClick={() =>{takeShiftCallback(shift)}} className="btn btn-primary margin-all-1rem">Take the shift</button>
           </section>
       );
     }
