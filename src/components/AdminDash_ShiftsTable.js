@@ -3,6 +3,7 @@ import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 
 import { formatTime, formatDate, dateInThePast } from './Helpers';
+import { toast } from 'react-toastify';
 
 class ShiftsTable extends React.Component {
   constructor() {
@@ -39,8 +40,6 @@ class ShiftsTable extends React.Component {
 
     axios.all(axiosGetFcns)
     .then(axios.spread((...responses) => {
-      // console.log("backend sent:", responses);
-
       // match up responses to allUnstaffedShifts
       for ( let i = 0; i < allUnstaffedShifts.length; i++) {
         const shiftId = allUnstaffedShifts[i].id;
@@ -51,9 +50,8 @@ class ShiftsTable extends React.Component {
       this.setState({
         availEmployeesByShiftId: availEmployeesByShiftId
       });
-      // console.log("this.state.availEmployeesByShiftId =", availEmployeesByShiftId);
     }))
-    .catch( errors => console.log(errors));
+    .catch( errors => toast.error(`ERROR loading info from database: ${errors}`));
 
     // sort into pastShifts and currentShifts
     this.setPastVsCurrentShifts();
@@ -193,7 +191,7 @@ class ShiftsTable extends React.Component {
       
       if (availEmpList.length === 0) {
         return (
-          // DO SOEMTHING SUPER SPECIAL FOR THIS EMERGENCY!!!  
+          // TODO: add soemthing special for this emergency
           <section className="card-employee red-bg">NO EMPLOYEES AVAILABLE!</section>
         );
 

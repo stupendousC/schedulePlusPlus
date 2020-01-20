@@ -1,9 +1,7 @@
 import React from 'react';
-import {formatTime} from './Helpers';
+import { formatTime } from './Helpers';
 
 const CalendarDay = ({basicShiftsInfo, dateStr, showColorBasedOnDay}) => {
-  // const [findEmployeesClicked, setFindEmployeesClicked] = useState(false);
-  // console.log("CalendarDay showing", dateStr, "\nbasicShiftsInfo = ", basicShiftsInfo);
 
   const showShifts = () => {
     return ( basicShiftsInfo.map (shift => {

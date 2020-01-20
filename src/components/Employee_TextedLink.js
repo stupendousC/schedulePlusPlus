@@ -18,8 +18,6 @@ export default function LinkTextedToEmployee({match}) {
 
   const acceptShift = () => {
     // send API call to backend to accept shift
-    console.log("sending info to backend");
-
     // response from backend will be a boolean, as to whether user really got the shift, or if someone else beat them to it
     axios.post(URL_ENDPOINT)
     .then(response => setShiftOrMsg(response.data))

@@ -75,8 +75,7 @@ const Info = ({info, URL_endpoint, updateInfoCallback}) => {
     );
   }
 
-  
-  
+  ////////////////////////////// render //////////////////////////////
   return (
       <section>   
         <h1  className="text-centered margin-all-1rem">MY INFO</h1>
@@ -100,8 +99,6 @@ const Info = ({info, URL_endpoint, updateInfoCallback}) => {
         </form>
       </section>
     );
-  
-  
-
 }
+
 export default Info;

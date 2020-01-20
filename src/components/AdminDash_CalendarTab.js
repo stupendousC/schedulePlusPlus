@@ -43,7 +43,7 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     .then(response => {
       setAvailEmpsOfDay(response.data);
     })
-    .catch(error => console.log(error.message));
+    .catch(error => toast.error(`ERROR downloading available employees for ${targetDateStr}: ${error.message}`);
   }
 
   //////////////////// display options ////////////////////
@@ -91,10 +91,6 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
   }
 
   const showColorBasedOnDay = () => {
-    // if today => bg-color = gold
-    // if past => bg-color = gray
-    // if no one to work => bg-color = red
-    // default => bg-color => blue
     if (daySpotlight === convertDateString(new Date())) {
       return "lightgold-bg";
     } else if (dateInThePast(daySpotlight)) {
@@ -194,17 +190,6 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
         </Accordion.Collapse>
       </Accordion>
 
-      {/* <Accordion>
-        <Accordion.Toggle eventKey="weekAgenda" className="accordion-toggle_button">
-          <section>
-            <section>▼AGENDA FOR THIS WEEK</section>
-          </section>
-        </Accordion.Toggle>
-
-        <Accordion.Collapse eventKey="weekAgenda">
-          <h1>Upcoming feature, stay tuned...</h1>
-        </Accordion.Collapse>
-      </Accordion> */}
     </section>
     );
   }

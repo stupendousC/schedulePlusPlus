@@ -3,9 +3,9 @@ import axios from 'axios';
 import CalendarTab from './AdminDash_CalendarTab';
 import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
-import {Nav, Navbar} from 'react-bootstrap';
-import {toast} from 'react-toastify';
-import {sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
+import { Nav, Navbar } from 'react-bootstrap';
+import { toast } from 'react-toastify';
+import { sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
 
 const uuidv4 = require('uuid/v4');
@@ -21,7 +21,6 @@ export default class AdminDash extends React.Component {
 
   constructor() {
     super()
-    // const today = convertDateString(new Date())
     this.state = {
       allClients: [],
       allAdmins: [],
@@ -41,7 +40,7 @@ export default class AdminDash extends React.Component {
   getAllUnavailsDB = () => axios.get(ALL_UNAVAILS);
 
   componentDidMount() {
-    // initial loading of data fromd atabase
+    // initial loading of data from database
     axios.all([
       this.getAllEmpsDB(),
       this.getAllClientsDB(),
@@ -66,7 +65,7 @@ export default class AdminDash extends React.Component {
         allUnavails: allUnavails
       });
     }))
-    .catch( errors => console.log(errors));
+    .catch( errors => `Error downloading from database: ${toast.error(errors.message)}`);
   }
 
   ////////////////////// set DISPLAY choice //////////////////////
@@ -186,10 +185,13 @@ Thank you from the office of Schedule Plus Plus!
     // bundled all the individual post requests together,
     // failed texts will not get in the way of successful texts
     axios.all(allAxiosPostReqs)
-    .then(axios.spread((...responses) => {
-      for ( const eachText of responses ) {
-        console.log("back end says", eachText.data);
-      }}))
+    .then(
+      // keeping this chunk around just in case
+      // axios.spread((...responses) => {
+      // for ( const eachText of responses ) {
+      //   console.log("\nTEXT sent:", eachText.data);
+      // }})
+      )
     .catch( errors => {
       const fullErrorMsg = errors.response.data.message;    
       const fullTextBody = JSON.parse(errors.config.data);

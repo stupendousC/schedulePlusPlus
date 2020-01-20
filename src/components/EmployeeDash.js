@@ -69,7 +69,7 @@ export default class EmployeeDash extends React.Component {
           unstaffedShifts: unstaffedShifts
         });
         }))
-        .catch(errors => console.log(errors));
+        .catch(errors => toast.error(`ERROR: ${errors.message}`));
   }
   
   ////////////////////// set DISPLAY choice //////////////////////
@@ -179,14 +179,13 @@ export default class EmployeeDash extends React.Component {
 
   ////////////////////// Callback fcns & related helpers //////////////////////
   freeToWork = (unavailObj) => {
-    console.log("so you want to work after all..., delete unavailObj", unavailObj);
     axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
       .then( response => {
         // quick update on front end to match db
         // response.data is the latest data from Unavails table in db for this employee
         this.setState({ empUnavails: response.data, availStatusOfDay: true });
       })  
-      .catch(error => console.log("ERROR deleting from db: ", error.message));
+      .catch(error => toast.error(`ERROR deleting from db: ${error.message}`));
   }
 
   toggleAvail = (availBoolean) => {
@@ -206,13 +205,11 @@ export default class EmployeeDash extends React.Component {
         latestEmpUnavails.push( response.data );
         this.setState({ empUnavails: latestEmpUnavails, availStatusOfDay: false });
       } )   
-      .catch(error => console.log("ERROR adding to db: ", error.message));
+      .catch(error => toast.error(`ERROR adding from db: ${error.message}`));
     }
   }
 
-  takeShift = (shift) => {
-    console.log("\nSEND API FOR", shift);
-    
+  takeShift = (shift) => {    
     const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
 
     axios.put(URL_endpoint)
@@ -232,13 +229,13 @@ export default class EmployeeDash extends React.Component {
         // need to update state unstaffedShifts[] either way, b/c now that shift is no longer unavailable
         this.updateLatestUnstaffedShifts();
     })
-    .catch(error => console.log(error.message));
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
   updateLatestUnstaffedShifts = () => { 
     axios.get(this.state.EMP_DASH+"/unstaffedShifts")
     .then( response => this.setState({ unstaffedShifts: response.data}))
-    .catch(error => console.log(error.message));
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
   
   updateInfo = (newEmpInfo) => {

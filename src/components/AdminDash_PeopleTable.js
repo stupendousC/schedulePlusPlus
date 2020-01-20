@@ -131,7 +131,6 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
   const sendAddAPI = (e) => {
     e.preventDefault();
-    console.log(e.target);
 
     if (!isFormValid(newPerson, setAddFormErrorMsgs)) return;
     
@@ -250,8 +249,8 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     setPersonSpotlight("");
     personInPurgatory = person;
 
-    console.log("\n\nTODO: If employee, need to reopen shifts they alreay committed to!!! and inform employees!!!");
-    console.log("TODO: If client, need to close shifts they alreay committed to!!! and inform employees!!!");
+    // TODO: If employee, need to reopen shifts they alreay committed to!!! and inform employees!!!
+    // TODO: If client, need to close shifts they alreay committed to!!! and inform employees!!!
 
     toast(<ToastUndo undo={undo} message={`Deleting ${person.name}`}/>, {
       // hook will be called when the component unmount

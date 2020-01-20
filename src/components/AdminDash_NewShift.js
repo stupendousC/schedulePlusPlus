@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { formatDate, dateInThePast } from './Helpers';
-
+import { toast } from 'react-toastify';
 
 const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback, showColorBasedOnDay}) => {
   // need for sending POST request to backend
@@ -58,7 +58,6 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
   const onFormSubmit = (e) => {
     e.preventDefault();
 
-    // find clientObj so backend doesn't have to
     const clientObj = allClients.find( client => {
       return (client.id === clientId);
     });
@@ -86,7 +85,7 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
       // send text to temployees who have non-null phone numbers
       textEmployeesCallback(newShift);
       })
-    .catch(error => console.log(error.message));
+    .catch(error => toast.error(`ERROR: Can't make new shift: ${error.message}`));
   }
 
   const showErrorMsgs = () => {

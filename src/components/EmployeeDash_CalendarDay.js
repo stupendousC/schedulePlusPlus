@@ -147,31 +147,3 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
 }
 
 export default CalendarDay;
-
-
-
-/////// OLD TABLE, might revert back later
-    // return (
-    //   <section key={shift.id}>
-    //     <section className="card-shift lightblue-bg" >
-    //       <p>DATE</p>
-    //       <p>{formatDate(shift.shift_date)}</p>
-    //       <p>START</p>
-    //       <p>{formatTime(shift.start_time)}</p>
-    //       <p>END</p>
-    //       <p>{formatTime(shift.end_time)}</p>
-    //     </section>
-
-    //     <section className="card-client">
-    //       <p>CLIENT</p>
-    //       { shift.client ? <p>{shift.client.name}</p> : <p></p> }
-    //       <p>PHONE</p>
-    //       { shift.client ? <p>{shift.client.phone}</p> : <p></p> }
-    //       <p>EMAIL</p>
-    //       { shift.client ? <p>{shift.client.email}</p> : <p></p> }
-    //       <p>ADDRESS</p>
-    //       { shift.client ? <p>{shift.client.address}</p> : <p></p> }
-    //     </section>
-
-    //   </section>
-    // );
