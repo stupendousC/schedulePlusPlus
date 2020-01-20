@@ -83,7 +83,7 @@ CalendarTab.propTypes = {
   daySpotlight: PropTypes.string.isRequired,
   shiftsToday: PropTypes.arrayOf(PropTypes.object),
   shiftsOfDay: PropTypes.arrayOf(PropTypes.object),
-  availStatusOfDay: PropTypes.bool.isRequired, 
+  availStatus: PropTypes.oneOfType([ PropTypes.bool, null ]),
   unstaffedShifts: PropTypes.arrayOf(PropTypes.object), 
   updateStateForCalendarDayCB: PropTypes.func.isRequired, 
   toggleAvailCallback: PropTypes.func.isRequired,

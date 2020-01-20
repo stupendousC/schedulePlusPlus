@@ -9,8 +9,8 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
   const showShifts = (shiftsInArray) => {
     // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[] 
     if (shiftsInArray.length > 0) {
-      return ( shiftsInArray.map (shift => {
-        return (showWholeShiftCard(shift));
+      return ( shiftsInArray.map ((shift, i) => {
+        return (<section key={i}>showWholeShiftCard(shift)</section>);
       }));
     } else {
       return (
@@ -25,47 +25,29 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
   const showWholeShiftCard = (shift) => {
 
     return (
-      <section key={shift.id} className="shift-card-container">
-        <table className="employee-dash-shift-table" >
-          <tr className="thead-dark">
-            <th>SHIFT INFO</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>DATE</td>
-            <td>{formatDate(shift.shift_date)}</td>
-          </tr>
-          <tr>
-            <td>START</td>
-            <td>{formatTime(shift.start_time)}</td>
-          </tr>
-          <tr>
-            <td>END</td>
-            <td>{formatTime(shift.end_time)}</td>
-          </tr>
-
-          <tr className="thead-dark">
-            <th>CLIENT INFO</th>
-            <th></th>
-          </tr>
-          <tr>
-            <td>CLIENT</td>
-            {shift.client ? <td>{shift.client.name}</td> : <td></td> }
-          </tr>
-          <tr>
-            <td>PHONE</td>
-            { shift.client ? <td>{shift.client.phone}</td> : <td></td> }
-          </tr>
-          <tr>
-            <td>EMAIL</td>
-            { shift.client ? <td>{shift.client.email}</td> : <td></td> }
-          </tr>
-          <tr>
-            <td>ADDRESS</td>
-            { shift.client ? <td>{shift.client.address}</td> : <td></td> }
-          </tr>
-        </table>
-
+      <section>
+        <h5 className="thead-dark text-centered">SHIFT INFO</h5>
+        <section className={`card-shift centered-children-per-row_container`}>
+          <p>DATE</p>
+          <p>{shift.shift_date}</p>
+          <p>START</p>
+          <p>{formatTime(shift.start_time)}</p>
+          <p>END</p>
+          <p>{formatTime(shift.end_time)}</p>
+        </section>
+        
+        <h5 className="thead-dark text-centered">CLIENT INFO</h5>
+        <section className="card-client centered-children-per-row_container">
+          <p>CLIENT</p>
+          <p>{shift.client.name}</p>
+          <p>PHONE</p>
+          <p>{shift.client.phone}</p>
+          <p>EMAIL</p>
+          <p>{shift.client.email}</p>
+          <p>ADDRESS</p>
+          <p>{shift.client.address}</p>
+        </section>
+        
       </section>
     );
   }
@@ -152,7 +134,7 @@ export default CalendarDay;
 CalendarDay.propTypes = {
   shiftsToday: PropTypes.arrayOf(PropTypes.object), 
   shiftsOfDaySpotlight: PropTypes.arrayOf(PropTypes.object), 
-  dateStr: PropTypes.string.isRequired, 
-  availStatus: PropTypes.bool.isRequired, 
+  dateStr: PropTypes.string.isRequired,  
+  availStatus: PropTypes.oneOfType([ PropTypes.bool, null ]),
   toggleAvailCallback: PropTypes.func.isRequired,
 };
