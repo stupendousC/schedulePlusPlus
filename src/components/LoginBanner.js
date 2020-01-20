@@ -20,7 +20,10 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   ////////////////////// LOGIN //////////////////////
   const responseGoogle = (response) => {
     // send info up to App.js     
-    googleAuthCallback(response.profileObj.googleId);
+    const googleId = response.profileObj.googleId;
+    const googleAccessToken = response.Zi.access_token;
+    
+    googleAuthCallback(googleId, googleAccessToken);
   }
 
   const showGoogleLogin = () => {
