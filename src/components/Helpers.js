@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import _ from 'underscore';
 
 export const convertToPST = (timeStr) => {

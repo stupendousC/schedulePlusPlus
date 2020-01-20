@@ -5,7 +5,7 @@ import GoogleLogin from 'react-google-login';
 import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) => {
@@ -15,6 +15,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   const [showModal, setShowModal] = useState(false);
   const handleCloseModal = () => setShowModal(false);
   const handleShowModal = () => setShowModal(true);
+
   ////////////////////// LOGIN //////////////////////
   const responseGoogle = (response) => {
     // send info up to App.js     
@@ -115,8 +116,6 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
       </Modal>
     </section>
   );
-  
-    
 }
 
 export default LoginBanner;
