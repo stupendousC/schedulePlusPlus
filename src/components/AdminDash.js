@@ -162,7 +162,7 @@ We have a shift available:
   Client: ${shift.client.name}
   Time: ${formatTime(shift.start_time)} to ${formatTime(shift.end_time)}.  
 
-Please click on [http://localhost:3000/text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
+Please click on [http://schedplusplusbackend.us-west-2.elasticbeanstalk.com//text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
 
 Thank you from the office of Schedule Plus Plus!
 ====================`
