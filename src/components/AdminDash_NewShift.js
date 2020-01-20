@@ -15,7 +15,7 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
   const [endTime, setEndTime] = useState(defaultEndTime);
 
   const isFormValid = () => {
-    if (dateInThePast(daySpotlight) || !clientId || (endTime < startTime)) {
+    if (dateInThePast(daySpotlight) || !clientId || (endTime <= startTime)) {
       return (false);
     } else {
       return (true);
@@ -32,7 +32,7 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
       if (!clientId) {
         errorMsgs.push("Please select a client before submitting form");
       }
-      if (endTime < startTime) {
+      if (endTime <= startTime) {
         errorMsgs.push("Start time must be before end time");
       }
 

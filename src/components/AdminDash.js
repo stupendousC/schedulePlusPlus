@@ -108,10 +108,14 @@ export default class AdminDash extends React.Component {
   showAllAdmins = () => <PeopleTable personType="admin" peopleList={this.state.allAdmins} URL_endpoint={ALL_ADMINS} setStateKey="allAdmins" updatePeopleListCB={this.updatePeopleList}/>
   showAllClients = () => <PeopleTable personType="client" peopleList={this.state.allClients} URL_endpoint={ALL_CLIENTS} setStateKey="allClients" updatePeopleListCB={this.updatePeopleList}/>
 
-  updatePeopleList = (setStateKey, updatedPeopleList) => {
+  updatePeopleList = (setStateKey, URL_endpoint) => {
     // this is a callback function for <PeopleTable> to send back updated peopleList
     // so we can .setState here to allow re-rendering of visuals
-    this.setState({ [setStateKey]: updatedPeopleList });
+    // this.setState({ [setStateKey]: updatedPeopleList });
+
+    axios.get(URL_endpoint)
+    .then( response => this.setState({ [setStateKey]: response.data }))
+    .catch(error => toast.error(`ERROR downloading list: ${error.message}`));
   }
   
   ////////////////////// Callback fcns  //////////////////////

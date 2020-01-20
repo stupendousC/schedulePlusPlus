@@ -137,9 +137,11 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     axios.post(URL_endpoint, newPerson)
     .then(response => {
       toast.success(`${newPerson.name} added successfully`);
-      const updatedPeopleList = [...peopleList];
-      updatedPeopleList.push(newPerson);
-      updatePeopleListCB(setStateKey, updatedPeopleList)})
+      // const updatedPeopleList = [...peopleList];
+      // updatedPeopleList.push(newPerson);
+      // updatePeopleListCB(setStateKey, updatedPeopleList)}
+      updatePeopleListCB(setStateKey, URL_endpoint)
+    })
     .catch(error => toast.error(`ERROR: ${error.message}`));
   }
   ////////////////////// FORM VALIDATION //////////////////////
@@ -238,7 +240,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
           return person;
         }
       });
-      updatePeopleListCB(setStateKey, updatedPeopleList)
+      updatePeopleListCB(setStateKey, URL_endpoint)
     }
     )
     .catch(error => toast.error(`ERROR: ${error.message}`));
@@ -270,8 +272,8 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     // if there's really a person to deactivate
     axios.delete(URL_endpoint + "/" + personInPurgatory.id)
     .then(response => {
-      const updatedPeopleList = peopleList.filter( p => p !== personInPurgatory );
-      updatePeopleListCB(setStateKey, updatedPeopleList);
+      // const updatedPeopleList = peopleList.filter( p => p !== personInPurgatory );
+      updatePeopleListCB(setStateKey, URL_endpoint);
     })
     .catch(error => toast.error(`ERROR: ${error.message}`));
   }

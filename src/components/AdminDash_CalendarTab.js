@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-
+import { toast } from 'react-toastify';
 import Accordion from 'react-bootstrap/Accordion';
 import Calendar from 'react-calendar';
 import CalendarDay from './AdminDash_CalendarDay';
@@ -40,10 +40,9 @@ const CalendarTab = ({allShifts, allClients, allEmployees, allUnavails, updateAl
     const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDateStr}`;
 
     axios.get(URL_getAllAvailEmpsByDate)
-    .then(response => {
-      setAvailEmpsOfDay(response.data);
-    })
-    .catch(error => toast.error(`ERROR downloading available employees for ${targetDateStr}: ${error.message}`);
+    .then(response => setAvailEmpsOfDay(response.data))
+    .catch(error => toast.error(error.message));
+
   }
 
   //////////////////// display options ////////////////////
