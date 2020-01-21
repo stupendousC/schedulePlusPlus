@@ -51,10 +51,14 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     e.preventDefault();
     handleCloseModal();
 
-    const googleId = sessionStorage.getItem('googleId')
-    const URL_endpoint = `${process.env.REACT_APP_LOGIN}/${googleId}`;
+    const googleId = sessionStorage.getItem('googleId');
+    const loginParams = { "googleId": googleId, "uuid": uuid };
+    const URL_endpoint = process.env.REACT_APP_LOGIN + `/firstTime`;
 
-    axios.post(URL_endpoint, {uuid: uuid})
+    console.log(`FIRST TIME LOGIN: ${URL_endpoint}`);
+    console.log(loginParams);
+
+    axios.post(URL_endpoint, loginParams)
     .then(response => {
       const roleDB = Object.keys(response.data)[0];
 

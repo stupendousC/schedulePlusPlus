@@ -34,9 +34,9 @@ class App extends React.Component {
     const googleAccessToken = sessionStorage.getItem('googleAccessToken');
 
     const loginParams = { "googleId": googleId, "googleAccessToken": googleAccessToken, "uuid": ""}
-    const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
+    const endpoint = process.env.REACT_APP_LOGIN;
 
-    axios.get(endpoint)
+    axios.post(endpoint, loginParams)
       .then(response => {
         if (Object.entries(response.data).length === 0) {
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
