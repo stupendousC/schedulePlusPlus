@@ -215,7 +215,10 @@ export default class EmployeeDash extends React.Component {
   takeShift = (shift) => {    
     const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
     const headers = makeHeader();
-    axios.put(URL_endpoint, {headers})
+
+    // JS weirdness!!! axios HAS to have somehting as the 2nd arg, bc it thinks it's the parameter, 
+    // if I had put {headers} in the 2nd arg, then jbackend will NOT recog the headers bc it's looking for something in the 3rd arg
+    axios.put(URL_endpoint, null, {headers})
     .then(response => {
       // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
       // need to compare the arrays of existing this.state.empShifts VS response.data... 

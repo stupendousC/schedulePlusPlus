@@ -40,8 +40,6 @@ class App extends React.Component {
 
     axios.post(endpoint, loginParams, {headers})
       .then(response => {
-        console.log(response.data);
-
         if (Object.entries(response.data).length === 0) {
           sessionStorage.setItem('authenticatedRole', "NEED UUID");
           this.setState({ authenticatedRole: "NEED UUID" });
