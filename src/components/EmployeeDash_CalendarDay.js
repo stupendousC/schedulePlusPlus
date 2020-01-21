@@ -10,7 +10,11 @@ const CalendarDay = ({shiftsToday, shiftsOfDaySpotlight, dateStr, availStatus, t
     // shiftsInArray can either be shiftsToday[] or shiftsOfDaySpotlight[] 
     if (shiftsInArray.length > 0) {
       return ( shiftsInArray.map ((shift, i) => {
-        return (<section key={i}>showWholeShiftCard(shift)</section>);
+        return (
+        <section key={i}>
+          {showWholeShiftCard(shift)}
+        </section>
+        );
       }));
     } else {
       return (
