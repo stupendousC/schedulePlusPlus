@@ -156,6 +156,8 @@ export default class AdminDash extends React.Component {
     const jsonForTextAPI = (employee, shift) => {
       // each text gets assigned an uuid for the db
       const uuid = uuidv4();
+      
+      const FRONT_END_URL = process.env.REACT_APP_FRONT_END_URL;
 
       // yes the indentation looks terrible here, but it's necessary otherwise the text msgs will ALSO have indents
       const personalizedMsg = (`
@@ -167,7 +169,7 @@ We have a shift available:
   Client: ${shift.client.name}
   Time: ${formatTime(shift.start_time)} to ${formatTime(shift.end_time)}.  
 
-Please click on [http://schedplusplusbackend.us-west-2.elasticbeanstalk.com//text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
+Please click on [${FRONT_END_URL}/text/${uuid}] to confirm, or log onto your employee dashboard to claim this shift.  
 
 Thank you from the office of Schedule Plus Plus!
 ====================`

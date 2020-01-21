@@ -3,8 +3,6 @@ import _ from 'underscore';
 export const makeHeader = () => {
   const googleId = sessionStorage.getItem('googleId');
   const googleAccessToken = sessionStorage.getItem('googleAccessToken');
-
-  console.log("sending header!", {"googleId": googleId, "googleAccessToken": googleAccessToken})
   return {"googleId": googleId, "googleAccessToken": googleAccessToken};
 }
 

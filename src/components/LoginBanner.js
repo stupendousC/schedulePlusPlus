@@ -56,9 +56,6 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     const loginParams = { "googleId": googleId, "uuid": uuid };
     const URL_endpoint = process.env.REACT_APP_LOGIN + `/firstTime`;
 
-    console.log(`FIRST TIME LOGIN: ${URL_endpoint}`);
-    console.log(loginParams);
-
     const headers = makeHeader();
     axios.post(URL_endpoint, loginParams, {headers})
     .then(response => {
