@@ -8,6 +8,7 @@ import axios from 'axios';
 
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { makeHeader } from './Helpers';
 
 const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) => {
 
@@ -58,7 +59,8 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     console.log(`FIRST TIME LOGIN: ${URL_endpoint}`);
     console.log(loginParams);
 
-    axios.post(URL_endpoint, loginParams)
+    const headers = makeHeader();
+    axios.post(URL_endpoint, loginParams, {headers})
     .then(response => {
       const roleDB = Object.keys(response.data)[0];
 

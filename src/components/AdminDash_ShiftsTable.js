@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import Accordion from 'react-bootstrap/Accordion';
 import PropTypes from 'prop-types';
-import { formatTime, formatDate, dateInThePast } from './Helpers';
+import { makeHeader, formatTime, formatDate, dateInThePast } from './Helpers';
 import { toast } from 'react-toastify';
 
 class ShiftsTable extends React.Component {
@@ -33,9 +33,10 @@ class ShiftsTable extends React.Component {
     let availEmployeesByShiftId = {};
 
     const allUnstaffedShifts = this.props.allShifts.filter (shift => !shift.employee );
+    const headers = makeHeader();
     const axiosGetFcns = allUnstaffedShifts.map( unstaffedShift => {
       const URL = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT + `/${unstaffedShift.id}`;
-      return axios.get(URL);
+      return axios.get(URL, {headers});
     })
 
     axios.all(axiosGetFcns)

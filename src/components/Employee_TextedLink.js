@@ -3,16 +3,18 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import ErrorGeneral from './ErrorGeneral';
 import MessageComponent from './MessageComponent';
-import {formatTime} from './Helpers';
+import {formatTime, makeHeader} from './Helpers';
 
 export default function LinkTextedToEmployee({match}) {
   const URL_ENDPOINT = `${process.env.REACT_APP_TEXTED_LINK}/${match.params.uuid}`;
 
   const [shiftOrMsg, setShiftOrMsg] = useState("LOADING");
 
+  const headers = makeHeader();
+
   const getFromDb = () => {
     // if shift is still available, response from backend will be the shift obj, otherwise null
-    axios.get(URL_ENDPOINT)
+    axios.get(URL_ENDPOINT, {headers})
       .then(response => setShiftOrMsg(response.data))
       .catch(error => console.log('ERROR:', error.message));
   }
@@ -20,7 +22,7 @@ export default function LinkTextedToEmployee({match}) {
   const acceptShift = () => {
     // send API call to backend to accept shift
     // response from backend will be a boolean, as to whether user really got the shift, or if someone else beat them to it
-    axios.post(URL_ENDPOINT)
+    axios.post(URL_ENDPOINT, {headers})
     .then(response => setShiftOrMsg(response.data))
     .catch(error => console.log('ERROR:', error.message));
   }

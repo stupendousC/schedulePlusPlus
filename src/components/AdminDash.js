@@ -5,7 +5,7 @@ import ShiftsTable from './AdminDash_ShiftsTable';
 import PeopleTable from './AdminDash_PeopleTable.js';
 import { Nav, Navbar } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
+import { makeHeader, sortShiftsByDate, isPhoneValid, formatDate, formatTime, truncateString } from './Helpers';
 import ErrorGeneral from './ErrorGeneral';
 
 const uuidv4 = require('uuid/v4');
@@ -30,23 +30,26 @@ export default class AdminDash extends React.Component {
       
       show: "calendar"
     }
+
   }
 
   ////////////////////// loading db data //////////////////////
-  getAllEmpsDB = () => axios.get(ALL_EMPS);
-  getAllClientsDB = () => axios.get(ALL_CLIENTS);
-  getAllAdminsDB = () => axios.get(ALL_ADMINS);
-  getAllShiftsDB = () => axios.get(ALL_SHIFTS);
-  getAllUnavailsDB = () => axios.get(ALL_UNAVAILS);
+  
+  getAllEmpsDB = (headers) => axios.get(ALL_EMPS, {headers});
+  getAllClientsDB = (headers) => axios.get(ALL_CLIENTS, {headers});
+  getAllAdminsDB = (headers) => axios.get(ALL_ADMINS, {headers});
+  getAllShiftsDB = (headers) => axios.get(ALL_SHIFTS, {headers});
+  getAllUnavailsDB = (headers) => axios.get(ALL_UNAVAILS, {headers});
 
   componentDidMount() {
+    const headers = makeHeader();
     // initial loading of data from database
     axios.all([
-      this.getAllEmpsDB(),
-      this.getAllClientsDB(),
-      this.getAllAdminsDB(),
-      this.getAllShiftsDB(),
-      this.getAllUnavailsDB()])
+      this.getAllEmpsDB(headers),
+      this.getAllClientsDB(headers),
+      this.getAllAdminsDB(headers),
+      this.getAllShiftsDB(headers),
+      this.getAllUnavailsDB(headers)])
     .then(axios.spread((...responses) => {
       const allEmployees = responses[0].data;
       const allClients = responses[1].data;
@@ -110,15 +113,17 @@ export default class AdminDash extends React.Component {
     // this is a callback function for <PeopleTable> to send back updated peopleList
     // so we can .setState here to allow re-rendering of visuals
     // this.setState({ [setStateKey]: updatedPeopleList });
-
-    axios.get(URL_endpoint)
+    const headers = makeHeader();
+    axios.get(URL_endpoint, {headers})
     .then( response => this.setState({ [setStateKey]: response.data }))
     .catch(error => toast.error(`ERROR downloading list: ${error.message}`));
   }
   
   ////////////////////// Callback fcns  //////////////////////
   updateAllShifts = () => {
-    axios.get(ALL_SHIFTS)
+    const headers = makeHeader();
+
+    axios.get(ALL_SHIFTS, {headers})
     .then( response => {
       const sortedShifts = sortShiftsByDate(response.data);
       this.setState({ allShifts: sortedShifts });
@@ -179,9 +184,10 @@ Thank you from the office of Schedule Plus Plus!
       );
     }
 
+    const headers = makeHeader();
     const allAxiosPostReqs = textableEmployees.map( employee => {
       // each employee gets a text
-      return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj)));
+      return (axios.post(SEND_TEXT, jsonForTextAPI(employee, shiftObj), {headers}));
     })
     
     // bundled all the individual post requests together,

@@ -8,7 +8,7 @@ import Info from './EmployeeDash_Info';
 import ErrorGeneral from './ErrorGeneral';
 import axios from 'axios';
 import ShiftsTable from './EmployeeDash_ShiftsTable';
-import { convertDateString, sortUnavailsByDate, sortShiftsByDate, deepCompareTwoSchedArrayss } from './Helpers';
+import { makeHeader, convertDateString, sortUnavailsByDate, sortShiftsByDate, deepCompareTwoSchedArrayss } from './Helpers';
 
 //https://www.hobo-web.co.uk/best-screen-size/  
 // 360x640
@@ -34,18 +34,20 @@ export default class EmployeeDash extends React.Component {
     }
   }
 
-  getEmpInfo = () => axios.get(this.state.EMP_DASH);
-  getEmpShifts = () => axios.get(this.state.EMP_DASH+"/shifts");
-  getEmpUnavails = () => axios.get(this.state.EMP_DASH+"/unavails");
-  getUnstaffedShifts = () => axios.get(this.state.EMP_DASH+"/unstaffedShifts");
+  getEmpInfo = (headers) => axios.get(this.state.EMP_DASH, {headers});
+  getEmpShifts = (headers) => axios.get(this.state.EMP_DASH+"/shifts", {headers});
+  getEmpUnavails = (headers) => axios.get(this.state.EMP_DASH+"/unavails", {headers});
+  getUnstaffedShifts = (headers) => axios.get(this.state.EMP_DASH+"/unstaffedShifts", {headers});
   
   componentDidMount() {
     // initial loading of data from database
+    const headers = makeHeader();
+
     axios.all([
-      this.getEmpInfo(), 
-      this.getEmpShifts(), 
-      this.getEmpUnavails(),
-      this.getUnstaffedShifts()
+      this.getEmpInfo(headers), 
+      this.getEmpShifts(headers), 
+      this.getEmpUnavails(headers),
+      this.getUnstaffedShifts(headers)
     ])
       .then(axios.spread((...responses) => {
         const empInfo = responses[0].data;
@@ -178,7 +180,8 @@ export default class EmployeeDash extends React.Component {
 
   ////////////////////// Callback fcns & related helpers //////////////////////
   freeToWork = (unavailObj) => {
-    axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`)
+    const headers = makeHeader();
+    axios.delete(this.state.EMP_DASH + `/unavails/${unavailObj.id}`, {headers})
       .then( response => {
         // quick update on front end to match db
         // response.data is the latest data from Unavails table in db for this employee
@@ -210,8 +213,8 @@ export default class EmployeeDash extends React.Component {
 
   takeShift = (shift) => {    
     const URL_endpoint = this.state.EMP_DASH+`/shifts/${shift.id}`;
-
-    axios.put(URL_endpoint)
+    const headers = makeHeader();
+    axios.put(URL_endpoint, {headers})
     .then(response => {
       // RACE CONDITION!  If another employee accepted it before you did, then current list wouldn't change
       // need to compare the arrays of existing this.state.empShifts VS response.data... 
@@ -232,7 +235,8 @@ export default class EmployeeDash extends React.Component {
   }
 
   updateLatestUnstaffedShifts = () => { 
-    axios.get(this.state.EMP_DASH+"/unstaffedShifts")
+    const headers = makeHeader();
+    axios.get(this.state.EMP_DASH+"/unstaffedShifts", {headers})
     .then( response => this.setState({ unstaffedShifts: response.data}))
     .catch(error => toast.error(`ERROR: ${error.message}`));
   }

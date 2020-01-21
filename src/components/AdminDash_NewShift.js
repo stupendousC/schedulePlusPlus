@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
-import { formatDate, dateInThePast } from './Helpers';
+import { formatDate, dateInThePast, makeHeader } from './Helpers';
 import { toast } from 'react-toastify';
 
 const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCallback, textEmployeesCallback, showColorBasedOnDay}) => {
@@ -73,9 +73,11 @@ const NewShift = ({daySpotlight, allClients, availEmpsOfDay, updateAllShiftsCall
 
     let newShift = null;
 
+    const headers = makeHeader();
+
     // send new shift to backend, to add to db
       // employees also can see the new shift when they login to their own dashboard
-    axios.post(ALL_SHIFTS, jsonForNewShiftAPI )
+    axios.post(ALL_SHIFTS, jsonForNewShiftAPI, {headers} )
     .then(response => {
       newShift = response.data;
       

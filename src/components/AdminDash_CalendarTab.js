@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { makeHeader } from './Helpers';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import Accordion from 'react-bootstrap/Accordion';
@@ -39,8 +40,9 @@ const CalendarTab = ({allShifts, allClients, updateAllShiftsCallback, textEmploy
 
   const getAndSetAvailEmpsByDate = (targetDateStr) => {
     const URL_getAllAvailEmpsByDate = process.env.REACT_APP_GET_AVAIL_EMPS_FOR_DAY + `/${targetDateStr}`;
+    const headers = makeHeader();
 
-    axios.get(URL_getAllAvailEmpsByDate)
+    axios.get(URL_getAllAvailEmpsByDate, {headers} )
     .then(response => setAvailEmpsOfDay(response.data))
     .catch(error => toast.error(error.message));
 

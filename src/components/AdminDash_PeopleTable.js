@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import ToastUndo from './ToastUndo';
 import Accordion from 'react-bootstrap/Accordion';
-import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
+import { makeHeader, isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
 
 
 ///////////////////// People can be either admins, employees, or clients /////////////////////
@@ -18,6 +18,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
   // no useState on the following b/c that's asynch AND I don't need re-rendering for it
   let personInPurgatory = null;
+  const headers = makeHeader();
 
   // need this for adding new people
   const uuidv4 = require('uuid/v4');
@@ -135,7 +136,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
     if (!isFormValid(newPerson, setAddFormErrorMsgs)) return;
     
-    axios.post(URL_endpoint, newPerson)
+    axios.post(URL_endpoint, newPerson, {headers})
     .then(response => {
       toast.success(`${newPerson.name} added successfully`);
       // const updatedPeopleList = [...peopleList];
@@ -231,7 +232,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
 
     if (!isFormValid(updatedPerson, setUpdateFormErrorMsgs)) return;
     
-    axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson)
+    axios.put(`${URL_endpoint}/${updatedPerson.id}`, updatedPerson, {headers})
     .then( response => {
       toast.success(`${updatedPerson.name} updated successfully`);
       const updatedPeopleList = peopleList.map(person => {
@@ -271,7 +272,7 @@ const PeopleTable = ({personType, peopleList, URL_endpoint, setStateKey, updateP
     }
 
     // if there's really a person to deactivate
-    axios.delete(URL_endpoint + "/" + personInPurgatory.id)
+    axios.delete(URL_endpoint + "/" + personInPurgatory.id, {headers})
     .then(response => {
       // const updatedPeopleList = peopleList.filter( p => p !== personInPurgatory );
       updatePeopleListCB(setStateKey, URL_endpoint);

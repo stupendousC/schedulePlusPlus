@@ -1,5 +1,11 @@
 import _ from 'underscore';
 
+export const makeHeader = () => {
+  const googleId = sessionStorage.getItem('googleId');
+  const googleAccessToken = sessionStorage.getItem('googleAccessToken');
+  return {"googleId": googleId, "googleAccessToken": googleAccessToken};
+}
+
 export const convertToPST = (dateStr) => {
   // UTC to PST conversion:
   // takes a dateStr of 'YYYY-MM-DD' in UTC time and convert it to a timeStr in Pacific Standard Time

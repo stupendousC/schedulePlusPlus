@@ -2,7 +2,7 @@ import React, {useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
-import { isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
+import { makeHeader, isPhoneValid, isEmailValid, convertToValidPhoneNumberIfInParens, convertToValidPhoneNumberIfAllNums } from './Helpers';
 
 
 const Info = ({info, URL_endpoint, updateInfoCallback}) => {
@@ -20,7 +20,8 @@ const Info = ({info, URL_endpoint, updateInfoCallback}) => {
 
     if (!isFormValid()) return;
 
-    axios.put(URL_endpoint, person)
+    const headers = makeHeader();
+    axios.put(URL_endpoint, person, {headers})
     .then(
       toast.success(`${person.name} updated successfully`),
       updateInfoCallback(person)

@@ -4,6 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { makeHeader } from './components/Helpers';
 import LoginBanner from './components/LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
@@ -34,7 +35,7 @@ class App extends React.Component {
     const googleAccessToken = sessionStorage.getItem('googleAccessToken');
 
     const loginParams = { "googleId": googleId, "googleAccessToken": googleAccessToken, "uuid": ""}
-    const headers = {"googleId": googleId, "googleAccessToken": googleAccessToken};
+    const headers = makeHeader();
     const endpoint = process.env.REACT_APP_LOGIN;
 
     axios.post(endpoint, loginParams, {headers})
