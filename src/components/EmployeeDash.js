@@ -200,8 +200,9 @@ export default class EmployeeDash extends React.Component {
       this.freeToWork(unavailObj);
 
     } else {
+      const headers = makeHeader();
       // emp wants day off -> post/add to unavails table in db
-      axios.post((this.state.EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight })
+      axios.post((this.state.EMP_DASH + `/unavails`), { day_off: this.state.daySpotlight }, { headers })
       .then( response => {
         // quick update on front end to match db
         latestEmpUnavails.push( response.data );

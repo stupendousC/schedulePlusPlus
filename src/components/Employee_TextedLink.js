@@ -3,7 +3,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import ErrorGeneral from './ErrorGeneral';
 import MessageComponent from './MessageComponent';
-import {formatTime, makeHeader} from './Helpers';
+import { formatTime, makeHeader } from './Helpers';
+import { toast } from 'react-toastify';
 
 export default function LinkTextedToEmployee({match}) {
   const URL_ENDPOINT = `${process.env.REACT_APP_TEXTED_LINK}/${match.params.uuid}`;
@@ -16,7 +17,7 @@ export default function LinkTextedToEmployee({match}) {
     // if shift is still available, response from backend will be the shift obj, otherwise null
     axios.get(URL_ENDPOINT, {headers})
       .then(response => setShiftOrMsg(response.data))
-      .catch(error => console.log('ERROR:', error.message));
+      
   }
 
   const acceptShift = () => {
@@ -24,7 +25,7 @@ export default function LinkTextedToEmployee({match}) {
     // response from backend will be a boolean, as to whether user really got the shift, or if someone else beat them to it
     axios.post(URL_ENDPOINT, {headers})
     .then(response => setShiftOrMsg(response.data))
-    .catch(error => console.log('ERROR:', error.message));
+    .catch(error => toast.error(`ERROR: ${error.message}`));
   }
 
   ///////////////////////// render //////////////////////////
