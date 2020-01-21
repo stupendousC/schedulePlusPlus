@@ -20,7 +20,13 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   ////////////////////// LOGIN //////////////////////
   const responseGoogle = (response) => {
     // send info up to App.js     
-    googleAuthCallback(response.profileObj.googleId);
+    const googleId = response.profileObj.googleId;
+    const googleAccessToken = response.Zi.access_token;
+    
+    sessionStorage.setItem('googleId', googleId);
+    sessionStorage.setItem('googleAccessToken', googleAccessToken);
+
+    googleAuthCallback();
   }
 
   const showGoogleLogin = () => {
@@ -45,16 +51,20 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     e.preventDefault();
     handleCloseModal();
 
-    const googleId = sessionStorage.getItem('googleId')
-    const URL_endpoint = `${process.env.REACT_APP_LOGIN}/${googleId}`;
+    const googleId = sessionStorage.getItem('googleId');
+    const loginParams = { "googleId": googleId, "uuid": uuid };
+    const URL_endpoint = process.env.REACT_APP_LOGIN + `/firstTime`;
 
-    axios.post(URL_endpoint, {uuid: uuid})
+    console.log(`FIRST TIME LOGIN: ${URL_endpoint}`);
+    console.log(loginParams);
+
+    axios.post(URL_endpoint, loginParams)
     .then(response => {
       const roleDB = Object.keys(response.data)[0];
 
       if (roleDB === "ADMIN" || roleDB === "EMPLOYEE") {
         // uuid does match someone in the database, now invoke googleAuthCallback back up to App.js to save info & re-render/re-direct
-        googleAuthCallback(googleId);
+        googleAuthCallback();
       } else {
         toast.error("Invalid uuid verification code, please double check and try again");
       }
