@@ -2,18 +2,14 @@ import React from 'react';
 import axios from 'axios';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import LoginBanner from './components/LoginBanner';
 import Footer from './components/Footer';
 import AdminDash from './components/AdminDash';
 import EmployeeDash from './components/EmployeeDash';
-
 import LinkTextedToEmployee from './components/Employee_TextedLink';
 
-import {} from './components/Helpers';
 import { BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom';
 import Homepage from './components/Homepage';
 
@@ -22,20 +18,23 @@ class App extends React.Component {
     super()
     this.state = {
       authenticatedRole: "",       
-      googleId: "",
-      username: "",
-      databaseId: ""
+      // googleId: "",
+      // username: "",
+      // databaseId: ""
     }
     sessionStorage.setItem('authenticatedRole', '');   
     sessionStorage.setItem('googleId', '');
+    sessionStorage.setItem('googleAccessToken', '');
     sessionStorage.setItem('username', '');    
     sessionStorage.setItem('databaseId', '');
   }
 
-  login = (googleId) => {
+  login = () => {
+    const googleId = sessionStorage.getItem('googleId');
+    const googleAccessToken = sessionStorage.getItem('googleAccessToken');
+
+    const loginParams = { "googleId": googleId, "googleAccessToken": googleAccessToken, "uuid": ""}
     const endpoint = process.env.REACT_APP_LOGIN + "/" + googleId;
-    // save googleId whether or not log in is successful, bc it's needed for first time login cases, see LoginBanner.js
-    sessionStorage.setItem('googleId', googleId);
 
     axios.get(endpoint)
       .then(response => {

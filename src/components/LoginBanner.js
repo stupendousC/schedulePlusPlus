@@ -23,7 +23,10 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     const googleId = response.profileObj.googleId;
     const googleAccessToken = response.Zi.access_token;
     
-    googleAuthCallback(googleId, googleAccessToken);
+    sessionStorage.setItem('googleId', googleId);
+    sessionStorage.setItem('googleAccessToken', googleAccessToken);
+
+    googleAuthCallback();
   }
 
   const showGoogleLogin = () => {
@@ -57,7 +60,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
 
       if (roleDB === "ADMIN" || roleDB === "EMPLOYEE") {
         // uuid does match someone in the database, now invoke googleAuthCallback back up to App.js to save info & re-render/re-direct
-        googleAuthCallback(googleId);
+        googleAuthCallback();
       } else {
         toast.error("Invalid uuid verification code, please double check and try again");
       }
