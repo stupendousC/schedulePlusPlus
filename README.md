@@ -23,16 +23,20 @@ What about for the people at the office?  Surely they can automate some of their
 
 3. And what if, instead of employees individually emailing in their own availability schedules, they can just manage their own days on/off via their own employee dashboard, wouldn't that also be just wonderful?
 
-YES, YES, and YES!  Says Schedule Plus Plus, and that is what I set out to do.
+#####YES, YES, and YES!  
+Says Schedule Plus Plus, and that is what I set out to do.
 
 ***
 
 ## CAN I SEE A DEMO?
 
-Of course!  
-[Demo as an ADMIN](https://youtu.be/_9Q1ofPxcDg)
-[Demo on TEXTS received by 3 employees](https://youtu.be/rvT_r7Nze6g)
-[Demo as an EMPLOYEE](https://youtu.be/TMOkfiG8SKQ)
+You don't even have to ask... 
+#### Demo as an ADMIN
+[![Watch the video](https://img.youtube.com/vi/_9Q1ofPxcDg/hqdefault.jpg)](https://youtu.be/_9Q1ofPxcDg)
+#### Demo on TEXTS received by employees
+[![Watch the video](https://img.youtube.com/vi/rvT_r7Nze6g/hqdefault.jpg)](https://youtu.be/rvT_r7Nze6g)
+#### Demo as an EMPLOYEE
+[![Watch the video](https://img.youtube.com/vi/TMOkfiG8SKQ/hqdefault.jpg)](https://youtu.be/TMOkfiG8SKQ)
 
 ## HOW TO SET UP ON MY OWN COMPUTER?
 Requirements: You need a Twilio account if you want to enable texting, which YOU DO.
