@@ -2,11 +2,11 @@
 ### Front end website for admin and employee use
 
 This is my capstone project for [Ada Developers Academy](https://
-adadevelopersacademy.org){:target="_blank"}.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule){:target="_blank"}.  
+adadevelopersacademy.org).  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/){:target="_blank"}.
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).
 
-The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com){:target="_blank"}.
+The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com).
 
 ***
 
@@ -18,16 +18,26 @@ I myself was an employee, and if I'm further down the line, then I won't get a c
 
 What about for the people at the office?  Surely they can automate some of their phone tasks and individual texts, thus free themselves up for other things.  
 
-..* If such an app exists, that would automatically generate a list of which employees are available, and texts them all for you, wouldn't that be great?  
+1. If such an app exists, that would automatically generate a list of which employees are available, and texts them all for you, wouldn't that be great?  
 
-..* Also, the employees can just grab the shifts on a first come first serve basis, that way they get an equal chance of work, wouldn't that be awesome too?  
+2. Also, the employees can just grab the shifts on a first come first serve basis, that way they get an equal chance of work, wouldn't that be awesome too?  
 
-..* And what if, instead of employees individually emailing in their own availability schedules, they can just manage their own days on/off via their own employee dashboard, wouldn't that also be just wonderful?
+3. And what if, instead of employees individually emailing in their own availability schedules, they can just manage their own days on/off via their own employee dashboard, wouldn't that also be just wonderful?
 
-Yes, yes, and yes!  Says Schedule Plus Plus, and that is what I set out to do.
+YES, YES, and YES!  Says Schedule Plus Plus, and that is what I set out to do.
 
 ***
 
 ## HOW TO SET UP ON MY OWN COMPUTER?
 
-TBD
+1. git clone it
+
+2. npm install
+
+3. npm run deploy
+
+4. yarn build
+
+5. npm run
+
+6. deploy on AWS 3S
