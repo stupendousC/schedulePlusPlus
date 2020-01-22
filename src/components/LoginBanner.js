@@ -30,6 +30,11 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     googleAuthCallback();
   }
 
+  const responseGoogleFail = (response) => {
+    console.log("GoogleLogin failed:");
+    console.log(response);
+  }
+
   const showGoogleLogin = () => {
     return (
       <section className="btn btn-google">
@@ -37,7 +42,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
           clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
           buttonText="LOGIN WITH GOOGLE"
           onSuccess={responseGoogle}
-          onFailure={responseGoogle}
+          onFailure={responseGoogleFail}
           cookiePolicy={'single_host_origin'}
         />
       </section>
