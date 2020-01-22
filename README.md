@@ -73,7 +73,8 @@ C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/
 
     `REACT_APP_FRONT_END_URL=**<your_front_end_url_OR_localhost:3000>**  `
   
-4. To run it on your local machine  
+4. To run it on your local machine.  
+  Note: the [back end](https://github.com/stupendousC/schedule) needs to be up and running first on either localhost:5000 or deployed on a back_end_url, so make sure you have that done by this point.
     `npm run`
 
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)  
