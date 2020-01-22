@@ -23,8 +23,7 @@ What about for the people at the office?  Surely they can automate some of their
 
 3. And what if, instead of employees individually emailing in their own availability schedules, they can just manage their own days on/off via their own employee dashboard, wouldn't that also be just wonderful?
 
-##### YES, YES, and YES!  
-##### Says Schedule Plus Plus, and that is what I set out to do.
+### YES, YES, and YES!   Says Schedule Plus Plus, and that is what I set out to do.
 
 ***
 
@@ -45,31 +44,44 @@ You don't even have to ask...
 ## HOW TO SET UP ON MY OWN COMPUTER?
 #### Requirements: 
 A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)
-B. You need a Twilio account if you want to enable texting, which trust me, YOU DO. [Twilio](https://www.twilio.com/).
+
+B. You need a [Twilio](https://www.twilio.com/) account if you want to enable texting, which trust me, YOU DO.
+
 C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
 
 #### Download & Setup:
 1. In your terminal, git clone a copy from here
+
   `git clone https://github.com/stupendousC/schedulePlusPlus.git`
 
 2. Install the dependencies
+
   `npm install`
 
 3. Make a .env file and declare your environment variables
+
   Note: I had my front end on localhost:3000 and my back end on localhost:5000
 
   `
-  REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**
+  REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**]
+
   REACT_APP_LOGIN=**<your_back_end_url_OR_localhost:5000>**/login
+
   REACT_APP_ALL_ADMINS=**<your_back_end_url_OR_localhost:5000>**/admin/admins
+
   REACT_APP_ALL_EMPS=**<your_back_end_url_OR_localhost:5000>**/admin/employees
+
   REACT_APP_ALL_CLIENTS=**<your_back_end_url_OR_localhost:5000>**/admin/clients
+  
   REACT_APP_ALL_SHIFTS=**<your_back_end_url_OR_localhost:5000>**/admin/shifts
+
   REACT_APP_ALL_UNAVAILS=**<your_back_end_url_OR_localhost:5000>**/admin/unavails
 
   REACT_APP_GET_AVAIL_EMPS_FOR_DAY=**<your_back_end_url_OR_localhost:5000>**/admin/employees/availableEmployees
+
   REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT=**<your_back_end_url_OR_localhost:5000>**/admin/shifts/availableEmployees
   REACT_APP_TEXT_EMPS=**<your_back_end_url_OR_localhost:5000>**/sendText
+  
 
   REACT_APP_TEXTED_LINK=**<your_back_end_url_OR_localhost:5000>**/text
 
@@ -79,8 +91,11 @@ C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/
   `
 
 4. To run it on your local machine
+
   `npm run`
 
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)
+
   `npm run deploy`
+
   `yarn build`
