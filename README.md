@@ -3,9 +3,9 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  As of this writing on 1/22/2020, the front end is not yet fully functional.  When it is, you will be able to log in with this dummy google authorization of email = FakeEmployee001@yahoo.com and password = RealPassword001, which is attached to an employee named Lisa Simpson, and you'll be able to play with the employee dashboard functions. 
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  As of this writing on 1/22/2020, the front end is not yet fully functional.  When it is, you will be able to log in with this dummy google authorization of email = FakeEmployee001@yahoo.com and password = RealPassword001, which is attached to an employee named Lisa Simpson, and you'll be able to play with the employee dashboard functions.  For now you can still play with it on http://localhost:3000/.
 
-The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com).
+The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](**<your_back_end_url_OR_localhost:5000>**).
 
 ***
 
@@ -23,35 +23,64 @@ What about for the people at the office?  Surely they can automate some of their
 
 3. And what if, instead of employees individually emailing in their own availability schedules, they can just manage their own days on/off via their own employee dashboard, wouldn't that also be just wonderful?
 
-#####YES, YES, and YES!  
-Says Schedule Plus Plus, and that is what I set out to do.
+##### YES, YES, and YES!  
+##### Says Schedule Plus Plus, and that is what I set out to do.
 
 ***
 
 ## CAN I SEE A DEMO?
 
 You don't even have to ask... 
-#### Demo as an ADMIN
+#### Demo as an ADMIN 👇
 [![Watch the video](https://img.youtube.com/vi/_9Q1ofPxcDg/hqdefault.jpg)](https://youtu.be/_9Q1ofPxcDg)
-#### Demo on TEXTS received by employees
+
+#### Demo on TEXTS received by employees 👇
 [![Watch the video](https://img.youtube.com/vi/rvT_r7Nze6g/hqdefault.jpg)](https://youtu.be/rvT_r7Nze6g)
-#### Demo as an EMPLOYEE
+
+#### Demo as an EMPLOYEE 👇
 [![Watch the video](https://img.youtube.com/vi/TMOkfiG8SKQ/hqdefault.jpg)](https://youtu.be/TMOkfiG8SKQ)
 
+***
+
 ## HOW TO SET UP ON MY OWN COMPUTER?
-Requirements: You need a Twilio account if you want to enable texting, which YOU DO.
-You need some way of deploying it, I used AWS 3S
+#### Requirements: 
+A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)
+B. You need a Twilio account if you want to enable texting, which trust me, YOU DO. [Twilio](https://www.twilio.com/).
+C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
 
-1. git clone it
+#### Download & Setup:
+1. In your terminal, git clone a copy from here
+  `git clone https://github.com/stupendousC/schedulePlusPlus.git`
 
-1B. You need environment variables!
+2. Install the dependencies
+  `npm install`
 
-2. npm install
+3. Make a .env file and declare your environment variables
+  Note: I had my front end on localhost:3000 and my back end on localhost:5000
 
-3. npm run deploy
+  `
+  REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**
+  REACT_APP_LOGIN=**<your_back_end_url_OR_localhost:5000>**/login
+  REACT_APP_ALL_ADMINS=**<your_back_end_url_OR_localhost:5000>**/admin/admins
+  REACT_APP_ALL_EMPS=**<your_back_end_url_OR_localhost:5000>**/admin/employees
+  REACT_APP_ALL_CLIENTS=**<your_back_end_url_OR_localhost:5000>**/admin/clients
+  REACT_APP_ALL_SHIFTS=**<your_back_end_url_OR_localhost:5000>**/admin/shifts
+  REACT_APP_ALL_UNAVAILS=**<your_back_end_url_OR_localhost:5000>**/admin/unavails
 
-4. yarn build
+  REACT_APP_GET_AVAIL_EMPS_FOR_DAY=**<your_back_end_url_OR_localhost:5000>**/admin/employees/availableEmployees
+  REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT=**<your_back_end_url_OR_localhost:5000>**/admin/shifts/availableEmployees
+  REACT_APP_TEXT_EMPS=**<your_back_end_url_OR_localhost:5000>**/sendText
 
-5. npm run
+  REACT_APP_TEXTED_LINK=**<your_back_end_url_OR_localhost:5000>**/text
 
-6. deploy on AWS 3S
+  REACT_APP_EMP_DASH=**<your_back_end_url_OR_localhost:5000>**/employees
+
+  REACT_APP_FRONT_END_URL=**<your_front_end_url_OR_localhost:3000>**
+  `
+
+4. To run it on your local machine
+  `npm run`
+
+5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)
+  `npm run deploy`
+  `yarn build`
