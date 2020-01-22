@@ -1,13 +1,14 @@
 # SCHEDULE PLUS PLUS
 ### Front end website for admin and employee use
 
-This is my capstone project for <a href="https://
-adadevelopersacademy.org" target="_blank">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
+This is my capstone project for [Ada Developers Academy](https://
+adadevelopersacademy.org){:target="_blank"}.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule){:target="_blank"}.  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/){:target="_blank"}.
 
-The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com/).
+The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com){:target="_blank"}.
 
+***
 
 ## WHAT DOES SCHEDULE PLUS PLUS DO?
 
@@ -25,6 +26,7 @@ What about for the people at the office?  Surely they can automate some of their
 
 Yes, yes, and yes!  Says Schedule Plus Plus, and that is what I set out to do.
 
+***
 
 ## HOW TO SET UP ON MY OWN COMPUTER?
 
