@@ -1,8 +1,7 @@
 # SCHEDULE PLUS PLUS
 ### Front end website for admin and employee use
 
-This is my capstone project for [Ada Developers Academy](https://
-adadevelopersacademy.org).  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
+This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
 The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).
 
@@ -29,8 +28,12 @@ YES, YES, and YES!  Says Schedule Plus Plus, and that is what I set out to do.
 ***
 
 ## HOW TO SET UP ON MY OWN COMPUTER?
+Requirements: You need a Twilio account if you want to enable texting, which YOU DO.
+You need some way of deploying it, I used AWS 3S
 
 1. git clone it
+
+1B. You need environment variables!
 
 2. npm install
 
