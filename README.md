@@ -50,52 +50,37 @@ B. You need a [Twilio](https://www.twilio.com/) account if you want to enable te
 C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
 
 #### Download & Setup:
-1. In your terminal, git clone a copy from here
+1. In your terminal, git clone a copy from here.
 
-  `git clone https://github.com/stupendousC/schedulePlusPlus.git`
+    `git clone https://github.com/stupendousC/schedulePlusPlus.git`
 
-2. Install the dependencies
+2. Install the dependencies.
 
-  `npm install`
+    `npm install`
 
-3. Make a .env file and declare your environment variables
-
+3. Make a .env file and declare your environment variables.
   Note: I had my front end on localhost:3000 and my back end on localhost:5000
 
-  `
-  REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**]
+  REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**
 
   REACT_APP_LOGIN=**<your_back_end_url_OR_localhost:5000>**/login
-
   REACT_APP_ALL_ADMINS=**<your_back_end_url_OR_localhost:5000>**/admin/admins
-
   REACT_APP_ALL_EMPS=**<your_back_end_url_OR_localhost:5000>**/admin/employees
-
   REACT_APP_ALL_CLIENTS=**<your_back_end_url_OR_localhost:5000>**/admin/clients
-  
   REACT_APP_ALL_SHIFTS=**<your_back_end_url_OR_localhost:5000>**/admin/shifts
-
   REACT_APP_ALL_UNAVAILS=**<your_back_end_url_OR_localhost:5000>**/admin/unavails
-
   REACT_APP_GET_AVAIL_EMPS_FOR_DAY=**<your_back_end_url_OR_localhost:5000>**/admin/employees/availableEmployees
-
   REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT=**<your_back_end_url_OR_localhost:5000>**/admin/shifts/availableEmployees
   REACT_APP_TEXT_EMPS=**<your_back_end_url_OR_localhost:5000>**/sendText
-  
-
   REACT_APP_TEXTED_LINK=**<your_back_end_url_OR_localhost:5000>**/text
-
   REACT_APP_EMP_DASH=**<your_back_end_url_OR_localhost:5000>**/employees
 
   REACT_APP_FRONT_END_URL=**<your_front_end_url_OR_localhost:3000>**
-  `
-
+  
 4. To run it on your local machine
 
-  `npm run`
+    `npm run`
 
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)
-
-  `npm run deploy`
-
-  `yarn build`
+  Skip the sections on the top where the author makes a new react app and parks it on github.  You want start with the section that starts with "First steps with AWS S3" about 15% down the page.  
+  As of this writing on 1/22/2020, I have not yet successfully and fully deployed on front end yet...
