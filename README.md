@@ -1,8 +1,8 @@
 # SCHEDULE PLUS PLUS
 ### Front end website for admin and employee use
 
-This is my capstone project for [Ada Developers Academy](https://
-adadevelopersacademy.org/).  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
+This is my capstone project for <a href="https://
+adadevelopersacademy.org" target="_blank">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
 The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).
 
