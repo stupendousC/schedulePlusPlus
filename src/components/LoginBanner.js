@@ -31,7 +31,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   }
 
   const responseGoogleFail = (response) => {
-    console.log("FAIL");
+    console.log("GoogleLogin failed:");
     console.log(response);
   }
 
