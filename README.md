@@ -3,7 +3,11 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks). When run locally, you will be able to log in with this dummy google authorization of email = FakeEmployee001@yahoo.com and password = RealPassword001, which is attached to an employee named Lisa Simpson, and you'll be able to play with the employee dashboard functions.  For now you can still play with it on http://localhost:3000/.
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks).  For now you can still play with it on http://localhost:3000/ (set up instructions below).
+
+When run locally, you can use these 2 samples:  
+    * If you want to play as an employee, use dummy email = FakeEmployee001@yahoo.com, password = RealPassword001, if prompted you can use uuid = ee5a220e-30f2-44f0-971f-cf60fdb6976d which is attached to Lisa Simpson.  
+    * If you want to play as an admin, use dummy email = Morbospp@gmail.com, password = RealPassword001, if prompted you can use uuid = d8f02b21-2d61-4fd8-aa2c-2e4b8682d5d9 which is attached to Morbo.
 
 The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com/).
 
@@ -47,6 +51,7 @@ Quick note: In the video at the 1:35 mark, you will see error messages saying th
 A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)  
 B. You need a [Twilio](https://www.twilio.com/) account if you want to enable texting, which trust me, YOU DO.  
 C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
+D. Javascript and React.
 
 ### Download & Setup:
 1. In your terminal, git clone a copy from here.  
