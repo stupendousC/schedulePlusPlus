@@ -75,7 +75,7 @@ C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/
   
 4. To run it on your local machine.  
   Note: the [back end](https://github.com/stupendousC/schedule) needs to be up and running first on either localhost:5000 or deployed on a back_end_url, so make sure you have that done by this point.
-    `npm run`
+    `npm start`
 
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)  
   Skip the sections on the top where the author makes a new react app and parks it on github.  You want start with the section that starts with "First steps with AWS S3" about 15% down the page.   
