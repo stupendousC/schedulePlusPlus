@@ -42,7 +42,7 @@ Quick note: In the video at the 1:35 mark, you will see error messages saying th
 
 ***
 
-## HOW TO SET UP ON MY OWN COMPUTER?
+## HOW TO SET UP ON MY OWN COMPUTER
 ### Requirements: 
 A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)  
 B. You need a [Twilio](https://www.twilio.com/) account if you want to enable texting, which trust me, YOU DO.  
@@ -81,3 +81,15 @@ C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)  
   Skip the sections on the top where the author makes a new react app and parks it on github.  You want start with the section that starts with "First steps with AWS S3" about 15% down the page.   
   As of this writing on 1/22/2020, I have not yet successfully and fully deployed on front end yet...
+
+***
+
+## WHAT IS YOUR PROCESS?
+
+I'm glad you asked!  
+
+For this project we're supposed to utilize new technologies, so I had to quickly learn some java, spring boot framework, and how to deploy and host my database via AWS.  This is also my first time using IntelliJ so that was cool.  Twilio and Google OAuth were also new to me.  
+
+First off, the brainstorming session... I had my real-life experience to draw ideas from, so that went pretty smoothly.  I did have other ideas, such as a doggy play-date tinder-clone and a left-over food recipe webscraper app, but Schedule Plus Plus hits home for me the most.  Given my proximity to the situation, I was able to gather some user stories of my own, both from my boss' perspective at the agency office, and from fellow employees such as myself.  Next I drafted my [product plan](https://gist.github.com/stupendousC/d3046c125289f5071d1c3627355a928a) and compiled my [Trello board](https://trello.com/b/Q2nqP0Re/capstone) (although right now you're seeing the aftermath, instead of the week by week battle plan).  Agile software development resulted in some differences between my initial vision and the final product; but I feel that right now, looking back on the past 4 weeks of hard work, I have delivered what I set out to make.
+
+What have I learned?  Lots!  There were a lot of ups and downs throughout the entire build.  Learning to learn, to deal with setbacks, to improvise, to adapt, and to overcome... all very crucial skills for successful living.  I had a lot of great advice from previous students, my wonderful fellow students to solve problems with, and of course the most amazing instructors and teaching assistants at [Ada Developers Academy](https://adadevelopersacademy.org)!
