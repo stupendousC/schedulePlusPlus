@@ -31,6 +31,7 @@ What about for the people at the office?  Surely they can automate some of their
 
 You don't even have to ask... 
 #### Demo as an ADMIN 👇
+Quick note: In the video at the 1:35 mark, you will see error messages saying that they couldn't text Frank Grimes and Pamela Poovey, that's because I seeded the database with fake & unverified phone numbers, except my own.  I wanted to show you what happens for both successful and failed cases.
 [![Watch the video](https://img.youtube.com/vi/_9Q1ofPxcDg/hqdefault.jpg)](https://youtu.be/_9Q1ofPxcDg)
 
 #### Demo on TEXTS received by employees 👇
