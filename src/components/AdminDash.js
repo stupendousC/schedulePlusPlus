@@ -197,10 +197,10 @@ Thank you from the office of Schedule Plus Plus!
     axios.all(allAxiosPostReqs)
     .then(
       // keeping this chunk around just in case
-      // axios.spread((...responses) => {
-      // for ( const eachText of responses ) {
-      //   console.log("\nTEXT sent:", eachText.data);
-      // }})
+      axios.spread((...responses) => {
+      for ( const eachText of responses ) {
+        console.log("\nTEXT sent:", eachText.data);
+      }})
       )
     .catch( errors => {
       const fullErrorMsg = errors.response.data.message;    
