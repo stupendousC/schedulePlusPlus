@@ -22,13 +22,11 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   const responseGoogle = (response) => {
     // send info up to App.js     
     const googleId = response.profileObj.googleId;
-    // const googleAccessToken = response.Zi.access_token;
-    
-    console.log(googleId);
     sessionStorage.setItem('googleId', googleId);
+
+    // TODO: FIX google Auth access token weirdness, had to comment out otherwise will break.  Never messing with deployment on day of presentation ever again...
+    // const googleAccessToken = response.Zi.access_token;
     // sessionStorage.setItem('googleAccessToken', googleAccessToken);
-
-
 
     googleAuthCallback();
   }
