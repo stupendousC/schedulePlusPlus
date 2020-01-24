@@ -22,10 +22,13 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   const responseGoogle = (response) => {
     // send info up to App.js     
     const googleId = response.profileObj.googleId;
-    const googleAccessToken = response.Zi.access_token;
+    // const googleAccessToken = response.Zi.access_token;
     
+    console.log(googleId);
     sessionStorage.setItem('googleId', googleId);
-    sessionStorage.setItem('googleAccessToken', googleAccessToken);
+    // sessionStorage.setItem('googleAccessToken', googleAccessToken);
+
+
 
     googleAuthCallback();
   }
