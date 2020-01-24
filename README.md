@@ -3,7 +3,11 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  As of this writing on 1/22/2020, the front end is not yet fully functional.  When it is, you will be able to log in with this dummy google authorization of email = FakeEmployee001@yahoo.com and password = RealPassword001, which is attached to an employee named Lisa Simpson, and you'll be able to play with the employee dashboard functions.  For now you can still play with it on http://localhost:3000/.
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks).  For now you can still play with it on http://localhost:3000/ (set up instructions below).
+
+When run locally, you can use these 2 samples:  
+    * If you want to play as an employee, use dummy email = FakeEmployee001@yahoo.com, password = RealPassword001, if prompted you can use uuid = ee5a220e-30f2-44f0-971f-cf60fdb6976d which is attached to Lisa Simpson.  
+    * If you want to play as an admin, use dummy email = Morbospp@gmail.com, password = RealPassword001, if prompted you can use uuid = d8f02b21-2d61-4fd8-aa2c-2e4b8682d5d9 which is attached to Morbo.
 
 The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  Deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com/).
 
@@ -47,6 +51,7 @@ Quick note: In the video at the 1:35 mark, you will see error messages saying th
 A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)  
 B. You need a [Twilio](https://www.twilio.com/) account if you want to enable texting, which trust me, YOU DO.  
 C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
+D. Javascript and React.
 
 ### Download & Setup:
 1. In your terminal, git clone a copy from here.  
@@ -90,6 +95,6 @@ I'm glad you asked!
 
 For this project we're supposed to utilize new technologies, so I had to quickly learn some java, spring boot framework, and how to deploy and host my database via AWS.  This is also my first time using IntelliJ so that was cool.  Twilio and Google OAuth were also new to me.  
 
-First off, the brainstorming session... I had my real-life experience to draw ideas from, so that went pretty smoothly.  I did have other ideas, such as a doggy play-date tinder-clone and a left-over food recipe webscraper app, but Schedule Plus Plus hits home for me the most.  Given my proximity to the situation, I was able to gather some user stories of my own, both from my boss' perspective at the agency office, and from fellow employees such as myself.  Next I drafted my [product plan](https://gist.github.com/stupendousC/d3046c125289f5071d1c3627355a928a) and compiled my [Trello board](https://trello.com/b/Q2nqP0Re/capstone) (although right now you're seeing the aftermath, instead of the week by week battle plan).  Agile software development resulted in some differences between my initial vision and the final product; but I feel that right now, looking back on the past 4 weeks of hard work, I have delivered what I set out to make.
+First off, the brainstorming session... I had my real-life experience to draw ideas from, so that went pretty smoothly. Given my proximity to the situation, I was able to gather some user stories of my own, both from my boss' perspective at the agency office, and from fellow employees such as myself.  Next I drafted my [product plan](https://gist.github.com/stupendousC/d3046c125289f5071d1c3627355a928a) and compiled my [Trello board](https://trello.com/b/Q2nqP0Re/capstone) (although right now you're seeing the aftermath, instead of the week by week battle plan).  Agile software development resulted in some differences between my initial vision and the final product; but I feel that right now, looking back on the past 4 weeks of hard work, I have delivered what I set out to make.
 
 What have I learned?  Lots!  There were a lot of ups and downs throughout the entire build.  Learning to learn, to deal with setbacks, to improvise, to adapt, and to overcome... all very crucial skills for successful living.  I had a lot of great advice from previous students, my wonderful fellow students to solve problems with, and of course the most amazing instructors and teaching assistants at [Ada Developers Academy](https://adadevelopersacademy.org)!
