@@ -3,7 +3,7 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks).  For now you can still play with it on http://localhost:3000/ (set up instructions below).
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks).  For now, as of 1/23/2020 you can still play with it on http://localhost:3000/ (set up instructions below).
 
 When run locally, you can use these 2 samples:  
     * If you want to play as an employee, use dummy email = FakeEmployee001@yahoo.com, password = RealPassword001, if prompted you can use uuid = ee5a220e-30f2-44f0-971f-cf60fdb6976d which is attached to Lisa Simpson.  
@@ -50,7 +50,7 @@ Quick note: In the video at the 1:35 mark, you will see error messages saying th
 ### Requirements: 
 A. You need to sign up with Google OAuth via their Google API Console.  [Overview here](https://developers.google.com/identity/protocols/OAuth2)  
 B. You need a [Twilio](https://www.twilio.com/) account if you want to enable texting, which trust me, YOU DO.  
-C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.
+C. You need some way of deploying it, I used [AWS 3S](https://aws.amazon.com/s3/?nc2=h_ql_prod_fs_s3).  Or you can just use localhost:3000 for now.  
 D. Javascript and React.
 
 ### Download & Setup:
@@ -63,21 +63,21 @@ D. Javascript and React.
 3. Make a .env file and declare your environment variables as below.  
   Note: I had my front end on localhost:3000 and my back end on localhost:5000  
 
-    `REACT_APP_GOOGLE_CLIENT_ID=**<your_google_client_id>**  `
+    `REACT_APP_GOOGLE_CLIENT_ID=<your_google_client_id>  ` . 
 
-    `REACT_APP_LOGIN=**<your_back_end_url_OR_localhost:5000>**/login  `
-    `REACT_APP_ALL_ADMINS=**<your_back_end_url_OR_localhost:5000>**/admin/admins  `
-    `REACT_APP_ALL_EMPS=**<your_back_end_url_OR_localhost:5000>**/admin/employees  `
-    `REACT_APP_ALL_CLIENTS=**<your_back_end_url_OR_localhost:5000>**/admin/clients  `
-    `REACT_APP_ALL_SHIFTS=**<your_back_end_url_OR_localhost:5000>**/admin/shifts  `
-    `REACT_APP_ALL_UNAVAILS=**<your_back_end_url_OR_localhost:5000>**/admin/unavails  `
-    `REACT_APP_GET_AVAIL_EMPS_FOR_DAY=**<your_back_end_url_OR_localhost:5000>**/admin/employees/availableEmployees  `
-    `REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT=**<your_back_end_url_OR_localhost:5000>**/admin/shifts/availableEmployees  ` 
-    `REACT_APP_TEXT_EMPS=**<your_back_end_url_OR_localhost:5000>**/sendText  `
-    `REACT_APP_TEXTED_LINK=**<your_back_end_url_OR_localhost:5000>**/text  `
-    `REACT_APP_EMP_DASH=**<your_back_end_url_OR_localhost:5000>**/employees  `
+    `REACT_APP_LOGIN=<your_back_end_url_OR_localhost:5000>/login  ` . 
+    `REACT_APP_ALL_ADMINS=<your_back_end_url_OR_localhost:5000>/admin/admins  ` . 
+    `REACT_APP_ALL_EMPS=<your_back_end_url_OR_localhost:5000>/admin/employees  ` . 
+    `REACT_APP_ALL_CLIENTS=<your_back_end_url_OR_localhost:5000>/admin/clients  ` . 
+    `REACT_APP_ALL_SHIFTS=<your_back_end_url_OR_localhost:5000>/admin/shifts  ` . 
+    `REACT_APP_ALL_UNAVAILS=<your_back_end_url_OR_localhost:5000>/admin/unavails  ` . 
+    `REACT_APP_GET_AVAIL_EMPS_FOR_DAY=<your_back_end_url_OR_localhost:5000>/admin/employees/availableEmployees  ` . 
+    `REACT_APP_GET_AVAIL_EMPS_FOR_SHIFT=<your_back_end_url_OR_localhost:5000>/admin/shifts/availableEmployees  ` .  
+    `REACT_APP_TEXT_EMPS=<your_back_end_url_OR_localhost:5000>/sendText  ` . 
+    `REACT_APP_TEXTED_LINK=<your_back_end_url_OR_localhost:5000>/text  ` . 
+    `REACT_APP_EMP_DASH=<your_back_end_url_OR_localhost:5000>/employees  ` . 
 
-    `REACT_APP_FRONT_END_URL=**<your_front_end_url_OR_localhost:3000>**  `
+    `REACT_APP_FRONT_END_URL=<your_front_end_url_OR_localhost:3000>  ` . 
   
 4. To run it on your local machine.  
   Note: the [back end](https://github.com/stupendousC/schedule) needs to be up and running first on either localhost:5000 or deployed on a back_end_url, so make sure you have that done by this point.
@@ -85,7 +85,7 @@ D. Javascript and React.
 
 5. To [deploy](https://medium.com/dailyjs/a-guide-to-deploying-your-react-app-with-aws-s3-including-https-a-custom-domain-a-cdn-and-58245251f081)  
   Skip the sections on the top where the author makes a new react app and parks it on github.  You want start with the section that starts with "First steps with AWS S3" about 15% down the page.   
-  As of this writing on 1/22/2020, I have not yet successfully and fully deployed on front end yet...
+  As of this writing on 1/23/2020, I have deployed on front end but for some reason it only works on my machine in incognito, will fix later...
 
 ***
 
