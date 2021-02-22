@@ -138,6 +138,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
 
     if (cannotWork) {
       if (bookedElsewhere) {
+        // TODO: This never gets triggered, already sifted out in EmployeeDash.showAllShifts(). Clean up!
         return (
           <section className="gray-bg text-centered margin-all-1rem">
             <p className="padding-all-1rem">You are already working elsewhere that day!</p>
@@ -170,6 +171,7 @@ const EmployeeDash_ShiftsTable = ({sortedOwnShifts, sortedUnstaffedShifts, sorte
 
   ////////////////// render ////////////////////
   if (!sortedOwnShifts) {
+    // TODO: this never happens, sortedOwnShifts gen'd synchronously.  Did I leave this in for some reason?
     return (
       <section>
         <h1 className="text-centered">MY SHIFTS</h1>

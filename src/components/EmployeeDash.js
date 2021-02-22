@@ -103,6 +103,7 @@ export default class EmployeeDash extends React.Component {
     
     let sortedUnstaffedShifts = allSortedUnstaffedShifts.filter( unstaffed => {
       // Emp does NOT need to see...  1. unstaffed shifts that are in the past
+      // TODO: This can be improved by backend not sending this to begin with
       const today = convertDateString(new Date());
       if (unstaffed.shift_date < today) return false;
 

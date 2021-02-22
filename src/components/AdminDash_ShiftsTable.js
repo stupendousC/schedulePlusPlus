@@ -117,6 +117,7 @@ class ShiftsTable extends React.Component {
   }
 
   showWholeShiftCard = (shift, timeCategory, secondaryColorClass) => {
+    const clientInfo = shift.client
     return (
       <section>
         <section className={`card-shift centered-children-per-row_container ${secondaryColorClass}`}>
@@ -130,13 +131,13 @@ class ShiftsTable extends React.Component {
 
         <section className="card-client centered-children-per-row_container">
           <p>CLIENT</p>
-          { shift.client ? <p>{shift.client.name}</p> : <p></p> }
+          { clientInfo.name ? <p>{clientInfo.name}</p> : <p>MISSING</p> }
           <p>PHONE</p>
-          { shift.client ? <p>{shift.client.phone}</p> : <p></p> }
+          { clientInfo.phone ? <p>{clientInfo.phone}</p> : <p>MISSING</p> }
           <p>EMAIL</p>
-          { shift.client ? <p>{shift.client.email}</p> : <p></p> }
+          { clientInfo.email ? <p>{clientInfo.email}</p> : <p>MISSING</p> }
           <p>ADDRESS</p>
-          { shift.client ? <p>{shift.client.address}</p> : <p></p> }
+          { clientInfo.address ? <p>{clientInfo.address}</p> : <p>MISSING</p> }
         </section>
 
         {/* employee info section shows either: A. actual employee info if staffed. B. list of available employees for that shift */}
@@ -162,16 +163,17 @@ class ShiftsTable extends React.Component {
 
   // showWholeShiftCard() calls this if ... A. shift is staffed
   showEmpInCard = (shift, colorClass) => {
+    const employeeInfo = shift.employee
     return (
       <section className={`card-employee ${colorClass}`}>
           <p>EMPLOYEE</p>
-          { shift.employee ? <p>{shift.employee.name}</p> : <p></p> }
+          { employeeInfo.name ? <p>{employeeInfo.name}</p> : <p>MISSING</p> }
           <p>PHONE</p>
-          { shift.employee ? <p>{shift.employee.phone}</p> : <p></p> }
+          { employeeInfo.phone ? <p>{employeeInfo.phone}</p> : <p>MISSING</p> }
           <p>EMAIL</p>
-          { shift.employee ? <p>{shift.employee.email}</p> : <p></p> }
+          { employeeInfo.email ? <p>{employeeInfo.email}</p> : <p>MISSING</p> }
           <p>ADDRESS</p>
-          { shift.employee ? <p>{shift.employee.address}</p> : <p></p> }
+          { employeeInfo.address ? <p>{employeeInfo.address}</p> : <p>MISSING</p> }
         </section>
     );
   }
@@ -179,10 +181,7 @@ class ShiftsTable extends React.Component {
   // showWholeShiftCard() calls this if ... B. shift is unstaffed
   showAvailEmpsInCard = (shift) => {
     
-    let stillLoading = true;
-    if (this.state.availEmployeesByShiftId !== "LOADING") { stillLoading = false; }
-    
-    if (stillLoading ) {
+    if (this.state.availEmployeesByShiftId === "LOADING" ) {
       return (
         <section className="card-employee lightblue-bg">Loading...</section>
       );

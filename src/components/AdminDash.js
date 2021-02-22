@@ -227,6 +227,7 @@ Thank you from the office of Schedule Plus Plus!
         <section>
 
           <Navbar bg="primary" variant="dark" sticky="top">
+            {/* TODO: Navbar keeps Calendar tab highlighted even if that's not chosen, fix! */}
             <Navbar.Brand onClick={()=>this.setShowCategory('calendar')}>CALENDAR</Navbar.Brand>
             <Nav className="mr-auto">
               <Nav.Link onClick={()=>this.setShowCategory('shifts')}>SHIFTS</Nav.Link>

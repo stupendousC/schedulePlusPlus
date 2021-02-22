@@ -60,6 +60,7 @@ const CalendarTab = ({allShifts, allClients, updateAllShiftsCallback, textEmploy
       // if date is in the past -> gray background
       // if it's on today -> gold background  
     if (daySpotlight === targetDate && availEmpsOfDay.length === 0) {
+      // TODO: why doesn't the emoji show up automatically? i had to click on calendar tile
       tileCaption = "😱";
       tileClassName = "tile-no-workers";
     }
