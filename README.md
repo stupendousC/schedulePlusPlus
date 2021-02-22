@@ -3,7 +3,7 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end is not yet fully functional when deployed due to limitations in Google OAuth when your app has not been fully verified by them (which takes 3-5 weeks).  For now, as of 1/23/2020 you can still play with it on http://localhost:3000/ (set up instructions below).
+The front end is written in Javascript with React, and it's deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/).  The front end has been pulled down as of 2/21/2020, but you can still play with it on http://localhost:3000/ (set up instructions below).
 
 When run locally, you can use these 2 samples:  
     * If you want to play as an employee, use dummy email = FakeEmployee001@yahoo.com, password = RealPassword001, if prompted you can use uuid = ee5a220e-30f2-44f0-971f-cf60fdb6976d which is attached to Lisa Simpson.  
