@@ -47,13 +47,12 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, demoLoginCallback, 
 
   const showDemoLogins = () => {
     const loginAs = (demoRole) => {
-      console.log(`gonna log you in as ${demoRole}`);
-      // TODO: use callback to send back up to App.js and set as the demoRole
       demoLoginCallback(demoRole);
     }
     
     return (
       <div>
+        <p>[NOTICE] Back end is no longer deployed, so you're not going to see any data populated (nor will any persist) once you login.</p>
         <button onClick={() => {loginAs('ADMIN')}}>Bypass Google, I just want to poke around as an ADMIN</button><br/>
         <button onClick={() => {loginAs('EMPLOYEE')}}>Bypass Google, I just want to poke around as an EMPLOYEE</button>
       </div>

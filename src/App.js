@@ -85,10 +85,10 @@ class App extends React.Component {
       databaseId: databaseId      
     })
 
-    this.greetToast(usernameDB);
+    this.greetToast(usernameDB, `You're logged in with role of ${demoRole}`);
   }
 
-  greetToast = (usernameDB) => {
+  greetToast = (usernameDB, optionalExtraMsg = null) => {
     const hourNow = (new Date()).getHours();
     let greetingBasedOnHour;
     if (hourNow < 12) {
@@ -98,8 +98,12 @@ class App extends React.Component {
     } else {
       greetingBasedOnHour = "Good evening";
     }
-    
-    toast.success(`${greetingBasedOnHour}, ${usernameDB} 😄`);
+    console.log(`... ${optionalExtraMsg}`)
+    if (optionalExtraMsg) {
+      toast.success(`${greetingBasedOnHour}, ${usernameDB} 😄  ${optionalExtraMsg}`);
+    } else {
+      toast.success(`${greetingBasedOnHour}, ${usernameDB} 😄`);
+    }
   }
 
   logout = () => {
