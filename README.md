@@ -3,7 +3,7 @@
 
 This is my capstone project for <a href="https://adadevelopersacademy.org">Ada Developers Academy</a>.  I made this in 4 weeks, and that includes the front end (what you see right here), and the [back end](https://github.com/stupendousC/schedule).  
 
-The front end is written in Javascript with React.  It _was_ deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/), but both this and the back end have been pulled down as of 2/21/2020.  I re-deployed this front end on [GH pages here](https://stupendousc.github.io/schedulePlusPlus/), BUT because the back end is not up, you will see a bunch of network error msgs bc you need the backend API to give you database info to populate the page with.  You can also play with it on http://localhost:3000/ (set up instructions below).
+The front end is written in Javascript with React.  It _was_ deployed via AWS S3, you can find it [here](http://schedplusplus.s3-website-us-west-2.amazonaws.com/), but both this and the back end have been pulled down as of 2/21/2020.  You can also play with it on http://localhost:3000/ (set up instructions below), BUT because the back end is not up, you will see a bunch of network error msgs bc you need the backend API to give you database info to populate the page with.
 
 The back end is written in Java using the Spring Boot framework, plus PostgreSQL database.  It _was_ deployed via AWS Elastic Beanstalk [here](http://schedplusplusbackend.us-west-2.elasticbeanstalk.com/).  Currently no plans on redeployment.
 
