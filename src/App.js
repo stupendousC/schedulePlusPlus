@@ -69,6 +69,25 @@ class App extends React.Component {
       });
   }
 
+  demoLogin = (demoRole) => {
+    let usernameDB = "demoUser";
+    let googleId = "demoGoogleId";
+    let databaseId = "demoDatabaseId";
+
+    sessionStorage.setItem('authenticatedRole', demoRole);
+    sessionStorage.setItem('username', usernameDB);
+    sessionStorage.setItem('databaseId', databaseId);
+
+    this.setState({
+      authenticatedRole: demoRole,
+      googleId: googleId,
+      username: usernameDB,
+      databaseId: databaseId      
+    })
+
+    this.greetToast(usernameDB);
+  }
+
   greetToast = (usernameDB) => {
     const hourNow = (new Date()).getHours();
     let greetingBasedOnHour;
@@ -104,7 +123,7 @@ class App extends React.Component {
     return (
       
       <Router>
-        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCallback={this.login} logoutCallback={this.logout}/>
+        <LoginBanner authenticatedRole={this.state.authenticatedRole} googleAuthCallback={this.login} demoLoginCallback={this.demoLogin} logoutCallback={this.logout}/>
         
         {role === "ADMIN" ? (<Redirect to="/adminDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}
         {role === "EMPLOYEE" ? (<Redirect to="/employeeDash" component={() => <EmployeeDash authenticatedRole={role} username={username} googleId={googleId} databaseId={databaseId}/>} />): null}

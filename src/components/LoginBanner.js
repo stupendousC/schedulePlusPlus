@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { makeHeader } from './Helpers';
 
-const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) => {
+const LoginBanner = ({authenticatedRole, googleAuthCallback, demoLoginCallback, logoutCallback}) => {
 
   const [uuid, setUuid] = useState("");
 
@@ -34,6 +34,30 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
   const responseGoogleFail = (response) => {
     console.log("GoogleLogin failed:");
     console.log(response);
+  }
+
+  const showLoginChoices = () => {
+    return (
+      <div>
+        {showGoogleLogin()}
+        {showDemoLogins()}
+      </div>
+    )
+  }
+
+  const showDemoLogins = () => {
+    const loginAs = (demoRole) => {
+      console.log(`gonna log you in as ${demoRole}`);
+      // TODO: use callback to send back up to App.js and set as the demoRole
+      demoLoginCallback(demoRole);
+    }
+    
+    return (
+      <div>
+        <button onClick={() => {loginAs('ADMIN')}}>Bypass Google, I just want to poke around as an ADMIN</button><br/>
+        <button onClick={() => {loginAs('EMPLOYEE')}}>Bypass Google, I just want to poke around as an EMPLOYEE</button>
+      </div>
+    )
   }
 
   const showGoogleLogin = () => {
@@ -111,7 +135,7 @@ const LoginBanner = ({authenticatedRole, googleAuthCallback, logoutCallback}) =>
     <section>
       <section className="loginBanner-section text-centered">
         <Link to="/"><img src={bannerLogo} alt="sppBannerLogo" className="img-90"/></Link>
-        {authenticatedRole? showDashWithLogout():showGoogleLogin()}
+        {authenticatedRole? showDashWithLogout():showLoginChoices()}
       </section>
 
 
